@@ -3,45 +3,37 @@ package com.project.mobile
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.compose.runtime.LaunchedEffect
 import com.project.mobile.ui.theme.MobileprojectTheme
+import androidx.navigation.compose.rememberNavController
+import com.project.mobile.ui.RoutineFormPage
+import com.project.mobile.ui.RoutineListPage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             MobileprojectTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                // 1. Create the navController
+                val navController = rememberNavController()
+
+                // 2. Map all pages to route in the navController
+                NavHost(navController = navController, startDestination = "routine_list") {
+                    composable("routine_list") {
+                        RoutineListPage(navController)
+                    }
+                    composable("routine_form/{routineId}") { backStackEntry ->
+                        RoutineFormPage(navController, routineId = backStackEntry.arguments?.getString("routineId"))
+                    }
+                }
+
+                // 3. Once finished, redirect to routine list page
+                LaunchedEffect(Unit) {
+                    navController.navigate("routine_list")
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MobileprojectTheme {
-        Greeting("Android")
     }
 }
