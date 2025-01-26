@@ -1,7 +1,7 @@
-# Compiled class file
+# Compiled class files
 *.class
 
-# Log file
+# Log files
 *.log
 
 # BlueJ files
@@ -10,7 +10,7 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Package files
 *.jar
 *.war
 *.nar
@@ -18,10 +18,46 @@
 *.zip
 *.tar.gz
 *.rar
+*.apk
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Virtual machine crash logs
 hs_err_pid*
 replay_pid*
 
-# Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
+# Kotlin Gradle plugin data
 .kotlin/
+
+# IDE settings
+.idea/
+*.iml
+
+# Build outputs
+**/build/
+.gradle/
+!gradle/wrapper/gradle-wrapper.properties
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+
+# Environment and sensitive files
+.env
+
+# Android-specific
+**/local.properties
+/captures
+.externalNativeBuild
+.cxx
+
+# Project-specific files (adjusted for "project" folder)
+project/local.properties
+project/.idea/caches
+project/.idea/libraries
+project/.idea/modules.xml
+project/.idea/workspace.xml
+project/.idea/navEditor.xml
+project/.idea/assetWizardSettings.xml
+project/build
