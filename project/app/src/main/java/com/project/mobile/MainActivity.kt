@@ -8,8 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.compose.runtime.LaunchedEffect
 import com.project.mobile.ui.theme.MobileprojectTheme
 import androidx.navigation.compose.rememberNavController
-import com.project.mobile.ui.RoutineFormPage
-import com.project.mobile.ui.RoutineListPage
+import com.project.mobile.presentation.RoutineFormPage
+import com.project.mobile.presentation.RoutineListPage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
