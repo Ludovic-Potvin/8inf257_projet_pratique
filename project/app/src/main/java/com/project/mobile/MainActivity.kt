@@ -25,7 +25,11 @@ class MainActivity : ComponentActivity() {
                         RoutineListPage(navController)
                     }
                     composable("routine_form/{routineId}") { backStackEntry ->
-                        RoutineFormPage(navController, routineId = backStackEntry.arguments?.getString("routineId"))
+                        RoutineFormPage(
+                            navController = navController,
+                            context = this@MainActivity, // Correction : ajout du contexte
+                            routineId = backStackEntry.arguments?.getString("routineId")
+                        )
                     }
                 }
 

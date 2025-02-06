@@ -20,41 +20,56 @@ import androidx.compose.ui.unit.sp
 import com.project.mobile.presentation.StoryVM
 import com.project.mobile.ui.theme.Purple
 import suezOneRegular
-
 @Composable
-fun StoryCard(story: StoryVM, onDeleteClick: (StoryVM) -> Unit){
+fun StoryCard(story: StoryVM, onDeleteClick: (StoryVM) -> Unit) {
     Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(Purple)
-        .padding(15.dp, 12.dp),
-    ){
-        Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Purple)
+            .padding(15.dp, 12.dp),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
 
             Text(story.title,
                 style = TextStyle(
                     fontSize = 22.sp,
                     color = Color.White,
                     fontFamily = suezOneRegular
-                ))
+                )
+            )
+
             Text(story.description,
                 style = TextStyle(
                     fontSize = 18.sp,
                     color = Color.White,
                     fontFamily = suezOneRegular,
                     textAlign = TextAlign.Center
-                ))
-            Row(){
-                Text(story.hour.toString(),
+                )
+            )
+
+            Row {
+                Text("Jours: ${story.days.joinToString(", ")}",
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
                         fontFamily = suezOneRegular,
-                    ))
+                    )
+                )
             }
 
+            Row {
+                Text("Heure: ${story.hour}",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontFamily = suezOneRegular,
+                    )
+                )
+            }
         }
     }
 }

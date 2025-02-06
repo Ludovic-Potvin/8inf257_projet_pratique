@@ -51,25 +51,22 @@ fun RoutineListPage(navController: NavController) {
             Spacer(modifier = Modifier.height(1.dp)
                 .background(Purple)
                 .width(260.dp)
-                )
+            )
 
             LazyColumn(
                 modifier = Modifier.padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
-            ){
+            ) {
                 stories.forEach { story ->
                     item {
-                        StoryCard(story
-                        ) {
-                            println("Deleting story")
+                        StoryCard(story) {
                             stories.remove(story)
                         }
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
-
             }
 
             Spacer(modifier = Modifier.height(1.dp)
@@ -89,12 +86,10 @@ fun RoutineListPage(navController: NavController) {
                 Text(text = "+",
                     style = TextStyle(fontFamily = suezOneRegular,
                         fontSize = 20.sp)
-                    )
+                )
             }
-
         }
     }
 }
-
 
 
