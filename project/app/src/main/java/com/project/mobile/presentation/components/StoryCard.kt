@@ -2,6 +2,7 @@ package com.project.mobile.presentation.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,11 +22,12 @@ import com.project.mobile.presentation.StoryVM
 import com.project.mobile.ui.theme.Purple
 import suezOneRegular
 @Composable
-fun StoryCard(story: StoryVM, onDeleteClick: (StoryVM) -> Unit) {
+fun StoryCard(story: StoryVM, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Purple)
+            .clickable { onClick() }
             .padding(15.dp, 12.dp),
     ) {
         Column(
@@ -73,3 +75,4 @@ fun StoryCard(story: StoryVM, onDeleteClick: (StoryVM) -> Unit) {
         }
     }
 }
+

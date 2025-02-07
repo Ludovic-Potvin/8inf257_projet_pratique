@@ -39,10 +39,17 @@ fun RoutineFormPage(navController: NavController, context: Context, routineId: S
 
 @Composable
 fun RoutineForm(navController: NavController, context: Context, routineId: String?, modifier: Modifier = Modifier) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedDays by remember { mutableStateOf(mutableListOf<String>()) }
-    var hour by remember { mutableStateOf(LocalTime.now()) }
+    val navBackStackEntry = navController.currentBackStackEntry
+    val savedTitle = navBackStackEntry?.arguments?.getString("title") ?: ""
+    val savedDescription = navBackStackEntry?.arguments?.getString("desc") ?: ""
+    val savedDays = navBackStackEntry?.arguments?.getString("days")?.split(",")?.toMutableList() ?: mutableListOf()
+    val savedHour = navBackStackEntry?.arguments?.getString("hour")?.let {
+        LocalTime.parse(it)
+    } ?: LocalTime.now()
+    var title by remember { mutableStateOf(savedTitle) }
+    var description by remember { mutableStateOf(savedDescription) }
+    var selectedDays by remember { mutableStateOf(savedDays) }
+    var hour by remember { mutableStateOf(savedHour) }
     var showError by remember { mutableStateOf(false) }
 
     val daysList = listOf("L", "Ma", "Me", "J", "V", "S", "D")

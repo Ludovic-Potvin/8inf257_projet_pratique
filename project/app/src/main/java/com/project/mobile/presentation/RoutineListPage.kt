@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Scaffold
@@ -59,13 +60,17 @@ fun RoutineListPage(navController: NavController) {
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
             ) {
-                stories.forEach { story ->
-                    item {
-                        StoryCard(story) {
-                            stories.remove(story)
+                items(stories) { story ->
+                    StoryCard(
+                        story,
+                        onClick = {
+                            navController.navigate(
+                                "routine_form/1?title=${story.title}&desc=${story.description}&days=${story.days.joinToString(",")}&hour=${story.hour}"
+                            )
                         }
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
                 }
             }
 
