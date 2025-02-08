@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.compose.runtime.LaunchedEffect
 import com.project.mobile.ui.theme.MobileprojectTheme
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile.ui.RoutineFormPage
@@ -27,11 +26,6 @@ class MainActivity : ComponentActivity() {
                     composable("routine_form/{routineId}") { backStackEntry ->
                         RoutineFormPage(navController, routineId = backStackEntry.arguments?.getString("routineId"))
                     }
-                }
-
-                // 3. Once finished, redirect to routine list page
-                LaunchedEffect(Unit) {
-                    navController.navigate("routine_list")
                 }
             }
         }
