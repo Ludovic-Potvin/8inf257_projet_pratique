@@ -4,3 +4,4 @@ import com.project.mobile.R
 
 
 val suezOneRegular = FontFamily(Font(R.font.suez_one))
+val trocchi = FontFamily(Font(R.font.trocchi))

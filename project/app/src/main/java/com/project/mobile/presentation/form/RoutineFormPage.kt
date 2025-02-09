@@ -1,4 +1,4 @@
-package com.project.mobile.presentation
+package com.project.mobile.presentation.form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.project.mobile.navigation.Screen
 
 @Composable
 fun RoutineFormPage(navController: NavController, routineId: String?) {
@@ -40,7 +41,7 @@ fun RoutineForm(navController: NavController, name: String, routineId: String?, 
         )
 
         Button(onClick = {
-            navController.navigate("routine_list")
+            navController.navigate(Screen.StoriesListScreen.route)
         }) {
             Text(text = "Go to RoutineListPage")
         }
