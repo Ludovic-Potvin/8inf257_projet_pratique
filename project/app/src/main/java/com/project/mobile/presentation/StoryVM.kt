@@ -8,11 +8,12 @@ data class StoryVM (
     val title: String = "",
     val description: String = "",
     val hour: LocalTime = LocalTime.now(),
-    val days: MutableList<DayVM> = mutableListOf(DayVM("L", NoActivated),
-                            DayVM("M", NoActivated),
-                            DayVM("M", NoActivated),
-                            DayVM("J", Activated),
-                            DayVM("V", NoActivated),
-                            DayVM("S", NoActivated),
-                            DayVM("D", NoActivated))
+    //Ou mettre une map ?
+    val days: MutableList<DayVM> = mutableListOf(DayVM("L", "Lundi", NoActivated),
+                            DayVM("M", "Mardi", NoActivated),
+                            DayVM("M", "Mercredi",NoActivated),
+                            DayVM("J", "Jeudi",Activated),
+                            DayVM("V", "Vendredi", NoActivated),
+                            DayVM("S", "Samedi", NoActivated),
+                            DayVM("D", "Dimande", NoActivated))
 )

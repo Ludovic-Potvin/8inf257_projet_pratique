@@ -6,6 +6,7 @@ import com.project.mobile.ui.theme.WhitePurple
 
 data class DayVM(
     val jour: String = "",
+    val value: String ="",
     val activatedOrNo: ActivatedOrNo
 
     )
