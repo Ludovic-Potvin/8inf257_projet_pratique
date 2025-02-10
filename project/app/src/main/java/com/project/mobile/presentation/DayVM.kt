@@ -1,7 +1,6 @@
 package com.project.mobile.presentation
 
 import androidx.compose.ui.graphics.Color
-import com.project.mobile.ui.theme.Purple
 import com.project.mobile.ui.theme.WhitePurple
 
 data class DayVM(
@@ -19,4 +18,4 @@ data object Activated:ActivatedOrNo(
     WhitePurple)
 
 data object NoActivated:ActivatedOrNo(
-    Purple)
+    Color.Unspecified)
