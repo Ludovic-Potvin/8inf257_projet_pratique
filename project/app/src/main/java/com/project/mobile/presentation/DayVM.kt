@@ -9,6 +9,7 @@ data class DayVM(
     val value: String ="",
     var state: ActivatedOrNo
     ){
+
     fun changeState(){
         state = if(state is Activated){
             NoActivated
