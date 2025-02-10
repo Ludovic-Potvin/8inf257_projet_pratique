@@ -55,11 +55,11 @@ fun StoryCard(story: StoryVM){
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center){
 
-                story.days.forEach { day ->
+                story.days.forEach { (key,day) ->
                         DayCard(day)
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(5.dp))
                     }
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(5.dp))
                 Column {
                     Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
                             fontSize = 20.sp,

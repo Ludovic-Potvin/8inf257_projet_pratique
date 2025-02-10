@@ -22,12 +22,12 @@ fun DayCard(day: DayVM) {
 
     Box(
         Modifier.size(32.dp)
-        .background(color = day.activatedOrNo.backgroundColor,
+        .background(color = day.state.backgroundColor,
             shape = CircleShape)
         .border(1.dp, WhitePurple, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        Text(day.jour,  style = TextStyle(
+        Text(day.value,  style = TextStyle(
             fontSize = 16.sp,
             color = Color.White,
             fontFamily = trocchi)

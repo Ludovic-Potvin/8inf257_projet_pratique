@@ -5,21 +5,30 @@ import com.project.mobile.ui.theme.Purple
 import com.project.mobile.ui.theme.WhitePurple
 
 data class DayVM(
-    val jour: String = "",
+    //val jour: String = "",
     val value: String ="",
-    val activatedOrNo: ActivatedOrNo
+    var state: ActivatedOrNo
+    ){
+    fun changeState(){
+        state = if(state is Activated){
+            NoActivated
+        } else{
+            Activated
+        }
+    }
 
-    )
+}
 
-
+//rajouter un booléen ?
 sealed class ActivatedOrNo(
-    val backgroundColor: Color
+    val backgroundColor: Color,
+    val activated: Boolean
 )
 
 data object Activated:ActivatedOrNo(
-    WhitePurple)
+    WhitePurple, true)
 
 data object NoActivated:ActivatedOrNo(
     //deux versions possibles :
     //Color.Unspecified)
-    Purple)
+    Purple, false)
