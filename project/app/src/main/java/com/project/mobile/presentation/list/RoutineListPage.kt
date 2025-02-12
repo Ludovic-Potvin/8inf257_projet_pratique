@@ -25,15 +25,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.components.StoryCard
 import com.project.mobile.ui.theme.Purple
+import com.project.mobile.utils.DataStoreManager
+import com.project.mobile.utils.ListStoriesViewModelFactory
 import suezOneRegular
 
 //TODO This is where we want to display the list of routine available
 @Composable
-fun RoutineListPage(navController: NavController, storiesViewModel: ListStoriesViewModel) {
+fun RoutineListPage(navController: NavController,dataStoreManager: DataStoreManager) {
+    val storiesViewModel: ListStoriesViewModel = viewModel(
+        factory = ListStoriesViewModelFactory(dataStoreManager)
+    )
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -64,11 +70,13 @@ fun RoutineListPage(navController: NavController, storiesViewModel: ListStoriesV
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
             ) {
-                items(storiesViewModel.stories.value) { story ->
-                    StoryCard(story)
+                items(storiesViewModel.stories.value) { story -> // Notez ici `stories.value` au lieu de `storiesViewModel`
+                    StoryCard(
+                        story,
+                        navController = navController
+                    )
                     Spacer(modifier = Modifier.height(11.dp))
                 }
-
             }
 
             Spacer(
@@ -94,12 +102,9 @@ fun RoutineListPage(navController: NavController, storiesViewModel: ListStoriesV
                     contentDescription = "Add a story"
                 )
             }
-
         }
     }
 }
-
-
 
 
 

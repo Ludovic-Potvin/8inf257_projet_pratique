@@ -18,6 +18,8 @@ import com.project.mobile.presentation.list.ListStoriesViewModel
 import com.project.mobile.presentation.list.RoutineListPage
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.project.mobile.utils.DataStoreManager
+import com.project.mobile.utils.ListStoriesViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,17 +27,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             MobileprojectTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // 1. Create the navController
+                    // 1. Crée le navController
                     val navController = rememberNavController()
+                    val dataStoreManager = DataStoreManager(this)
 
-                    // 2. Map all pages to route in the navController
+                    // 2. Configure le ViewModel avec un factory personnalisé
+                    val viewModelFactory = ListStoriesViewModelFactory(dataStoreManager)
+
+                    // 3. Mappe toutes les pages à une route dans le navController
                     NavHost(
                         navController = navController,
                         startDestination = Screen.StoriesListScreen.route
                     ) {
                         composable(route = Screen.StoriesListScreen.route) {
-                            val stories = viewModel<ListStoriesViewModel>()
-                            RoutineListPage(navController, stories)
+                            // Utilisation du factory personnalisé pour créer le ViewModel
+                            val storiesViewModel: ListStoriesViewModel = viewModel(factory = viewModelFactory)
+                            RoutineListPage(navController, dataStoreManager)
                         }
                         composable(route = Screen.FormStoryScreen.route) { backStackEntry ->
                             RoutineFormPage(
@@ -45,10 +52,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    // 3. Once finished, redirect to routine list page
+                    // 3. Une fois terminé, redirige vers la page de la liste des routines
                     /* LaunchedEffect(Unit) {
-                    navController.navigate("routine_list")
-                }*/
+                        navController.navigate("routine_list")
+                    }*/
                 }
             }
         }

@@ -62,4 +62,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("androidx.compose.ui:ui:<compose_version>")
+    implementation ("androidx.compose.material3:material3:<compose_version>")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:<lifecycle_version>")
+    implementation ("androidx.compose.runtime:runtime-livedata:<compose_version>")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:<lifecycle_version>")
 }

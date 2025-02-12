@@ -1,6 +1,7 @@
 package com.project.mobile.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,16 +22,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.StoryVM
 import com.project.mobile.ui.theme.Purple
 import suezOneRegular
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun StoryCard(story: StoryVM){
+fun StoryCard(story: StoryVM, navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .clickable {
+                navController.navigate(Screen.FormStoryScreen.route)
+            }
             .background(Purple, shape = RoundedCornerShape(10.dp))
             .padding(15.dp, 12.dp),
     ){

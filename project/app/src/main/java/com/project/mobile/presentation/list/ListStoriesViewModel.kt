@@ -1,28 +1,38 @@
 package com.project.mobile.presentation.list
 
-
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.mobile.presentation.StoryVM
-import com.project.mobile.utils.deleteStoryFromList
-import com.project.mobile.utils.getStories
-import androidx.compose.runtime.State
+import com.project.mobile.utils.DataStoreManager
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class ListStoriesViewModel : ViewModel() {
-    private val _stories: MutableState<List<StoryVM>> = mutableStateOf(emptyList())
-    var stories: State<List<StoryVM>> = _stories
+class ListStoriesViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {
+
+    private val _stories = mutableStateOf<List<StoryVM>>(emptyList()) // State pour lister les histoires
+    val stories: State<List<StoryVM>> = _stories
 
     init {
-        _stories.value = loadStories()
+        loadStories() // Charger les histoires dès le départ
     }
 
-    private fun loadStories(): List<StoryVM> {
-        return getStories()
+    init {
+        loadStories()
+    }
+
+    // Charger les histoires depuis DataStore
+    private fun loadStories() {
+        viewModelScope.launch {
+            dataStoreManager.storiesFlow.collect { storyList ->
+                _stories.value = storyList
+            }
+        }
     }
 
     fun onEvent(event: StoryEvent) {
-        when(event) {
+        when (event) {
             is StoryEvent.Delete -> {
                 deleteStory(event.story)
             }
@@ -30,7 +40,8 @@ class ListStoriesViewModel : ViewModel() {
     }
 
     private fun deleteStory(story: StoryVM) {
-        _stories.value = _stories.value.filter { it != story }
-        deleteStoryFromList(story)
+        viewModelScope.launch {
+            dataStoreManager.deleteStory(story)
+        }
     }
 }
