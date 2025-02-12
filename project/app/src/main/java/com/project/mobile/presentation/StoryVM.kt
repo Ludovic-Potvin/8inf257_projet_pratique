@@ -1,19 +1,26 @@
 package com.project.mobile.presentation
-import androidx.compose.runtime.remember
+
 import java.time.LocalTime
-data class StoryVM(
+import kotlin.random.Random
+
+data class StoryVM (
+    val id: Int = Random.nextInt(),
     val title: String = "",
     val description: String = "",
-    val days: List<String> = listOf(),
-    val hour: LocalTime = LocalTime.now()
-)
-
-val stories =
-    mutableListOf(
-        StoryVM(
-            title = "Faire du sport",
-            description = "Séance de musculation",
-            days = listOf("L", "M", "V"),
-            hour = LocalTime.of(18, 30)
-        )
+    val hour: LocalTime = LocalTime.now(),
+    //list ou map
+    /*val daysdeux: MutableList<DayVM> = linkedMapOf("lundi" to DayVM(, "Lundi", NoActivated),
+                            "mardi" to DayVM("M", "Mardi", NoActivated),
+                            "mercredi" to DayVM("M", "Mercredi",NoActivated),
+                            "jeudi" to DayVM("J", "Jeudi",Activated),
+                            "vendredi" to DayVM("V", "Vendredi", NoActivated),
+                            "samedi" to DayVM("S", "Samedi", NoActivated),
+                            "dimanche" to DayVM("D", "Dimande", NoActivated))*/
+    val days: LinkedHashMap<String, DayVM> = linkedMapOf("lundi" to DayVM("L", NoActivated),
+        "mardi" to DayVM("M", NoActivated),
+        "mercredi" to DayVM("M", NoActivated),
+        "jeudi" to DayVM("J", Activated),
+        "vendredi" to DayVM("V", NoActivated),
+        "samedi" to DayVM("S", NoActivated),
+        "dimanche" to DayVM("D", NoActivated)),
 )
