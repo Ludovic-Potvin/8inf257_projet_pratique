@@ -12,12 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.project.mobile.ui.theme.MobileprojectTheme
 import androidx.navigation.compose.rememberNavController
-import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.form.RoutineFormPage
 import com.project.mobile.presentation.list.ListStoriesViewModel
 import com.project.mobile.presentation.list.RoutineListPage
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.project.mobile.navigation.Screen
+import com.project.mobile.presentation.RoutineFormPage
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
 
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     // 3. Mappe toutes les pages à une route dans le navController
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.StoriesListScreen.route
+                        startDestination = Screen.StoriesListScreen
                     ) {
                         composable(route = Screen.StoriesListScreen.route) {
                             // Utilisation du factory personnalisé pour créer le ViewModel
@@ -47,7 +47,9 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.FormStoryScreen.route) { backStackEntry ->
                             RoutineFormPage(
                                 navController,
-                                routineId = backStackEntry.arguments?.getString("routineId")
+                                routineId = backStackEntry.arguments?.getString("routineId"),
+                                context = this@MainActivity,
+                                dataStoreManager = dataStoreManager
                             )
                         }
                     }

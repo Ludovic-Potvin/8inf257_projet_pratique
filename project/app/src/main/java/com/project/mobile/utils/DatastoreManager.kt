@@ -39,19 +39,26 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
-    // Ajouter ou mettre à jour une histoire
+    // Ajouter ou mettre à jour une histoire dans DataStore
     suspend fun addOrUpdateStory(story: StoryVM) {
+        // Utilisation de 'first' pour récupérer les histoires actuelles
         val currentStories = storiesFlow.first().toMutableList()
+
+        // Vérifier si l'histoire existe déjà et mettre à jour
         val existingIndex = currentStories.indexOfFirst { it.id == story.id }
 
         if (existingIndex != -1) {
-            currentStories[existingIndex] = story // Mise à jour
+            // Histoire existante, mise à jour
+            currentStories[existingIndex] = story
         } else {
-            currentStories.add(story) // Ajout
+            // Ajouter une nouvelle histoire
+            currentStories.add(story)
         }
 
+        // Sauvegarder la liste mise à jour dans DataStore
         saveStories(currentStories)
     }
+
 
     // Supprimer une histoire
     suspend fun deleteStory(story: StoryVM) {

@@ -27,7 +27,7 @@ fun DayCard(day: DayVM) {
         .border(1.dp, WhitePurple, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        Text(day.value,  style = TextStyle(
+        Text(day.abreviation,  style = TextStyle(
             fontSize = 16.sp,
             color = Color.White,
             fontFamily = trocchi)
