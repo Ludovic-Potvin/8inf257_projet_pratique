@@ -10,18 +10,18 @@ import androidx.annotation.RequiresApi
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun scheduleNotificationWithPermission(context: Context, hour: Int, minute: Int) {
+fun scheduleNotificationWithPermission(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String) {
     if (checkAndRequestExactAlarmPermission(context)) {
-        scheduleNotification(context, hour, minute) // Call your scheduling function
+        scheduleNotification(context, jour, hour, minute, titreNotif, messageNotif) // Call your scheduling function
     }
 }
 
-fun scheduleNotification(context: Context, hour: Int, minute: Int) {
+fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String) {
     try {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java).apply {
-            putExtra("title", "Rappel")
-            putExtra("message", "C'est l'heure de la notification !")
+            putExtra("title", titreNotif)
+            putExtra("message", messageNotif)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -30,10 +30,33 @@ fun scheduleNotification(context: Context, hour: Int, minute: Int) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Mapping entre le nom du jour en français et la constante Calendar
+        val joursMap = mapOf(
+            "Lundi" to Calendar.MONDAY,
+            "Mardi" to Calendar.TUESDAY,
+            "Mercredi" to Calendar.WEDNESDAY,
+            "Jeudi" to Calendar.THURSDAY,
+            "Vendredi" to Calendar.FRIDAY,
+            "Samedi" to Calendar.SATURDAY,
+            "Dimanche" to Calendar.SUNDAY
+        )
+
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
+
+            // Récupérer la constante Calendar correspondant au jour
+            val targetDay = joursMap[jour] ?: Calendar.MONDAY // Par défaut, lundi si inconnu
+
+            // Calculer le nombre de jours jusqu'au jour cible
+            val daysUntilTarget = (targetDay - get(Calendar.DAY_OF_WEEK) + 7) % 7
+            if (daysUntilTarget > 0) {
+                add(Calendar.DAY_OF_YEAR, daysUntilTarget)
+            } else if (daysUntilTarget == 0 && timeInMillis < System.currentTimeMillis()) {
+                // Si aujourd'hui est le bon jour mais l'heure est déjà passée, programmer pour la semaine suivante
+                add(Calendar.DAY_OF_YEAR, 7)
+            }
         }
 
         alarmManager.setExactAndAllowWhileIdle(

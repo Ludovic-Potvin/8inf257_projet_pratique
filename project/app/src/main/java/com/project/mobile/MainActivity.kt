@@ -13,13 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.project.mobile.notification.scheduleNotificationWithPermission
 import com.project.mobile.ui.theme.MobileprojectTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scheduleNotificationWithPermission(this, 16, 12)
+        scheduleNotificationWithPermission(this, "Jeudi", 14, 50, "Bonjour", "Message")
         enableEdgeToEdge()
         setContent {
             MobileprojectTheme {
