@@ -1,4 +1,4 @@
-package com.project.mobile
+package com.project.mobile.notification
 
 import android.app.AlarmManager
 import android.app.PendingIntent

@@ -1,4 +1,4 @@
-package com.project.mobile
+package com.project.mobile.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
