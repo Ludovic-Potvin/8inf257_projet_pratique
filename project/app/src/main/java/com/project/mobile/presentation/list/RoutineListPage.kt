@@ -70,7 +70,7 @@ fun RoutineListPage(navController: NavController,dataStoreManager: DataStoreMana
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
             ) {
-                items(storiesViewModel.stories.value) { story -> // Notez ici `stories.value` au lieu de `storiesViewModel`
+                items(storiesViewModel.stories.value) { story ->
                     StoryCard(
                         story,
                         navController = navController

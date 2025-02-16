@@ -5,8 +5,7 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.Json
 
-// @Polymorphic pour dire que cette classe et ses sous-classes seront sérialisées
-@Polymorphic
+
 @Serializable
 sealed class Screen(val route: String) {
 
@@ -17,4 +16,9 @@ sealed class Screen(val route: String) {
     @Serializable
     @SerialName("FormStoryScreen") // Nom pour la sérialisation
     object FormStoryScreen : Screen(route = "routine_form/{routineId}")
+
+    @Serializable
+    @SerialName("ModifStoryScreen") // Nom pour la sérialisation
+    object ModifStoryScreen : Screen(route = "routine_modif/{routineId}")
+
 }

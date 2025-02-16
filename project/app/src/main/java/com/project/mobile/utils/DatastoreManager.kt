@@ -66,4 +66,10 @@ class DataStoreManager(private val context: Context) {
         currentStories.removeIf { it.id == story.id }
         saveStories(currentStories)
     }
+
+
+    suspend fun getStoryById(id: Int): StoryVM? {
+        val stories = storiesFlow.first()
+        return stories.find { it.id == id }
+    }
 }

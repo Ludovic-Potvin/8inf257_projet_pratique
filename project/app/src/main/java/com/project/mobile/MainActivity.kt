@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.RoutineFormPage
+import com.project.mobile.presentation.form.ModifRoutineForm
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
 
@@ -31,17 +32,12 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val dataStoreManager = DataStoreManager(this)
 
-                    // 2. Configure le ViewModel avec un factory personnalisé
-                    val viewModelFactory = ListStoriesViewModelFactory(dataStoreManager)
-
                     // 3. Mappe toutes les pages à une route dans le navController
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.StoriesListScreen
+                        startDestination = Screen.StoriesListScreen.route
                     ) {
                         composable(route = Screen.StoriesListScreen.route) {
-                            // Utilisation du factory personnalisé pour créer le ViewModel
-                            val storiesViewModel: ListStoriesViewModel = viewModel(factory = viewModelFactory)
                             RoutineListPage(navController, dataStoreManager)
                         }
                         composable(route = Screen.FormStoryScreen.route) { backStackEntry ->
@@ -52,6 +48,19 @@ class MainActivity : ComponentActivity() {
                                 dataStoreManager = dataStoreManager
                             )
                         }
+                        composable(route = Screen.ModifStoryScreen.route) { backStackEntry ->
+                            val routineId = backStackEntry.arguments?.getInt("routineId")
+                            if (routineId != null) {
+                                ModifRoutineForm(
+                                    navController = navController,
+                                    dataStoreManager = dataStoreManager,
+                                    context = this@MainActivity,
+                                    routineId = routineId // Passer l'ID à ModifRoutineFormPage
+                                )
+                            }
+                        }
+
+                            }
                     }
 
                     // 3. Une fois terminé, redirige vers la page de la liste des routines
@@ -61,5 +70,4 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
 }

@@ -1,7 +1,9 @@
 package com.project.mobile.presentation
 
+import Activated
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -52,7 +54,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
     var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
     var hour by remember { mutableStateOf(LocalTime.now()) }
     var showError by remember { mutableStateOf(false) }
-
+    Log.d("RoutineformPage","routineid =$routineId")
     // Créer une instance de StoryVM avec la liste des jours
     val story = StoryVM()
 
@@ -209,7 +211,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { navController.navigate("routine_list") },
+                    onClick = { navController.navigate(Screen.StoriesListScreen.route) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
                     Text(text = "Annuler")
@@ -230,7 +232,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                         // Lancer une coroutine pour enregistrer la routine
                         coroutineScope.launch {
                             dataStoreManager.addOrUpdateStory(story = newRoutine)
-                            navController.navigate(Screen.StoriesListScreen) // Naviguer après l'enregistrement
+                            navController.navigate(Screen.StoriesListScreen.route) // Naviguer après l'enregistrement
                         }
                     }
                 }) {

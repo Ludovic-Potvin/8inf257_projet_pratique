@@ -22,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.media3.common.util.Log
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.StoryVM
@@ -31,11 +32,13 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun StoryCard(story: StoryVM, navController: NavController){
+    val routineId = story.id
+    Log.d("routineId", "routineId=$routineId")
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                navController.navigate(Screen.FormStoryScreen.route)
+                navController.navigate("routine_modif/$routineId")
             }
             .background(Purple, shape = RoundedCornerShape(10.dp))
             .padding(15.dp, 12.dp),
