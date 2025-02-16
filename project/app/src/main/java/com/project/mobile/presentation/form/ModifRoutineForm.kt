@@ -1,6 +1,7 @@
 package com.project.mobile.presentation.form
 
 import Activated
+import NoActivated
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.DayVM
+import com.project.mobile.presentation.Days
 import com.project.mobile.ui.theme.Purple
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -130,7 +132,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     }
                                 } else {
                                     LinkedHashMap(selectedDays).apply {
-                                        remove(key) // Retirer le jour de la liste
+                                        put(key, day.copy(state = NoActivated)) // Retirer le jour de la liste
                                     }
                                 }
                             },
@@ -184,6 +186,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 description = description,
                                 days = selectedDays,
                                 hour = hour)
+
                             coroutineScope.launch {
                             dataStoreManager.deleteStory(newRoutine)
                             navController.navigate(Screen.StoriesListScreen.route) }

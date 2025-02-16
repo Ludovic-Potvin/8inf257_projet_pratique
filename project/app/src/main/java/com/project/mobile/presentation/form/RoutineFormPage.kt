@@ -1,6 +1,8 @@
 package com.project.mobile.presentation
 
 import Activated
+import NoActivated
+import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.util.Log
@@ -42,19 +44,22 @@ fun RoutineFormPage(navController: NavController, dataStoreManager: DataStoreMan
     }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager, context: Context, routineId: String?, modifier: Modifier = Modifier) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
+    var selectedDays by remember { mutableStateOf(linkedMapOf("lundi" to DayVM("L", "Lundi", NoActivated),
+        "mardi" to DayVM("M", "Mardi", NoActivated),
+        "mercredi" to DayVM("M", "Mercredi",NoActivated),
+        "jeudi" to DayVM("J", "Jeudi",NoActivated),
+        "vendredi" to DayVM("V", "Vendredi", NoActivated),
+        "samedi" to DayVM("S", "Samedi", NoActivated),
+        "dimanche" to DayVM("D", "Dimande", NoActivated))
+    ) }
     var hour by remember { mutableStateOf(LocalTime.now()) }
     var showError by remember { mutableStateOf(false) }
     Log.d("RoutineformPage","routineid =$routineId")
-    // Créer une instance de StoryVM avec la liste des jours
-    val days: Days = Days()
-
-    // Accès aux jours dans StoryVM
-    val daysList: Days = days
 
     // Créer un CoroutineScope avec remember
     val coroutineScope = rememberCoroutineScope()
@@ -106,17 +111,18 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                daysList.days.forEach { day ->
-                    val isSelected = selectedDays[day.key]?.state?.activated ?: false
+                selectedDays.forEach { (key, day) ->
+                    val isSelected = day.state.activated
                     Button(
                         onClick = {
                             selectedDays = if (!isSelected) {
                                 LinkedHashMap(selectedDays).apply {
-                                    put(day.key, day.value.copy(state = Activated)) // Mettre à jour l'état du jour
+                                    put(key, day.copy(state = Activated)) // Mettre à jour l'état du jour
                                 }
                             } else {
                                 LinkedHashMap(selectedDays).apply {
-                                    remove(day.key) // Retirer le jour de la liste
+                                    //remove(day.key) // Retirer le jour de la liste7
+                                    put(key, day.copy(state = NoActivated))
                                 }
                             }
                         },
@@ -130,7 +136,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             .size(42.dp)
                             .clip(CircleShape)
                     ) {
-                        Text(text = day.value.fullname, color = if (isSelected) Purple else Color.White)
+                        Text(text = day.abreviation)
                     }
                 }
             }
