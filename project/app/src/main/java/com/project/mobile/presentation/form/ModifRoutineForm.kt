@@ -1,16 +1,10 @@
 package com.project.mobile.presentation.form
 
 import Activated
-import android.app.TimePickerDialog
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,12 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.dataStore
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
@@ -34,7 +24,6 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import com.project.mobile.presentation.StoryVM
 import com.project.mobile.utils.DataStoreManager
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,7 +47,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
             hour = it.hour
             selectedDays = it.days
         }
-        Log.d("ModifRoutineForm", " story=$story , routine id=$routineId")
+     Log.d("ModifRoutineForm", " story=$story , routine id=$routineId")
     }
 
         // Interface de formulaire
@@ -201,7 +190,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                   },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                     ) {
-                        Text(text = "Annuler")
+                        Text(text = "supprimer")
                     } // Bouton de soumission
                     Button(onClick = {
                         if (title.isBlank()) {

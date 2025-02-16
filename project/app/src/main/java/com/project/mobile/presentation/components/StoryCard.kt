@@ -38,6 +38,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .clickable {
+                Log.d("Navigation", "Navigating to routine_modif/$routineId")
                 navController.navigate("routine_modif/$routineId")
             }
             .background(Purple, shape = RoundedCornerShape(10.dp))

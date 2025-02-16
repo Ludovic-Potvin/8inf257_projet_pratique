@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(route = Screen.ModifStoryScreen.route) { backStackEntry ->
-                            val routineId = backStackEntry.arguments?.getInt("routineId")
+                            val routineId = backStackEntry.arguments?.getString("routineId")?.toIntOrNull()
                             if (routineId != null) {
                                 ModifRoutineForm(
                                     navController = navController,
@@ -63,10 +63,7 @@ class MainActivity : ComponentActivity() {
                             }
                     }
 
-                    // 3. Une fois terminé, redirige vers la page de la liste des routines
-                    /* LaunchedEffect(Unit) {
-                        navController.navigate("routine_list")
-                    }*/
+
                 }
             }
         }

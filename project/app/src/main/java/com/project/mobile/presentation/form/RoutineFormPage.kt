@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
@@ -20,18 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.dataStore
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.ui.theme.Purple
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import com.project.mobile.presentation.StoryVM
 import com.project.mobile.utils.DataStoreManager
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,10 +51,10 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
     var showError by remember { mutableStateOf(false) }
     Log.d("RoutineformPage","routineid =$routineId")
     // Créer une instance de StoryVM avec la liste des jours
-    val story = StoryVM()
+    val days: Days = Days()
 
     // Accès aux jours dans StoryVM
-    val daysList: LinkedHashMap<String, DayVM> = story.days
+    val daysList: Days = days
 
     // Créer un CoroutineScope avec remember
     val coroutineScope = rememberCoroutineScope()
@@ -111,7 +106,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                daysList.forEach { day ->
+                daysList.days.forEach { day ->
                     val isSelected = selectedDays[day.key]?.state?.activated ?: false
                     Button(
                         onClick = {
@@ -222,17 +217,19 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                         showError = true
                     } else {
                         showError = false
-                        val newRoutine = StoryVM(
-                            title = title,
-                            description = description,
-                            days = selectedDays,
-                            hour = hour
-                        )
-
-                        // Lancer une coroutine pour enregistrer la routine
                         coroutineScope.launch {
-                            dataStoreManager.addOrUpdateStory(story = newRoutine)
-                            navController.navigate(Screen.StoriesListScreen.route) // Naviguer après l'enregistrement
+                            val newId = dataStoreManager.generateNewStoryId()
+
+                            val newRoutine = StoryVM(
+                                id = newId,
+                                title = title,
+                                description = description,
+                                days = selectedDays,
+                                hour = hour
+                            )
+
+                            dataStoreManager.addOrUpdateStory(newRoutine)
+                            navController.navigate(Screen.StoriesListScreen.route)
                         }
                     }
                 }) {
