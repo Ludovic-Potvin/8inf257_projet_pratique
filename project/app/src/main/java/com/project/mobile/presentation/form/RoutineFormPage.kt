@@ -96,7 +96,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf("Autre") }
 
-    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole")
+    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
     Log.d("RoutineformPage","routineid =$routineId")
 
     // Créer un CoroutineScope avec remember

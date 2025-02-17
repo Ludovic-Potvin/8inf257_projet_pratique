@@ -47,7 +47,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf("Autre") }
 
-    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole")
+    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
     // Charger les données de la routine à modifier
     LaunchedEffect(routineId) {
         // Récupérer la story à partir de l'id
