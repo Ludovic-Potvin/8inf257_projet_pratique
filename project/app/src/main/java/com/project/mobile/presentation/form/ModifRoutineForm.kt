@@ -43,6 +43,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var hour by remember { mutableStateOf(LocalTime.now()) }
+
     var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf("") }
@@ -170,6 +171,16 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         }
                     }
 
+                    // 🔴 Ajout du message d'erreur si aucun jour n'est sélectionné
+                    if (selectedDays.values.none { it.state.activated }) {
+                        Text(
+                            text = "Veuillez sélectionner au moins un jour",
+                            color = Color.Red,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Champ Heure
@@ -267,6 +278,12 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(
+                            onClick = { navController.navigate(Screen.StoriesListScreen.route) },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Black)
+                        ) {
+                            Text(text = "Annuler", fontFamily = trocchi, fontWeight = FontWeight.Bold)
+                        }
+                        Button(
                             onClick = {
                                 val newRoutine = StoryVM(
                                     id = routineId,
@@ -290,7 +307,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             Text(text = "Supprimer", fontFamily = trocchi, color = DarkPurple, fontWeight = FontWeight.Bold)
                         } // Bouton de soumission
                         Button(onClick = {
-                            if (title.isBlank()) {
+                            if (title.isBlank() || selectedDays.values.none { it.state.activated }) {
                                 showError = true
                             } else {
                                 showError = false

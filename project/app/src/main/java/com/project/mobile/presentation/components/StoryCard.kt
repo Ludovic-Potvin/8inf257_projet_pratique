@@ -1,5 +1,6 @@
 package com.project.mobile.presentation.components
 
+import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.StoryVM
@@ -33,6 +35,7 @@ import suezOneRegular
 import trocchi
 import java.time.format.DateTimeFormatter
 
+@OptIn(UnstableApi::class)
 @Composable
 fun StoryCard(story: StoryVM, navController: NavController){
     val routineId = story.id
@@ -80,21 +83,22 @@ fun StoryCard(story: StoryVM, navController: NavController){
                     textAlign = TextAlign.Center
                 ))
             Spacer(modifier = Modifier.height(5.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center){
+            Column(modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally){
 
-                story.days.forEach { (key,day) ->
+                Row(horizontalArrangement = Arrangement.Center) {
+                    story.days.forEach { (_, day) ->
                         DayCard(day)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
-                Spacer(modifier = Modifier.width(5.dp))
-                Column {
-                    Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.White,
-                            fontFamily = suezOneRegular)
-                    )
                 }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontFamily = suezOneRegular)
+                )
+
             }
 
 

@@ -89,6 +89,8 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
         "dimanche" to DayVM("D", "Dimande", NoActivated))
     ) }
     var hour by remember { mutableStateOf(LocalTime.now()) }
+
+
     var showError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf("Autre") }
@@ -192,6 +194,15 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }
+            // 🔴 Ajout du message d'erreur si aucun jour n'est sélectionné
+            if (selectedDays.values.none { it.state.activated }) {
+                Text(
+                    text = "Veuillez sélectionner au moins un jour",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -203,8 +214,11 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 fontWeight = FontWeight.Bold,
                 fontFamily = trocchi
             )
+            val formattedHour by remember { derivedStateOf { hour.format(DateTimeFormatter.ofPattern("HH:mm")) } }
+
+
             OutlinedTextField(
-                value = hour.format(DateTimeFormatter.ofPattern("HH:mm")),
+                value = formattedHour, // Utilise la version formatée
                 onValueChange = {},
                 label = { Text("HH:MM") },
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
@@ -227,6 +241,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             context,
                             { _, selectedHour, selectedMinute ->
                                 hour = LocalTime.of(selectedHour, selectedMinute)
+                                Log.d("RoutineForm", "Nouvelle heure sélectionnée : ${hour.format(DateTimeFormatter.ofPattern("HH:mm"))}")
                             },
                             hour.hour,
                             hour.minute,
@@ -340,7 +355,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
             }
 
             Button(onClick = {
-                if (title.isBlank()) {
+                if (title.isBlank() || selectedDays.values.none { it.state.activated })  {
                     showError = true
                 } else {
                     showError = false
