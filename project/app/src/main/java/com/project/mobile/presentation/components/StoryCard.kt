@@ -1,6 +1,7 @@
 package com.project.mobile.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +28,9 @@ import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.StoryVM
 import com.project.mobile.ui.theme.Purple
+import com.project.mobile.ui.theme.WhitePurple
 import suezOneRegular
+import trocchi
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -43,11 +46,26 @@ fun StoryCard(story: StoryVM, navController: NavController){
             }
             .background(Purple, shape = RoundedCornerShape(10.dp))
             .padding(15.dp, 12.dp),
+
     ){
+
         Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-
+            Box(modifier = Modifier
+                .align(Alignment.End)
+                .border(1.dp, WhitePurple                        , shape = RoundedCornerShape(10.dp)
+                )
+                .background(Purple, shape = RoundedCornerShape(10.dp))
+                .padding(8.dp, 3.dp)
+            ){
+                Text(story.categorie,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontFamily = trocchi)
+                )
+            }
             Text(story.title,
                 style = TextStyle(
                     fontSize = 22.sp,
@@ -78,6 +96,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                     )
                 }
             }
+
 
         }
     }

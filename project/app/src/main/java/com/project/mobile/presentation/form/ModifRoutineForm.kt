@@ -8,11 +8,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,18 +23,17 @@ import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.DayVM
-import com.project.mobile.presentation.Days
 import com.project.mobile.ui.theme.Purple
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import com.project.mobile.presentation.StoryVM
 import com.project.mobile.ui.theme.DarkPurple
-import com.project.mobile.ui.theme.WhitePurple
 import com.project.mobile.utils.DataStoreManager
 import kotlinx.coroutines.launch
 import suezOneRegular
 import trocchi
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataStoreManager, context: MainActivity, routineId: Int) {
     // Charger les données de la routine à modifier
@@ -45,7 +44,10 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
     var description by remember { mutableStateOf("") }
     var hour by remember { mutableStateOf(LocalTime.now()) }
     var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
+    var expanded by remember { mutableStateOf(false) }
+    var categorie by remember { mutableStateOf("Autre") }
 
+    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole")
     // Charger les données de la routine à modifier
     LaunchedEffect(routineId) {
         // Récupérer la story à partir de l'id
@@ -209,6 +211,53 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         )
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        "Catégorie :",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = trocchi
+                    )
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = !expanded },
+                        modifier = Modifier
+                            .border(1.dp,Color.White, shape = RoundedCornerShape(5.dp))
+                    ) {
+                        OutlinedTextField(
+                            value = categorie,
+                            textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .clickable { expanded = !expanded }
+                                .background(Purple, shape = RoundedCornerShape(5.dp))
+                                .border(1.dp,Color.White, shape = RoundedCornerShape(5.dp))
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+
+                            modifier = Modifier.background(Purple)
+                        ) {
+                            options.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option, color=Color.White, fontSize = 16.sp) },
+                                    onClick = {
+                                        categorie = option
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -230,11 +279,12 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 navController.navigate(Screen.StoriesListScreen.route) }
                                       },
                             colors = ButtonColors(
-                                disabledContainerColor = WhitePurple,
+                                disabledContainerColor = Color.White,
                                 disabledContentColor = Color.White,
-                                containerColor = WhitePurple,
+                                containerColor = Color.White,
                                 contentColor = Color.White
-                            )
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(3.dp)
                         ) {
                             Text(text = "Supprimer", fontFamily = trocchi, color = DarkPurple, fontWeight = FontWeight.Bold)
                         } // Bouton de soumission
@@ -248,7 +298,8 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     title = title,
                                     description = description,
                                     days = selectedDays,
-                                    hour = hour
+                                    hour = hour,
+                                    categorie = categorie
                                 )
 
                                 // Lancer une coroutine pour enregistrer la routine
@@ -262,7 +313,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             disabledContentColor = Color.White,
                             containerColor = Purple,
                             contentColor = Color.White
-                        )) {
+                        ),elevation = ButtonDefaults.buttonElevation(3.dp)) {
                             Text(text = "Enregistrer", fontFamily = trocchi, color = Color.White, fontWeight = FontWeight.Bold)
                         }
                     }

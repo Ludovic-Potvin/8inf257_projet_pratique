@@ -8,6 +8,7 @@ data class StoryVM(
     val id: Int,
     val title: String = "",
     val description: String = "",
+    val categorie: String = "",
     val hour: LocalTime = LocalTime.now(),
     val days: LinkedHashMap<String, DayVM> = Days.days,
     /*    val days: LinkedHashMap<String, DayVM> = linkedMapOf("lundi" to DayVM("L", NoActivated),
