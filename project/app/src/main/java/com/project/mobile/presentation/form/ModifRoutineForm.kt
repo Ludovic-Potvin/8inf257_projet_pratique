@@ -9,6 +9,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -67,7 +70,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -99,6 +102,19 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
+                    Box(
+                        modifier = Modifier
+                            .clickable { navController.navigate(Screen.StoriesListScreen.route) }
+                            .align(Alignment.Start)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Retour",
+                            tint = Color.White,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                     // Champ Titre
                     Text("Titre :", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = trocchi)
                     OutlinedTextField(
@@ -171,7 +187,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         }
                     }
 
-                    // 🔴 Ajout du message d'erreur si aucun jour n'est sélectionné
+                    // Ajout du message d'erreur si aucun jour n'est sélectionné
                     if (selectedDays.values.none { it.state.activated }) {
                         Text(
                             text = "Veuillez sélectionner au moins un jour",
@@ -277,12 +293,6 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Button(
-                            onClick = { navController.navigate(Screen.StoriesListScreen.route) },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Black)
-                        ) {
-                            Text(text = "Annuler", fontFamily = trocchi, fontWeight = FontWeight.Bold)
-                        }
                         Button(
                             onClick = {
                                 val newRoutine = StoryVM(

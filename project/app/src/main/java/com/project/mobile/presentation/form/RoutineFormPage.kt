@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -112,6 +113,19 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
+            Box(
+                modifier = Modifier
+                    .clickable { navController.navigate(Screen.StoriesListScreen.route) }
+                    .align(Alignment.Start)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Retour",
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             // Champ Titre
             Text(
                 "Titre :",

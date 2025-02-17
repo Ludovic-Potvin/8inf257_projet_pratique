@@ -91,13 +91,14 @@ fun StoryCard(story: StoryVM, navController: NavController){
                         DayCard(day)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        fontFamily = suezOneRegular)
+                    )
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontFamily = suezOneRegular)
-                )
+
 
             }
 
