@@ -45,7 +45,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
     var hour by remember { mutableStateOf(LocalTime.now()) }
     var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
     var expanded by remember { mutableStateOf(false) }
-    var categorie by remember { mutableStateOf("Autre") }
+    var categorie by remember { mutableStateOf("") }
 
     val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
     // Charger les données de la routine à modifier
@@ -57,6 +57,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
             description = it.description
             hour = it.hour
             selectedDays = it.days
+            categorie = it.categorie
         }
      Log.d("ModifRoutineForm", " story=$story , routine id=$routineId")
     }
