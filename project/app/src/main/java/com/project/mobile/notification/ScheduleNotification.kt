@@ -16,6 +16,20 @@ fun scheduleNotificationWithPermission(context: Context, jour: String, hour: Int
     }
 }
 
+fun cancelNotification(context: Context, jour: String, hour: Int, minute: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, NotificationReceiver::class.java)
+    val requestCode = jour.hashCode() + hour * 100 + minute
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        requestCode,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    alarmManager.cancel(pendingIntent)
+}
+
 fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String) {
     try {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

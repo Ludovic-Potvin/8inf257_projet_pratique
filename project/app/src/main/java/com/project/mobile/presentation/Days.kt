@@ -9,7 +9,7 @@ data class Days (
         "jeudi" to DayVM("J", "Jeudi",NoActivated),
         "vendredi" to DayVM("V", "Vendredi", NoActivated),
         "samedi" to DayVM("S", "Samedi", NoActivated),
-        "dimanche" to DayVM("D", "Dimande", NoActivated))
+        "dimanche" to DayVM("D", "Dimanche", NoActivated))
 
     ) {
     companion object {
