@@ -37,9 +37,11 @@ fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int,
             putExtra("title", titreNotif)
             putExtra("message", messageNotif)
         }
+
+        val requestCode = jour.hashCode() + hour * 100 + minute
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
