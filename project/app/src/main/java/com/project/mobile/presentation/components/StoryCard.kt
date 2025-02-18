@@ -73,7 +73,8 @@ fun StoryCard(story: StoryVM, navController: NavController){
                 style = TextStyle(
                     fontSize = 22.sp,
                     color = Color.White,
-                    fontFamily = suezOneRegular
+                    fontFamily = suezOneRegular,
+                    textAlign = TextAlign.Center
                 ))
             Text(story.description,
                 style = TextStyle(

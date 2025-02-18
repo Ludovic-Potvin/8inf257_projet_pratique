@@ -208,7 +208,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }
-            // 🔴 Ajout du message d'erreur si aucun jour n'est sélectionné
+            // Ajout du message d'erreur si aucun jour n'est sélectionné
             if (selectedDays.values.none { it.state.activated }) {
                 Text(
                     text = "Veuillez sélectionner au moins un jour",
