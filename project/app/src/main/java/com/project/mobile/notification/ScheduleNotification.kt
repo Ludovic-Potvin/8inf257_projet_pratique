@@ -59,11 +59,13 @@ fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int,
             }
         }
 
-        alarmManager.setExactAndAllowWhileIdle(
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY * 7, // Répéter toutes les semaines
             pendingIntent
         )
+
     } catch (e: SecurityException) {
         Toast.makeText(
             context,
