@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.format.DateTimeFormatter
 
 // Extension DataStore
 val Context.dataStore by preferencesDataStore(name = "story_prefs")
@@ -73,8 +74,11 @@ class DataStoreManager(private val context: Context) {
 
     suspend fun getStoryById(id: Int): StoryVM? {
         val stories = storiesFlow.first()
-        return stories.find { it.id == id }
+        val story = stories.find { it.id == id }
+
+        return story?.copy(hour = story.getHourAsLocalTime().format( DateTimeFormatter.ofPattern("HH:mm")))
     }
+
     private suspend fun getLastStoryId(): Int {
         return context.dataStore.data.map { preferences ->
             preferences[LAST_STORY_ID_KEY] ?: 0 // Si aucun ID n'existe, commence à 0

@@ -33,6 +33,7 @@ import com.project.mobile.ui.theme.Purple
 import com.project.mobile.ui.theme.WhitePurple
 import suezOneRegular
 import trocchi
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @OptIn(UnstableApi::class)
@@ -84,21 +85,27 @@ fun StoryCard(story: StoryVM, navController: NavController){
                     textAlign = TextAlign.Center
                 ))
             Spacer(modifier = Modifier.height(5.dp))
-            Column(modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally){
 
                 Row(horizontalArrangement = Arrangement.Center) {
                     story.days.forEach { (_, day) ->
                         DayCard(day)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(story.hour.format(DateTimeFormatter.ofPattern("HH:mm")), style = TextStyle(
+                    Spacer(modifier = Modifier.width(7.dp))
+                    val formattedHour = try {
+                        LocalTime.parse(story.hour, DateTimeFormatter.ofPattern("HH:mm"))
+                            .format(DateTimeFormatter.ofPattern("HH:mm"))
+                    } catch (e: Exception) {
+                        Log.e("StoryCard", "Erreur de formatage de l'heure : ${story.hour}", e)
+                        "Heure invalide"
+                    }
+
+                    Text(formattedHour, style = TextStyle(
                         fontSize = 20.sp,
                         color = Color.White,
-                        fontFamily = suezOneRegular)
-                    )
-                }
+                        fontFamily = suezOneRegular
+                    ))
+
 
 
             }

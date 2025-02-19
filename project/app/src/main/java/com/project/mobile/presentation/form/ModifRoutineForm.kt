@@ -3,6 +3,7 @@ package com.project.mobile.presentation.form
 import Activated
 import NoActivated
 import android.os.Build
+import android.app.TimePickerDialog
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -64,7 +66,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
         story?.let {
             title = it.title
             description = it.description
-            hour = it.hour
+            hour = LocalTime.parse(it.hour, DateTimeFormatter.ofPattern("HH:mm"))
             selectedDays = it.days
             categorie = it.categorie
         }
@@ -208,7 +210,24 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                     Text("Heure :", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = trocchi)
                     OutlinedTextField(
                         value = hour.format(DateTimeFormatter.ofPattern("HH:mm")),
-                        onValueChange = { /* Peut implémenter un Picker d'heure si nécessaire */ },
+                        onValueChange = {},
+                        readOnly = true,
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                val timePicker = TimePickerDialog(
+                                    context,
+                                    { _, selectedHour, selectedMinute ->
+                                        hour = LocalTime.of(selectedHour, selectedMinute)
+                                    },
+                                    hour.hour,
+                                    hour.minute,
+                                    true
+                                )
+                                timePicker.show()
+                            }) {
+                                Icon(imageVector = Icons.Filled.AccessTime, contentDescription = "Sélectionner l'heure", tint = Color.White)
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
                         colors = TextFieldDefaults.colors(
@@ -305,7 +324,8 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     title = title,
                                     description = description,
                                     days = selectedDays,
-                                    hour = hour)
+                                    hour = hour.toString()
+                                )
 
                                 coroutineScope.launch {
                                 dataStoreManager.deleteStory(newRoutine)
@@ -336,7 +356,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     title = title,
                                     description = description,
                                     days = selectedDays,
-                                    hour = hour,
+                                    hour = hour.toString(),
                                     categorie = categorie
                                 )
 
