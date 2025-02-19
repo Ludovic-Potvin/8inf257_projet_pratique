@@ -5,7 +5,9 @@ import NoActivated
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
+import com.project.mobile.notification.saveNotificationTime
+import com.project.mobile.notification.scheduleNotificationWithPermission
 import com.project.mobile.ui.theme.DarkPurple
 import com.project.mobile.ui.theme.Purple
 import com.project.mobile.ui.theme.WhitePurple
@@ -75,6 +79,7 @@ fun RoutineFormPage(navController: NavController, dataStoreManager: DataStoreMan
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -385,6 +390,14 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
 
                         dataStoreManager.addOrUpdateStory(newRoutine)
                         navController.navigate(Screen.StoriesListScreen.route)
+
+                        for (jour in selectedDays.values) {
+                            if (jour.state == Activated)
+                            {
+                                scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
+                            }
+                        }
                     }
                 }
             }, colors = ButtonColors(
