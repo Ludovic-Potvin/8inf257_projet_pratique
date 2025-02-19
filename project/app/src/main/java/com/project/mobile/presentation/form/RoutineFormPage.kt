@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
+import com.project.mobile.notification.saveNotificationTime
 import com.project.mobile.notification.scheduleNotificationWithPermission
 import com.project.mobile.ui.theme.DarkPurple
 import com.project.mobile.ui.theme.Purple
@@ -394,6 +395,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             if (jour.state == Activated)
                             {
                                 scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                             }
                         }
                     }

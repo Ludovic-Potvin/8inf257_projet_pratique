@@ -30,6 +30,8 @@ import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
 import com.project.mobile.notification.cancelNotification
+import com.project.mobile.notification.getPreviousNotificationTime
+import com.project.mobile.notification.saveNotificationTime
 import com.project.mobile.notification.scheduleNotificationWithPermission
 import com.project.mobile.presentation.DayVM
 import com.project.mobile.ui.theme.Purple
@@ -335,7 +337,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 {
                                     cancelNotification(context, jour.fullname, hour.hour, hour.minute)
                                 }
-                                      },
+                            },
                             colors = ButtonColors(
                                 disabledContainerColor = Color.White,
                                 disabledContentColor = Color.White,
@@ -367,9 +369,16 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 }
 
                                 for (jour in selectedDays.values) {
+
+                                    val previousTime = getPreviousNotificationTime(context, jour.fullname)
+                                    if (previousTime != null) {
+                                        cancelNotification(context, jour.fullname, previousTime.first, previousTime.second) // Supprime l'ancienne alarme
+                                    }
+
                                     if (jour.state == Activated)
                                     {
                                         scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                        saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                                     }
                                     else
                                     {

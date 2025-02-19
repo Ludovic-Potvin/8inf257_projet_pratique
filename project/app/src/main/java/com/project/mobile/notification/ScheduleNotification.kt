@@ -3,6 +3,7 @@ package com.project.mobile.notification
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
@@ -91,3 +92,20 @@ fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int,
     }
 }
 
+fun saveNotificationTime(context: Context, jour: String, hour: Int, minute: Int) {
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE)
+    with(sharedPreferences.edit()) {
+        putInt("${jour}_hour", hour)
+        putInt("${jour}_minute", minute)
+        apply()
+    }
+}
+
+fun getPreviousNotificationTime(context: Context, jour: String): Pair<Int, Int>? {
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE)
+    val hour = sharedPreferences.getInt("${jour}_hour", -1)
+    val minute = sharedPreferences.getInt("${jour}_minute", -1)
+
+    return if (hour != -1 && minute != -1) Pair(hour, minute) else null
+}
