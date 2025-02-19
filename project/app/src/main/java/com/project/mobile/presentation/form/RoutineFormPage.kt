@@ -228,11 +228,10 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 fontWeight = FontWeight.Bold,
                 fontFamily = trocchi
             )
-            val formattedHour by remember { derivedStateOf { hour.format(DateTimeFormatter.ofPattern("HH:mm")) } }
 
 
             OutlinedTextField(
-                value = formattedHour, // Utilise la version formatée
+                value = hour.format(DateTimeFormatter.ofPattern("HH:mm")),
                 onValueChange = {},
                 label = { Text("HH:MM") },
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
@@ -255,7 +254,6 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             context,
                             { _, selectedHour, selectedMinute ->
                                 hour = LocalTime.of(selectedHour, selectedMinute)
-                                Log.d("RoutineForm", "Nouvelle heure sélectionnée : ${hour.format(DateTimeFormatter.ofPattern("HH:mm"))}")
                             },
                             hour.hour,
                             hour.minute,
@@ -381,7 +379,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             title = title,
                             description = description,
                             days = selectedDays,
-                            hour = hour,
+                            hour = hour.toString(),
                             categorie = categorie
                         )
 
