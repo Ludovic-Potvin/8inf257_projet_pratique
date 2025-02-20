@@ -89,7 +89,8 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
         "samedi" to DayVM("S", "Samedi", NoActivated),
         "dimanche" to DayVM("D", "Dimande", NoActivated))
     ) }
-    var hour by remember { mutableStateOf(LocalTime.now()) }
+    var hour by remember { mutableStateOf(LocalTime.now().withSecond(0).withNano(0)) }
+
 
 
     var showError by remember { mutableStateOf(false) }
@@ -255,7 +256,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                         val timePicker = TimePickerDialog(
                             context,
                             { _, selectedHour, selectedMinute ->
-                                hour = LocalTime.of(selectedHour, selectedMinute)
+                                hour = LocalTime.of(selectedHour, selectedMinute).withSecond(0).withNano(0)
                             },
                             hour.hour,
                             hour.minute,
