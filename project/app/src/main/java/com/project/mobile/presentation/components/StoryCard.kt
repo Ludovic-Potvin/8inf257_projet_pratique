@@ -58,7 +58,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                 navController.navigate("routine_modif/$routineId")
             }
             .background(background, shape = RoundedCornerShape(10.dp))
-            .padding(15.dp, 12.dp),
+            .padding(12.dp, 12.dp),
 
     ){
 
@@ -114,7 +114,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                         DayCard(day)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
-                    Spacer(modifier = Modifier.width(7.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     val formattedHour = try {
                         LocalTime.parse(story.hour, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("HH:mm"))

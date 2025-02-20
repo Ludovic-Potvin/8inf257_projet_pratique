@@ -140,9 +140,9 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             unfocusedIndicatorColor = Color.White
                         )
                     )
-                    if (showError) {
+                    if (title.isBlank()) {
                         Text(
-                            text = "Le titre ne peut pas être vide",
+                            text = "Veuillez saisir un titre",
                             color = Color.Red,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(top = 4.dp)
