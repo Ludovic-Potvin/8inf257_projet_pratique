@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
+import com.project.mobile.presentation.Categorie
 import com.project.mobile.presentation.DayVM
+import com.project.mobile.presentation.Priorite
 import com.project.mobile.ui.theme.Purple
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -51,9 +53,10 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
 
     var selectedDays by remember { mutableStateOf(LinkedHashMap<String, DayVM>()) }
     var expanded by remember { mutableStateOf(false) }
-    var categorie by remember { mutableStateOf("") }
+    var categorie by remember { mutableStateOf(Categorie.AUTRE) }
+    var priorite by remember { mutableStateOf(Priorite.MOYENNE) }
+    var expandedPriorite by remember { mutableStateOf(false) }
 
-    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
     // Charger les données de la routine à modifier
     LaunchedEffect(routineId) {
         // Récupérer la story à partir de l'id
@@ -64,6 +67,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
             hour = LocalTime.parse(it.hour, DateTimeFormatter.ofPattern("HH:mm"))
             selectedDays = it.days
             categorie = it.categorie
+            priorite = it.priorite
         }
      Log.d("ModifRoutineForm", " story=$story , routine id=$routineId")
     }
@@ -273,7 +277,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             .border(1.dp,Color.White, shape = RoundedCornerShape(5.dp))
                     ) {
                         OutlinedTextField(
-                            value = categorie,
+                            value = categorie.label,
                             textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
                             onValueChange = {},
                             readOnly = true,
@@ -294,9 +298,9 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
 
                             modifier = Modifier.background(Purple)
                         ) {
-                            options.forEach { option ->
+                            Categorie.values().forEach { option ->
                                 DropdownMenuItem(
-                                    text = { Text(option, color=Color.White, fontSize = 16.sp) },
+                                    text = { Text(option.label, color=Color.White, fontSize = 16.sp) },
                                     onClick = {
                                         categorie = option
                                         expanded = false
@@ -306,6 +310,55 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(8.dp))
+                    //Priorite
+                    Text(
+                        "Priorité :",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = trocchi
+                    )
+
+                    ExposedDropdownMenuBox(
+                        expanded = expandedPriorite,
+                        onExpandedChange = { expandedPriorite = !expandedPriorite },
+                        modifier = Modifier
+                            .border(1.dp, Color.White, shape = RoundedCornerShape(5.dp))
+                    ) {
+
+                        OutlinedTextField(
+                            value = priorite.label,
+                            textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedPriorite)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .clickable { expandedPriorite = !expandedPriorite }
+                                .background(Purple, shape = RoundedCornerShape(5.dp))
+                                .border(1.dp, Color.White, shape = RoundedCornerShape(5.dp))
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expandedPriorite,
+                            onDismissRequest = { expandedPriorite = false },
+                            modifier = Modifier.background(Purple)
+                        ) {
+                            Priorite.values().forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option.label, color = Color.White, fontSize = 16.sp) },
+                                    onClick = {
+                                        priorite = option
+                                        expandedPriorite = false
+                                    }
+                                )
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
@@ -347,7 +400,8 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     description = description,
                                     days = selectedDays,
                                     hour = hour.toString(),
-                                    categorie = categorie
+                                    categorie = categorie,
+                                    priorite = priorite
                                 )
 
                                 // Lancer une coroutine pour enregistrer la routine

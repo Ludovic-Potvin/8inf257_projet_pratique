@@ -11,11 +11,11 @@ open class ActivatedOrNo(
 
 // Objets pour les états activés et non activés
 object Activated : ActivatedOrNo(
-    backgroundColor = WhitePurple,  // Couleur personnalisée (par exemple, WhitePurple)
+    backgroundColor = Purple,  // Couleur personnalisée (par exemple, WhitePurple)
     activated = true
 )
 
 object NoActivated : ActivatedOrNo(
-    backgroundColor = Purple,  // Couleur de non activation
+    backgroundColor = WhitePurple,  // Couleur de non activation
     activated = false
 )

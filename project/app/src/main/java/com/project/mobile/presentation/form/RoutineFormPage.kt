@@ -94,11 +94,11 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
 
     var showError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
-    var categorie by remember { mutableStateOf("Autre") }
+    var categorie by remember { mutableStateOf(Categorie.AUTRE) }
     var priorite by remember { mutableStateOf(Priorite.MOYENNE) }
     var expandedPriorite by remember { mutableStateOf(false) }
 
-    val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
+
     Log.d("RoutineformPage","routineid =$routineId")
 
     // Créer un CoroutineScope avec remember
@@ -316,7 +316,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     .border(1.dp,Color.White, shape = RoundedCornerShape(5.dp))
                        ) {
                 OutlinedTextField(
-                    value = categorie,
+                    value = categorie.label,
                     textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
                     onValueChange = {},
                     readOnly = true,
@@ -336,9 +336,9 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.background(Purple)
                 ) {
-                    options.forEach { option ->
+                    Categorie.values().forEach { option ->
                         DropdownMenuItem(
-                            text = { Text(option, color= Color.White, fontSize = 16.sp) },
+                            text = { Text(option.label, color= Color.White, fontSize = 16.sp) },
                             onClick = {
                                 categorie = option
                                 expanded = false

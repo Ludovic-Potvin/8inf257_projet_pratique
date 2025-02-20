@@ -1,6 +1,7 @@
 package com.project.mobile
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,6 +27,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,11 +36,11 @@ class MainActivity : ComponentActivity() {
                     // 1. Crée le navController
                     val navController = rememberNavController()
                     val dataStoreManager = DataStoreManager(this)
-               /*     val coroutineScope = rememberCoroutineScope()
+                   val coroutineScope = rememberCoroutineScope()
                     coroutineScope.launch {
                         dataStoreManager.clearDataStore()
                     }
-                */
+
 
                     // 3. Mappe toutes les pages à une route dans le navController
                     NavHost(
@@ -67,9 +69,8 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-
-                            }
                     }
+                }
 
 
                 }

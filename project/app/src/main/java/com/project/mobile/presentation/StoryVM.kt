@@ -10,7 +10,7 @@ data class StoryVM(
     val id: Int,
     val title: String = "",
     val description: String = "",
-    val categorie: String = "Autre",
+    val categorie: Categorie = Categorie.AUTRE,
     val hour: String = "00:00",
     val days: LinkedHashMap<String, DayVM> = Days.days,
     val priorite: Priorite = Priorite.MOYENNE

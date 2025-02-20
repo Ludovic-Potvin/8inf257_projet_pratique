@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +44,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun StoryCard(story: StoryVM, navController: NavController){
     val routineId = story.id
-    val backgroundColor = when (story.priorite) {
+    val background = when (story.priorite) {
         Priorite.BASSE -> WhitePurple
         Priorite.MOYENNE -> Purple
         Priorite.ELEVEE -> DarkPurple
@@ -55,7 +57,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                 Log.d("Navigation", "Navigating to routine_modif/$routineId")
                 navController.navigate("routine_modif/$routineId")
             }
-            .background(backgroundColor, shape = RoundedCornerShape(10.dp))
+            .background(background, shape = RoundedCornerShape(10.dp))
             .padding(15.dp, 12.dp),
 
     ){
@@ -63,20 +65,34 @@ fun StoryCard(story: StoryVM, navController: NavController){
         Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
+
+       /* Row(modifier = Modifier.fillMaxSize(),horizontalArrangement = Arrangement.SpaceBetween){
+
+            Box(
+            Modifier.size(30.dp)
+                .align(Alignment.Start)
+                .background(color = priorityColor,
+                    shape = CircleShape
+                )
+                .border(1.dp, WhitePurple, CircleShape),
+        )*/
             Box(modifier = Modifier
                 .align(Alignment.End)
-                .border(1.dp, WhitePurple                        , shape = RoundedCornerShape(10.dp)
+                .border(1.dp, WhitePurple, shape = RoundedCornerShape(10.dp)
                 )
                 .background(Purple, shape = RoundedCornerShape(10.dp))
                 .padding(8.dp, 3.dp)
             ){
-                Text(story.categorie,
+                Text(story.categorie.label,
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
                         fontFamily = trocchi)
                 )
             }
+           /* }*/
+
+
             Text(story.title,
                 style = TextStyle(
                     fontSize = 22.sp,
