@@ -28,7 +28,9 @@ import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
+import com.project.mobile.presentation.Priorite
 import com.project.mobile.presentation.StoryVM
+import com.project.mobile.ui.theme.DarkPurple
 import com.project.mobile.ui.theme.Purple
 import com.project.mobile.ui.theme.WhitePurple
 import suezOneRegular
@@ -40,6 +42,11 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun StoryCard(story: StoryVM, navController: NavController){
     val routineId = story.id
+    val backgroundColor = when (story.priorite) {
+        Priorite.BASSE -> WhitePurple
+        Priorite.MOYENNE -> Purple
+        Priorite.ELEVEE -> DarkPurple
+    }
     Log.d("routineId", "routineId=$routineId")
     Box(
         modifier = Modifier
@@ -48,7 +55,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                 Log.d("Navigation", "Navigating to routine_modif/$routineId")
                 navController.navigate("routine_modif/$routineId")
             }
-            .background(Purple, shape = RoundedCornerShape(10.dp))
+            .background(backgroundColor, shape = RoundedCornerShape(10.dp))
             .padding(15.dp, 12.dp),
 
     ){

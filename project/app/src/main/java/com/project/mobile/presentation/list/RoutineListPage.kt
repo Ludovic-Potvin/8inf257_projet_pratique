@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,7 @@ import com.project.mobile.presentation.components.StoryCard
 import com.project.mobile.ui.theme.Purple
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
+import kotlinx.coroutines.launch
 import suezOneRegular
 
 //TODO This is where we want to display the list of routine available
@@ -40,6 +42,7 @@ fun RoutineListPage(navController: NavController,dataStoreManager: DataStoreMana
     val storiesViewModel: ListStoriesViewModel = viewModel(
         factory = ListStoriesViewModelFactory(dataStoreManager)
     )
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier

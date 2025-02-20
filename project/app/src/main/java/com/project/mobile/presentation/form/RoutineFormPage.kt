@@ -95,6 +95,8 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
     var showError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf("Autre") }
+    var priorite by remember { mutableStateOf(Priorite.MOYENNE) }
+    var expandedPriorite by remember { mutableStateOf(false) }
 
     val options = listOf("Travail", "Médical", "Maison", "Sport", "Ecole", "Loisir")
     Log.d("RoutineformPage","routineid =$routineId")
@@ -299,7 +301,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 )
             )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
             Text(
                 "Catégorie :",
                 color = Color.White,
@@ -345,6 +347,55 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            //Priorite
+            Text(
+                "Priorité :",
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = trocchi
+            )
+
+            ExposedDropdownMenuBox(
+                expanded = expandedPriorite,
+                onExpandedChange = { expandedPriorite = !expandedPriorite },
+                modifier = Modifier
+                    .border(1.dp, Color.White, shape = RoundedCornerShape(5.dp))
+            ) {
+
+                OutlinedTextField(
+                    value = priorite.label,
+                    textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedPriorite)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .clickable { expandedPriorite = !expandedPriorite }
+                        .background(Purple, shape = RoundedCornerShape(5.dp))
+                        .border(1.dp, Color.White, shape = RoundedCornerShape(5.dp))
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedPriorite,
+                    onDismissRequest = { expandedPriorite = false },
+                    modifier = Modifier.background(Purple)
+                ) {
+                    Priorite.values().forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option.label, color = Color.White, fontSize = 16.sp) },
+                            onClick = {
+                                priorite = option
+                                expandedPriorite = false
+                            }
+                        )
+                    }
+                }
+            }
 
 
         // Boutons Enregistrer et Annuler
@@ -379,8 +430,10 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                             title = title,
                             description = description,
                             days = selectedDays,
-                            hour = hour.toString(),
-                            categorie = categorie
+                            hour = //"12:00",
+                                hour.toString(),
+                            categorie = categorie,
+                            priorite = priorite
                         )
 
                         dataStoreManager.addOrUpdateStory(newRoutine)

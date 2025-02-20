@@ -15,12 +15,15 @@ import androidx.navigation.compose.rememberNavController
 import com.project.mobile.presentation.list.ListStoriesViewModel
 import com.project.mobile.presentation.list.RoutineListPage
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.RoutineFormPage
 import com.project.mobile.presentation.form.ModifRoutineForm
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,11 @@ class MainActivity : ComponentActivity() {
                     // 1. Crée le navController
                     val navController = rememberNavController()
                     val dataStoreManager = DataStoreManager(this)
+               /*     val coroutineScope = rememberCoroutineScope()
+                    coroutineScope.launch {
+                        dataStoreManager.clearDataStore()
+                    }
+                */
 
                     // 3. Mappe toutes les pages à une route dans le navController
                     NavHost(

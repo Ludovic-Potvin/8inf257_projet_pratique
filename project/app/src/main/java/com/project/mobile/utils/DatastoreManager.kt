@@ -103,5 +103,5 @@ class DataStoreManager(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences.clear() // Supprime toutes les valeurs enregistrées
         }
-    }
+    }   
 }
