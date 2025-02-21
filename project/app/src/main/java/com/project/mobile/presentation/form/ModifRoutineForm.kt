@@ -45,7 +45,8 @@ import trocchi
 fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataStoreManager, context: MainActivity, routineId: Int) {
     // Charger les données de la routine à modifier
     val coroutineScope = rememberCoroutineScope()
-    var showError by remember { mutableStateOf(false) }
+    var showTitleError by remember { mutableStateOf(false) }
+    var showDayError by remember { mutableStateOf(false) }
     var story by remember { mutableStateOf<StoryVM?>(null) }
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -139,7 +140,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             unfocusedIndicatorColor = Color.White
                         )
                     )
-                    if (title.isBlank()) {
+                    if (showTitleError) {
                         Text(
                             text = "Veuillez saisir un titre",
                             color = Color.Red,
@@ -193,7 +194,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                     }
 
                     // Ajout du message d'erreur si aucun jour n'est sélectionné
-                    if (selectedDays.values.none { it.state.activated }) {
+                    if (showDayError) {
                         Text(
                             text = "Veuillez sélectionner au moins un jour",
                             color = Color.Red,
@@ -389,10 +390,10 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                             Text(text = "Supprimer", fontFamily = trocchi, color = DarkPurple, fontWeight = FontWeight.Bold)
                         } // Bouton de soumission
                         Button(onClick = {
-                            if (title.isBlank() || selectedDays.values.none { it.state.activated }) {
-                                showError = true
-                            } else {
-                                showError = false
+                            showTitleError = title.isBlank()
+                            showDayError = selectedDays.values.none { it.state.activated }
+                            // Si aucune erreur, on enregistre
+                            if (!showTitleError && !showDayError) {
                                 val newRoutine = StoryVM(
                                     id = routineId,
                                     title = title,

@@ -93,7 +93,8 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
 
 
 
-    var showError by remember { mutableStateOf(false) }
+    var showTitleError by remember { mutableStateOf(false) }
+    var showDayError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var categorie by remember { mutableStateOf(Categorie.AUTRE) }
     var priorite by remember { mutableStateOf(Priorite.MOYENNE) }
@@ -154,7 +155,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                     unfocusedIndicatorColor = Color.White
                 )
             )
-            if (title.isBlank()) {
+            if (showTitleError) {
                 Text(
                     text = "Veuillez saisir un Titre",
                     color = Color.Red,
@@ -212,7 +213,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                 }
             }
             // Ajout du message d'erreur si aucun jour n'est sélectionné
-            if (selectedDays.values.none { it.state.activated }) {
+            if (showDayError) {
                 Text(
                     text = "Veuillez sélectionner au moins un jour",
                     color = Color.Red,
@@ -419,10 +420,9 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
             }
 
             Button(onClick = {
-                if (title.isBlank() || selectedDays.values.none { it.state.activated })  {
-                    showError = true
-                } else {
-                    showError = false
+                showTitleError = title.isBlank()
+                showDayError = selectedDays.values.none { it.state.activated }
+                if (!showTitleError && !showDayError){
                     coroutineScope.launch {
                         val newId = dataStoreManager.generateNewStoryId()
 
