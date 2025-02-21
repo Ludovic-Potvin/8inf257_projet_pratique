@@ -128,7 +128,6 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                         onValueChange = { title = it },
                         modifier = Modifier.fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
-                        isError = showError,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Purple,
                             unfocusedContainerColor = Purple,
