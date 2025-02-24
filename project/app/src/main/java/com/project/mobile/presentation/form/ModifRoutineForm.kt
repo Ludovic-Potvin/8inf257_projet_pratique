@@ -2,8 +2,10 @@ package com.project.mobile.presentation.form
 
 import Activated
 import NoActivated
+import android.os.Build
 import android.app.TimePickerDialog
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,6 +30,10 @@ import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.Categorie
+import com.project.mobile.notification.cancelNotification
+import com.project.mobile.notification.getPreviousNotificationTime
+import com.project.mobile.notification.saveNotificationTime
+import com.project.mobile.notification.scheduleNotificationWithPermission
 import com.project.mobile.presentation.DayVM
 import com.project.mobile.presentation.Priorite
 import com.project.mobile.ui.theme.Purple
@@ -40,6 +46,7 @@ import kotlinx.coroutines.launch
 import suezOneRegular
 import trocchi
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataStoreManager, context: MainActivity, routineId: Int) {
@@ -378,7 +385,12 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 coroutineScope.launch {
                                 dataStoreManager.deleteStory(newRoutine)
                                 navController.navigate(Screen.StoriesListScreen.route) }
-                                      },
+
+                                for (jour in selectedDays.values)
+                                {
+                                    cancelNotification(context, jour.fullname, hour.hour, hour.minute)
+                                }
+                            },
                             colors = ButtonColors(
                                 disabledContainerColor = Color.White,
                                 disabledContentColor = Color.White,
@@ -408,6 +420,24 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                 coroutineScope.launch {
                                     dataStoreManager.addOrUpdateStory(story = newRoutine)
                                     navController.navigate(Screen.StoriesListScreen.route) // Naviguer après l'enregistrement
+                                }
+
+                                for (jour in selectedDays.values) {
+
+                                    val previousTime = getPreviousNotificationTime(context, jour.fullname)
+                                    if (previousTime != null) {
+                                        cancelNotification(context, jour.fullname, previousTime.first, previousTime.second) // Supprime l'ancienne alarme
+                                    }
+
+                                    if (jour.state == Activated)
+                                    {
+                                        scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                        saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
+                                    }
+                                    else
+                                    {
+                                        cancelNotification(context, jour.fullname, hour.hour, hour.minute)
+                                    }
                                 }
                             }
                         }, colors = ButtonColors(

@@ -1,10 +1,11 @@
 package com.project.mobile
-
-
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.navigation.compose.NavHost
@@ -23,6 +24,15 @@ import com.project.mobile.presentation.RoutineFormPage
 import com.project.mobile.presentation.form.ModifRoutineForm
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
+import androidx.compose.ui.tooling.preview.Preview
+import com.project.mobile.notification.scheduleNotificationWithPermission
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.compose.runtime.LaunchedEffect
+import com.project.mobile.ui.theme.MobileprojectTheme
+import androidx.navigation.compose.rememberNavController
+import com.project.mobile.ui.RoutineFormPage
+import com.project.mobile.ui.RoutineListPage
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -30,6 +40,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             MobileprojectTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -41,12 +52,12 @@ class MainActivity : ComponentActivity() {
                         dataStoreManager.clearDataStore()
                     }
 
-
-                    // 3. Mappe toutes les pages à une route dans le navController
+                    // 3. Map toutes les pages à une route dans le navController
                     NavHost(
                         navController = navController,
                         startDestination = Screen.StoriesListScreen.route
-                    ) {
+                    )
+                    {
                         composable(route = Screen.StoriesListScreen.route) {
                             RoutineListPage(navController, dataStoreManager)
                         }
@@ -71,9 +82,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
-
-                }
             }
         }
+    }
 }
