@@ -7,14 +7,21 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import android.Manifest
+import android.content.pm.PackageManager
+import android.app.NotificationManager
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun checkAndRequestExactAlarmPermission(context: Context): Boolean {
+fun checkAndRequestPermissions(context: Context): Boolean {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    // Check if the app has permission to schedule exact alarms
+    var hasAlarmPermission = true
+    var hasNotificationPermission = true
+
+    // Vérifier et demander l'autorisation des alarmes exactes
     if (!alarmManager.canScheduleExactAlarms()) {
-        // Notify the user and redirect to settings
         Toast.makeText(
             context,
             "Autorisez les alarmes exactes dans les paramètres de l'application.",
@@ -25,8 +32,28 @@ fun checkAndRequestExactAlarmPermission(context: Context): Boolean {
             data = android.net.Uri.fromParts("package", context.packageName, null)
         }
         context.startActivity(intent)
-        return false
+        hasAlarmPermission = false
     }
 
-    return true
+    // Vérifier et demander l'autorisation des notifications (Android 13+)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            // Demande explicite de permission (doit être appelée depuis une Activity)
+            Toast.makeText(
+                context,
+                "Autorisez les notifications pour cette application.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            }
+            context.startActivity(intent)
+            hasNotificationPermission = false
+        }
+    }
+
+    return hasAlarmPermission && hasNotificationPermission
 }

@@ -13,7 +13,7 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.S)
 fun scheduleNotificationWithPermission(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String, priorite: Priorite) {
-    if (checkAndRequestExactAlarmPermission(context)) {
+    if (checkAndRequestPermissions(context)) {
         scheduleNotification(context, jour, hour, minute, titreNotif, messageNotif, priorite) // Call your scheduling function
     }
 }
