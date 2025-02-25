@@ -8,12 +8,13 @@ import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.project.mobile.common.PriorityType
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun scheduleNotificationWithPermission(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String) {
-    if (checkAndRequestExactAlarmPermission(context)) {
-        scheduleNotification(context, jour, hour, minute, titreNotif, messageNotif) // Call your scheduling function
+fun scheduleNotificationWithPermission(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String, priorite: PriorityType) {
+    if (checkAndRequestPermissions(context)) {
+        scheduleNotification(context, jour, hour, minute, titreNotif, messageNotif, priorite) // Call your scheduling function
     }
 }
 
@@ -31,12 +32,13 @@ fun cancelNotification(context: Context, jour: String, hour: Int, minute: Int) {
     alarmManager.cancel(pendingIntent)
 }
 
-fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String) {
+fun scheduleNotification(context: Context, jour: String, hour: Int, minute: Int, titreNotif: String, messageNotif: String, priorite: PriorityType) {
     try {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java).apply {
             putExtra("title", titreNotif)
             putExtra("message", messageNotif)
+            putExtra("priorite", priorite.toInt())
         }
 
         val requestCode = jour.hashCode() + hour * 100 + minute

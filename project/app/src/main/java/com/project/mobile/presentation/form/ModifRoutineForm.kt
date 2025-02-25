@@ -3,7 +3,9 @@ package com.project.mobile.presentation.form
 import Activated
 import NoActivated
 import android.app.TimePickerDialog
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.project.mobile.MainActivity
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.Categorie
+import com.project.mobile.common.PriorityType
 import com.project.mobile.notification.cancelNotification
 import com.project.mobile.notification.getPreviousNotificationTime
 import com.project.mobile.notification.saveNotificationTime
@@ -43,6 +45,7 @@ import kotlinx.coroutines.launch
 import suezOneRegular
 import trocchi
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataStoreManager, context: MainActivity, routineId: Int) {
     // Charger les données de la routine à modifier
@@ -417,6 +420,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                     navController.navigate(Screen.StoriesListScreen.route) // Naviguer après l'enregistrement
                                 }
 
+                                //TODO : Adapter la selection des jours en fonction de la nouvelle catégorie
                                 for (jour in selectedDays.values) {
 
                                     val previousTime = getPreviousNotificationTime(context, jour.fullname)
@@ -424,9 +428,11 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
                                         cancelNotification(context, jour.fullname, previousTime.first, previousTime.second) // Supprime l'ancienne alarme
                                     }
 
+                                    //TODO : Adapter l'état des jours en fonction de la nouvelle catégorie
                                     if (jour.state == Activated)
                                     {
-                                        scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                        //TODO : Adapter la nouvelle priorité en fonction de la nouvelle catégorie
+                                        scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description, priorite)
                                         saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                                     }
                                     else
