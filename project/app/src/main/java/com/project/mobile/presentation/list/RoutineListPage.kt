@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,11 +28,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.components.StoryCard
+import com.project.mobile.ui.theme.components.StoryCard
 import com.project.mobile.ui.theme.Purple
 import com.project.mobile.utils.DataStoreManager
 import com.project.mobile.utils.ListStoriesViewModelFactory
-import kotlinx.coroutines.launch
+import com.project.mobile.viewmodel.ListStoriesViewModel
 import suezOneRegular
 
 //TODO This is where we want to display the list of routine available

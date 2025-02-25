@@ -1,12 +1,11 @@
-package com.project.mobile.presentation.list
+package com.project.mobile.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.mobile.presentation.StoryVM
+import com.project.mobile.presentation.list.StoryEvent
 import com.project.mobile.utils.DataStoreManager
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListStoriesViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {

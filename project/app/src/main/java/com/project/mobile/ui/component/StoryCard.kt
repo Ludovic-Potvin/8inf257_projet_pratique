@@ -1,6 +1,5 @@
-package com.project.mobile.presentation.components
+package com.project.mobile.ui.component
 
-import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,60 +23,40 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.util.Log
-import androidx.media3.common.util.UnstableApi
-import androidx.navigation.NavController
-import com.project.mobile.presentation.Priorite
-import com.project.mobile.presentation.StoryVM
-import com.project.mobile.ui.theme.LightPurple
-import com.project.mobile.ui.theme.MediumPurple
-import com.project.mobile.ui.theme.Purple
-import com.project.mobile.ui.theme.WhitePurple
+import com.project.mobile.common.PriorityType
+import com.project.mobile.viewmodel.StoryVM
+import androidx.compose.material3.MaterialTheme.colorScheme as theme
 import suezOneRegular
 import trocchi
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-@OptIn(UnstableApi::class)
 @Composable
-fun StoryCard(story: StoryVM, navController: NavController){
+fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
     val routineId = story.id
-    val background = when (story.priorite) {
-        Priorite.BASSE -> LightPurple
-        Priorite.MOYENNE -> Purple
-        Priorite.ELEVEE -> MediumPurple
+    val background = when (story.priority) {
+        PriorityType.LowPriority -> theme.primary
+        PriorityType.StandardPriority -> theme.secondary
+        PriorityType.HighPriority -> theme.tertiary
     }
-    Log.d("routineId", "routineId=$routineId")
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                Log.d("Navigation", "Navigating to routine_modif/$routineId")
-                navController.navigate("routine_modif/$routineId")
+                onClick(story)
             }
             .background(background, shape = RoundedCornerShape(10.dp))
             .padding(12.dp, 12.dp),
-
     ){
 
         Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-
-       /* Row(modifier = Modifier.fillMaxSize(),horizontalArrangement = Arrangement.SpaceBetween){
-
-            Box(
-            Modifier.size(30.dp)
-                .align(Alignment.Start)
-                .background(color = priorityColor,
-                    shape = CircleShape
-                )
-                .border(1.dp, WhitePurple, CircleShape),
-        )*/
             Box(modifier = Modifier
                 .align(Alignment.End)
-                .border(1.dp, WhitePurple, shape = RoundedCornerShape(10.dp)
+                .border(1.dp, theme.outline, shape = RoundedCornerShape(10.dp)
                 )
-                .background(Purple, shape = RoundedCornerShape(10.dp))
+                .background(theme.secondary, shape = RoundedCornerShape(10.dp))
                 .padding(8.dp, 3.dp)
             ){
                 Text(story.categorie.label,
@@ -87,9 +66,6 @@ fun StoryCard(story: StoryVM, navController: NavController){
                         fontFamily = trocchi)
                 )
             }
-           /* }*/
-
-
             Text(story.title,
                 style = TextStyle(
                     fontSize = 22.sp,
@@ -107,8 +83,11 @@ fun StoryCard(story: StoryVM, navController: NavController){
             Spacer(modifier = Modifier.height(5.dp))
 
                 Row(horizontalArrangement = Arrangement.Center) {
-                    story.days.forEach { (_, day) ->
-                        DayCard(day)
+                    story.days.forEach { (dayName, isActive) ->
+                        DayCard(
+                            dayName.first().toString(),
+                            isActive
+                        )
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -125,12 +104,7 @@ fun StoryCard(story: StoryVM, navController: NavController){
                         color = Color.White,
                         fontFamily = suezOneRegular
                     ))
-
-
-
             }
-
-
         }
     }
 }

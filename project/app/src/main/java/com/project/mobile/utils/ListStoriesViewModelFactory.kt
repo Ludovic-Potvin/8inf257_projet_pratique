@@ -2,7 +2,7 @@ package com.project.mobile.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.project.mobile.presentation.list.ListStoriesViewModel
+import com.project.mobile.viewmodel.ListStoriesViewModel
 
 class ListStoriesViewModelFactory(
     private val dataStoreManager: DataStoreManager
