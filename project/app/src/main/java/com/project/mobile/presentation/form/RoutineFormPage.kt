@@ -448,7 +448,7 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                         for (jour in selectedDays.values) {
                             if (jour.state == Activated)
                             {
-                                scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description, priorite)
                                 saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                             }
                         }
