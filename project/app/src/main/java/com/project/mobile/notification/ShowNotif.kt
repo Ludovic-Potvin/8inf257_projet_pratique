@@ -5,10 +5,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.project.mobile.presentation.Priorite
 
-fun showNotification(context: Context, title: String, message: String) {
+fun showNotification(context: Context, title: String, message: String, prio: Priorite) {
     val channelId = "notification_channel"
     val channelName = "Notification Channel"
+
+    val priorite = when(prio)
+    {
+        Priorite.BASSE -> NotificationCompat.PRIORITY_LOW
+        Priorite.MOYENNE -> NotificationCompat.PRIORITY_DEFAULT
+        Priorite.ELEVEE -> NotificationCompat.PRIORITY_HIGH
+    }
 
     // Créer un canal de notification pour Android 8.0+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -25,7 +33,7 @@ fun showNotification(context: Context, title: String, message: String) {
         .setSmallIcon(android.R.drawable.ic_dialog_info)
         .setContentTitle(title)
         .setContentText(message)
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setPriority(priorite)
         .build()
 
     val notificationManager =

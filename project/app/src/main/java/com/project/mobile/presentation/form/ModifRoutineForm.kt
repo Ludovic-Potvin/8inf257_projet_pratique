@@ -426,7 +426,7 @@ fun ModifRoutineForm(navController: NavHostController, dataStoreManager: DataSto
 
                                     if (jour.state == Activated)
                                     {
-                                        scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description)
+                                        scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description, priorite)
                                         saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                                     }
                                     else
