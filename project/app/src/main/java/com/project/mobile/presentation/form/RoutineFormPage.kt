@@ -446,9 +446,12 @@ fun RoutineForm(navController: NavController, dataStoreManager: DataStoreManager
                         dataStoreManager.addOrUpdateStory(newRoutine)
                         navController.navigate(Screen.StoriesListScreen.route)
 
+                        //TODO : Adapter la selection des jours en fonction de la nouvelle catégorie
                         for (jour in selectedDays.values) {
+                            //TODO : Adapter la selection des jours en fonction de la nouvelle catégorie
                             if (jour.state == Activated)
                             {
+                                //TODO : Adapter la nouvelle priorité en fonction de la nouvelle catégorie
                                 scheduleNotificationWithPermission(context, jour.fullname, hour.hour, hour.minute, title, description, priorite)
                                 saveNotificationTime(context, jour.fullname, hour.hour, hour.minute)
                             }
