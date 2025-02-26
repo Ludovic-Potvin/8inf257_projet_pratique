@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import android.content.Context
+import com.project.mobile.notification.checkAndRequestPermissions
 
 class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel() {
     private val _story = mutableStateOf(StoryVM())
@@ -100,6 +101,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
             val storyData = story.value
             val days = listOf("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
 
+            checkAndRequestPermissions(context)
             storyData.days.forEachIndexed { index, isActive ->
                 if (isActive) {
                     scheduleNotification(
