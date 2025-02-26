@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
+import com.project.mobile.notification.cancelNotification
+import com.project.mobile.notification.scheduleNotification
 import com.project.mobile.viewmodel.StoryVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -72,6 +74,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
                 val entity = story.value.toEntity()
                 dao.upsertStory(entity)
                 _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
+                scheduleNotification()
             } catch(e: Exception) {
                 _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
             }
@@ -84,8 +87,48 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
                 val entity = story.value.toEntity()
                 dao.deleteStory(entity)
                 _eventFlow.emit(AddEditStoryUiEvent.DeletedStory)
+                cancelNotification()
             } catch(e: Exception) {
                 _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
+            }
+        }
+    }
+
+    private fun scheduleNotification() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val storyData = story.value
+            val days = listOf("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
+
+            storyData.days.forEachIndexed { index, isActive ->
+                if (isActive) {
+                    scheduleNotification(
+                        context = MyApplication.instance,
+                        jour = days[index],
+                        hour = storyData.getHourAsLocalTime().hour,
+                        minute = storyData.getHourAsLocalTime().minute,
+                        titreNotif = storyData.title,
+                        messageNotif = storyData.description,
+                        priorite = storyData.priority
+                    )
+                }
+            }
+        }
+    }
+
+    private fun cancelNotification() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val storyData = story.value
+            val days = listOf("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
+
+            storyData.days.forEachIndexed { index, isActive ->
+                if (isActive) {
+                    cancelNotification(
+                        context = MyApplication.instance,
+                        jour = days[index],
+                        hour = storyData.getHourAsLocalTime().hour,
+                        minute = storyData.getHourAsLocalTime().minute
+                    )
+                }
             }
         }
     }
