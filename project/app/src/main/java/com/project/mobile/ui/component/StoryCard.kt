@@ -22,23 +22,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.media3.common.util.Log
 import com.project.mobile.common.PriorityType
 import com.project.mobile.viewmodel.StoryVM
 import androidx.compose.material3.MaterialTheme.colorScheme as theme
 import suezOneRegular
 import trocchi
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
-    val routineId = story.id
+
     val background = when (story.priority) {
         PriorityType.LowPriority -> theme.primary
         PriorityType.StandardPriority -> theme.secondary
         PriorityType.HighPriority -> theme.tertiary
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -59,11 +57,12 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
                 .background(theme.secondary, shape = RoundedCornerShape(10.dp))
                 .padding(8.dp, 3.dp)
             ){
-                Text(story.categorie.label,
+                Text(story.category.label,
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
-                        fontFamily = trocchi)
+                        fontFamily = trocchi
+                    )
                 )
             }
             Text(story.title,
@@ -72,38 +71,34 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
                     color = Color.White,
                     fontFamily = suezOneRegular,
                     textAlign = TextAlign.Center
-                ))
+                )
+            )
             Text(story.description,
                 style = TextStyle(
                     fontSize = 18.sp,
                     color = Color.White,
                     fontFamily = suezOneRegular,
                     textAlign = TextAlign.Center
-                ))
+                )
+            )
             Spacer(modifier = Modifier.height(5.dp))
 
-                Row(horizontalArrangement = Arrangement.Center) {
-                    story.days.forEach { (dayName, isActive) ->
-                        DayCard(
-                            dayName.first().toString(),
-                            isActive
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    val formattedHour = try {
-                        LocalTime.parse(story.hour, DateTimeFormatter.ofPattern("HH:mm"))
-                            .format(DateTimeFormatter.ofPattern("HH:mm"))
-                    } catch (e: Exception) {
-                        Log.e("StoryCard", "Erreur de formatage de l'heure : ${story.hour}", e)
-                        "Heure invalide"
-                    }
+            Row(horizontalArrangement = Arrangement.Center) {
+                story.days.forEachIndexed { index, day ->
+                    DayCard(
+                        label = "SMTWTFS"[index].toString(),
+                        isActive = day
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                val formattedHour = story.getHourAsLocalTime().toString()
 
-                    Text(formattedHour, style = TextStyle(
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontFamily = suezOneRegular
-                    ))
+                Text(formattedHour, style = TextStyle(
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontFamily = suezOneRegular
+                ))
             }
         }
     }

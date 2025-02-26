@@ -12,7 +12,7 @@ package com.project.mobile.common
  * - [LOISIR]: Represents leisure activities.
  * - [AUTRE]: Represents other activities.
  */
-enum class CategoryType(private val label: String) {
+enum class CategoryType(val label: String) {
     TRAVAIL("Travail"),
     MEDICAL("Médical"),
     MAISON("Maison"),

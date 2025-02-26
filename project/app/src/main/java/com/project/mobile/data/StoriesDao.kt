@@ -1,11 +1,10 @@
-package com.project.mobile.data.dao
+package com.project.mobile.data
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import androidx.room.Delete
 
-import com.project.mobile.data.model.Story
 import kotlinx.coroutines.flow.Flow
 
 @Dao

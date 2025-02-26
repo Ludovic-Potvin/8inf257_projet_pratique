@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.room.Room
-import com.project.mobile.data.database.StoriesDatabase
+import com.project.mobile.data.StoriesDatabase
 import com.project.mobile.navigation.NavGraph
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavGraph(navController, innerPadding)
+                    NavGraph(db, navController, innerPadding)
                 }
             }
         }

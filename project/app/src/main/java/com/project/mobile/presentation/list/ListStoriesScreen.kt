@@ -1,5 +1,6 @@
 package com.project.mobile.presentation.list
 
+import ReminderHeader
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,30 +18,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.ui.theme.components.StoryCard
+import com.project.mobile.presentation.addedit.AddEditStoryViewModel
+import com.project.mobile.ui.component.StoryCard
 import com.project.mobile.ui.theme.Purple
-import com.project.mobile.utils.DataStoreManager
-import com.project.mobile.utils.ListStoriesViewModelFactory
-import com.project.mobile.viewmodel.ListStoriesViewModel
-import suezOneRegular
 
-//TODO This is where we want to display the list of routine available
 @Composable
-fun RoutineListPage(navController: NavController,dataStoreManager: DataStoreManager) {
-    val storiesViewModel: ListStoriesViewModel = viewModel(
-        factory = ListStoriesViewModelFactory(dataStoreManager)
-    )
+fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel) {
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -51,52 +41,43 @@ fun RoutineListPage(navController: NavController,dataStoreManager: DataStoreMana
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text(
-                text = "REMINDER",
-                modifier = Modifier.padding(vertical = 10.dp),
-                color = Purple,
-                fontSize = 36.sp,
-                fontFamily = suezOneRegular,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(
-                modifier = Modifier.height(1.dp)
-                    .background(Purple)
-                    .width(260.dp)
-            )
-
+            ReminderHeader()
             LazyColumn(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
             ) {
-                items(storiesViewModel.stories.value) { story ->
+                items(viewModel.stories.value) { story ->
                     StoryCard(
                         story,
-                        navController = navController
+                        onClick = {
+                            Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                        }
                     )
                     Spacer(modifier = Modifier.height(11.dp))
                 }
             }
 
             Spacer(
-                modifier = Modifier.height(1.dp)
+                modifier = Modifier
+                    .height(1.dp)
                     .background(Purple)
                     .fillMaxWidth()
             )
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.FormStoryScreen.route)
+                    navController.navigate(Screen.AddEditStoryScreen.route)
                 }, colors = ButtonColors(
                     disabledContainerColor = Purple,
                     disabledContentColor = Color.White,
                     containerColor = Purple,
                     contentColor = Color.White
                 ),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier
+                    .padding(top = 10.dp)
                     .width(80.dp)
             ) {
                 Icon(

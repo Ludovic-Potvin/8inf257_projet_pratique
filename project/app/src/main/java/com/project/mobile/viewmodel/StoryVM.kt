@@ -1,6 +1,6 @@
 package com.project.mobile.viewmodel
 
-import com.project.mobile.data.model.Story
+import com.project.mobile.data.Story
 import com.project.mobile.common.CategoryType
 import com.project.mobile.common.PriorityType
 import java.time.LocalTime
@@ -14,7 +14,7 @@ data class StoryVM(
     val description: String = "",
     val category: CategoryType = CategoryType.AUTRE,
     val hour: String = "00:00",
-    val days: String = "0000000", // 7 char, each represent a day starting from sunday. 0 = false, 1 = true
+    val days: List<Boolean> = List(7) { false },
     val priority: PriorityType = PriorityType.StandardPriority
 ) {
     companion object {
@@ -25,10 +25,23 @@ data class StoryVM(
                 description = entity.description,
                 category = CategoryType.fromLabel(entity.category),
                 hour = entity.hour,
-                days = entity.days,
+                days = entity.days.map { it == '1' },
                 priority = PriorityType.fromInt(entity.priority)
             )
         }
+    }
+
+    fun toEntity(): Story {
+        val id = if (this.id == -1) null else this.id
+        return Story(
+            id = id,
+            title = this.title,
+            description = this.description,
+            category = this.category.label,
+            hour = this.hour,
+            days = this.days.joinToString("") { if (it) "1" else "0" },
+            priority = this.priority.toInt()
+        )
     }
 
     fun getHourAsLocalTime(): LocalTime {
