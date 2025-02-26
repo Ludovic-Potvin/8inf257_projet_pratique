@@ -117,7 +117,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
             OutlinedTextField(
                 value = story.title,
                 onValueChange = {
-                    viewModel.onEvent(AddEditStoryEvent.EnteredTitle(it))
+                    viewModel.onEvent(context, AddEditStoryEvent.EnteredTitle(it))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
@@ -152,7 +152,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
                         label="SMTWTFS"[index].toString(),
                         isActive=day,
                         onClick= {
-                            viewModel.onEvent(AddEditStoryEvent.EnteredDay(index))
+                            viewModel.onEvent(context, AddEditStoryEvent.EnteredDay(index))
                         })
                     Spacer(modifier = Modifier.width(4.dp))
                 }
@@ -193,7 +193,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
                             context,
                             story.getHourAsLocalTime()
                         ) { newTime ->
-                            viewModel.onEvent(AddEditStoryEvent.EnteredHour(newTime))
+                            viewModel.onEvent(context, AddEditStoryEvent.EnteredHour(newTime))
                         }
                     }) {
                         Icon(
@@ -218,7 +218,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
             OutlinedTextField(
                 value = story.description,
                 onValueChange = {
-                    viewModel.onEvent(AddEditStoryEvent.EnteredDescription(it))
+                    viewModel.onEvent(context, AddEditStoryEvent.EnteredDescription(it))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -248,7 +248,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
             CategoryDropdownMenu(
                 selectedCategory = story.category
             ) { newCategory ->
-                viewModel.onEvent(AddEditStoryEvent.EnteredCategory(newCategory))
+                viewModel.onEvent(context, AddEditStoryEvent.EnteredCategory(newCategory))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -264,7 +264,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
             PriorityDropdownMenu(
                 selectedPriority = story.priority
             ) { newPriority ->
-                viewModel.onEvent(AddEditStoryEvent.EnteredPriority(newPriority))
+                viewModel.onEvent(context, AddEditStoryEvent.EnteredPriority(newPriority))
             }
 
             // Boutons Enregistrer et Annuler
@@ -288,7 +288,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
 
                 Button(
                     onClick = {
-                        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+                        viewModel.onEvent(context, AddEditStoryEvent.SaveStory)
                     },
                     colors = ButtonColors(
                     disabledContainerColor = Purple,

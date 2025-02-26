@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import android.content.Context
 
 class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel() {
     private val _story = mutableStateOf(StoryVM())
@@ -28,7 +29,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
         }
     }
 
-    fun onEvent(event: AddEditStoryEvent) {
+    fun onEvent(context :Context, event: AddEditStoryEvent) {
         when (event) {
             is AddEditStoryEvent.EnteredTitle -> {
                 _story.value = _story.value.copy(title = event.title)
@@ -59,42 +60,42 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
             }
 
             AddEditStoryEvent.SaveStory -> {
-                saveStory()
+                saveStory(context)
             }
 
             AddEditStoryEvent.DeleteStory -> {
-                deleteStory()
+                deleteStory(context)
             }
         }
     }
 
-    private fun saveStory() {
+    private fun saveStory(context :Context) {
         viewModelScope.launch {
             try {
                 val entity = story.value.toEntity()
                 dao.upsertStory(entity)
                 _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
-                scheduleNotification()
+                scheduleNotification(context)
             } catch(e: Exception) {
                 _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
             }
         }
     }
 
-    private fun deleteStory() {
+    private fun deleteStory(context :Context) {
         viewModelScope.launch {
             try {
                 val entity = story.value.toEntity()
                 dao.deleteStory(entity)
                 _eventFlow.emit(AddEditStoryUiEvent.DeletedStory)
-                cancelNotification()
+                cancelNotification(context)
             } catch(e: Exception) {
                 _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
             }
         }
     }
 
-    private fun scheduleNotification() {
+    private fun scheduleNotification(context :Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val storyData = story.value
             val days = listOf("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
@@ -102,7 +103,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
             storyData.days.forEachIndexed { index, isActive ->
                 if (isActive) {
                     scheduleNotification(
-                        context = MyApplication.instance,
+                        context = context,
                         jour = days[index],
                         hour = storyData.getHourAsLocalTime().hour,
                         minute = storyData.getHourAsLocalTime().minute,
@@ -115,7 +116,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
         }
     }
 
-    private fun cancelNotification() {
+    private fun cancelNotification(context :Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val storyData = story.value
             val days = listOf("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
@@ -123,7 +124,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
             storyData.days.forEachIndexed { index, isActive ->
                 if (isActive) {
                     cancelNotification(
-                        context = MyApplication.instance,
+                        context = context,
                         jour = days[index],
                         hour = storyData.getHourAsLocalTime().hour,
                         minute = storyData.getHourAsLocalTime().minute
