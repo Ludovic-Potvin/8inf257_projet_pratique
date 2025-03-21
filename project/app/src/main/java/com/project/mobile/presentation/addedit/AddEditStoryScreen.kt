@@ -1,17 +1,14 @@
 package com.project.mobile.presentation.addedit
 
 import ReminderHeader
-import android.app.TimePickerDialog
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +23,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.project.mobile.common.PriorityType
 import com.project.mobile.navigation.Screen
 import com.project.mobile.ui.component.CategoryDropdownMenu
 import com.project.mobile.ui.component.DayCard
@@ -93,17 +89,33 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) 
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Box(
-                modifier = Modifier
-                    .clickable { navController.navigate(Screen.StoriesListScreen.route) }
-                    .align(Alignment.Start)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Retour",
-                    tint = Color.White,
-                    modifier = Modifier.size(40.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .clickable { navController.navigate(Screen.StoriesListScreen.route) }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Retour",
+                        tint = Color.White,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .clickable { viewModel.onEvent(AddEditStoryEvent.DeleteStory) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close",
+                        tint = Color.White,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
             // Title

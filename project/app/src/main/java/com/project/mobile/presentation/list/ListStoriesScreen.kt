@@ -53,7 +53,9 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                     StoryCard(
                         story,
                         onClick = {
-                            Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                            navController.navigate(
+                                Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                            );
                         }
                     )
                     Spacer(modifier = Modifier.height(11.dp))
