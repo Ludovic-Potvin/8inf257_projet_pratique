@@ -2,6 +2,7 @@ package com.project.mobile.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -27,7 +28,8 @@ fun DayCard(label: String, isActive: Boolean, onClick: () -> Unit = {}) {
         .border(
             1.dp,
             theme.outline,
-            CircleShape),
+            CircleShape)
+        .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(label,  style = TextStyle(

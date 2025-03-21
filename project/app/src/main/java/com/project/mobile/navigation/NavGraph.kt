@@ -24,7 +24,9 @@ fun NavGraph(db: StoriesDatabase, navController: NavHostController, innerPadding
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Screen.StoriesListScreen.route) {
-            val stories = viewModel<ListStoriesViewModel>()
+            val stories = viewModel<ListStoriesViewModel>() {
+                ListStoriesViewModel(db.dao)
+            }
             ListStoriesScreen(navController, stories)
         }
         composable(route = Screen.AddEditStoryScreen.route + "?storyId={storyId}",

@@ -87,7 +87,8 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
                 story.days.forEachIndexed { index, day ->
                     DayCard(
                         label = "SMTWTFS"[index].toString(),
-                        isActive = day
+                        isActive = day,
+                        onClick = { onClick(story) }
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                 }
