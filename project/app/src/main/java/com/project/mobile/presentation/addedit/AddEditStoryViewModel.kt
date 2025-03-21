@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
+import com.project.mobile.util.StoryException
 import com.project.mobile.viewmodel.StoryVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -69,9 +70,14 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
     private fun saveStory() {
         viewModelScope.launch {
             try {
-                val entity = story.value.toEntity()
-                dao.upsertStory(entity)
-                _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
+                if(story.value.title.isEmpty() || !story.value.days.any { it }) {
+                    _eventFlow.emit(AddEditStoryUiEvent.ShowMessage("Unable to save story"))
+                }
+                else {
+                    val entity = story.value.toEntity()
+                    dao.upsertStory(entity)
+                    _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
+                }
             } catch(e: Exception) {
                 _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
             }
