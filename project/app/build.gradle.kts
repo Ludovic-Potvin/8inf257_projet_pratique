@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+
+
+    alias(libs.plugins.hiltAndroid)
+    kotlin("kapt")
    }
 
 android {
@@ -44,6 +48,12 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler) // Utilise kapt au lieu de ksp
+
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

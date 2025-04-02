@@ -1,19 +1,31 @@
 package com.project.mobile.presentation.addedit
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
+import com.project.mobile.notification.NotificationManager
+import com.project.mobile.notification.NotificationModule
 import com.project.mobile.util.StoryException
 import com.project.mobile.viewmodel.StoryVM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel() {
+@HiltViewModel
+class AddEditStoryViewModel @Inject constructor(
+    val dao: StoriesDao,
+    savedStateHandle: SavedStateHandle,
+    private val notificationManager: NotificationManager) : ViewModel()
+{
     private val _story = mutableStateOf(StoryVM())
     val story : State<StoryVM> = _story
 
@@ -21,6 +33,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
+        val storyId = savedStateHandle.get<Int>("storyId")?: -1
         viewModelScope.launch(Dispatchers.IO) {
             val storyEntity = dao.getStory(storyId)
             _story.value = storyEntity?.let { StoryVM.fromEntity(it) } ?: StoryVM()
@@ -75,6 +88,7 @@ class AddEditStoryViewModel(val dao: StoriesDao, storyId: Int = -1) : ViewModel(
                 }
                 else {
                     val entity = story.value.toEntity()
+                    notificationManager.scheduleNotificationWithPermission(entity)
                     dao.upsertStory(entity)
                     _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
                 }

@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.room.Room
 import com.project.mobile.data.StoriesDatabase
 import com.project.mobile.navigation.NavGraph
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     // Database
     private val db by lazy {
