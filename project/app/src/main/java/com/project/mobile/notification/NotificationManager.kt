@@ -141,10 +141,15 @@ class NotificationManager @Inject constructor(
 
 
     private fun hasNotificationPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
-        } else { true }
+        } else {
+            true
+        }
+
+        val areNotificationsEnabled = NotificationManagerCompat.from(context).areNotificationsEnabled()
+        return hasPermission && areNotificationsEnabled
     }
 }
