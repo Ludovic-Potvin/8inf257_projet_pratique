@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -88,7 +89,7 @@ class AddEditStoryViewModel @Inject constructor(
                 }
                 else {
                     val entity = story.value.toEntity()
-                    notificationManager.scheduleNotificationWithPermission(entity)
+                    notificationManager.setNotification(entity)
                     dao.upsertStory(entity)
                     _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
                 }
@@ -102,6 +103,7 @@ class AddEditStoryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val entity = story.value.toEntity()
+                notificationManager.cancelNotification(entity)
                 dao.deleteStory(entity)
                 _eventFlow.emit(AddEditStoryUiEvent.DeletedStory)
             } catch(e: Exception) {
