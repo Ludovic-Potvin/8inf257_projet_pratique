@@ -37,11 +37,7 @@ fun NavGraph(db: StoriesDatabase, navController: NavHostController, innerPadding
                 }
             )
         ) { backStackEntry ->
-            val storyId = backStackEntry.arguments?.getInt("storyId") ?: -1
-            val story = viewModel<AddEditStoryViewModel>() {
-                AddEditStoryViewModel(db.dao, storyId)
-            }
-            AddEditStoryScreen(navController, story)
+            AddEditStoryScreen(navController)
         }
     }
 }

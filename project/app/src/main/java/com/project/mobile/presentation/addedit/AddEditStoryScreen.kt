@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.ui.component.CategoryDropdownMenu
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 import trocchi
 
 @Composable
-fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryViewModel) {
+fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -74,7 +75,7 @@ fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryView
 }
 
 @Composable
-fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel) {
+fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel()) {
     val story = viewModel.story.value
     val context = LocalContext.current
     Box(
