@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
 import com.project.mobile.viewmodel.StoryVM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class ListStoriesViewModel(val dao: StoriesDao) : ViewModel() {
+@HiltViewModel
+class ListStoriesViewModel @Inject constructor(val dao: StoriesDao) : ViewModel() {
     private val _stories : MutableState<List<StoryVM>> = mutableStateOf(emptyList())
     val stories: State<List<StoryVM>> = _stories
     var job: Job? = null

@@ -8,9 +8,11 @@ import com.project.mobile.ui.theme.MobileprojectTheme
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.room.Room
 import com.project.mobile.data.StoriesDatabase
 import com.project.mobile.navigation.NavGraph
+import com.project.mobile.ui.theme.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,11 +31,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MobileprojectTheme {
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+            MobileprojectTheme(themeViewModel) {
                 val navController = rememberNavController()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavGraph(db, navController, innerPadding)
+                    NavGraph(db, themeViewModel, navController, innerPadding)
                 }
             }
         }

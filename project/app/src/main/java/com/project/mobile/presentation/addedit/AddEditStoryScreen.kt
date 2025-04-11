@@ -28,8 +28,7 @@ import com.project.mobile.navigation.Screen
 import com.project.mobile.ui.component.CategoryDropdownMenu
 import com.project.mobile.ui.component.DayCard
 import com.project.mobile.ui.component.PriorityDropdownMenu
-import com.project.mobile.ui.theme.DarkPurple
-import com.project.mobile.ui.theme.Purple
+import androidx.compose.material3.MaterialTheme.colorScheme as theme
 import com.project.mobile.util.showTimePicker
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.collectLatest
@@ -65,12 +64,8 @@ fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryView
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             ReminderHeader()
-            RoutineForm(
-                navController = navController,
-                viewModel = viewModel
-            )
+            RoutineForm(navController)
         }
-
     }
 }
 
@@ -86,7 +81,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
     ) {
         Column(
             modifier = Modifier
-                .background(Purple)
+                .background(theme.tertiary)
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
@@ -136,9 +131,9 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
 
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Purple,
-                    unfocusedContainerColor = Purple,
-                    disabledContainerColor = Purple,
+                    focusedContainerColor = theme.tertiary,
+                    unfocusedContainerColor = theme.tertiary,
+                    disabledContainerColor = theme.tertiary,
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
                     disabledTextColor = Color.White,
@@ -191,9 +186,9 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                 readOnly = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Purple,
-                    unfocusedContainerColor = Purple,
-                    disabledContainerColor = Purple,
+                    focusedContainerColor = theme.tertiary,
+                    unfocusedContainerColor = theme.tertiary,
+                    disabledContainerColor = theme.tertiary,
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
                     disabledTextColor = Color.White,
@@ -238,9 +233,9 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                     .height(100.dp),
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Purple,
-                    unfocusedContainerColor = Purple,
-                    disabledContainerColor = Purple,
+                    focusedContainerColor = theme.tertiary,
+                    unfocusedContainerColor = theme.tertiary,
+                    disabledContainerColor = theme.tertiary,
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
                     disabledTextColor = Color.White,
@@ -296,7 +291,7 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                     ),
                     elevation = ButtonDefaults.buttonElevation(3.dp)
                 ) {
-                    Text(text = "Annuler", fontFamily = trocchi, color = DarkPurple, fontWeight = FontWeight.Bold)
+                    Text(text = "Annuler", fontFamily = trocchi, color = theme.secondary, fontWeight = FontWeight.Bold)
                 }
 
                 Button(
@@ -304,9 +299,9 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                         viewModel.onEvent(AddEditStoryEvent.SaveStory)
                     },
                     colors = ButtonColors(
-                    disabledContainerColor = Purple,
+                    disabledContainerColor = theme.secondary,
                     disabledContentColor = Color.White,
-                    containerColor = Purple,
+                    containerColor = theme.tertiary,
                     contentColor = Color.White
                 ), elevation = ButtonDefaults.buttonElevation(3.dp)) {
                     Text(text = "Enregistrer", fontFamily = trocchi, color = Color.White, fontWeight = FontWeight.Bold)
@@ -314,7 +309,6 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
             }
         }
     }
-
 }
 
 
