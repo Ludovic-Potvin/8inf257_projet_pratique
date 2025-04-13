@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile.common.PriorityType
-import com.project.mobile.ui.theme.Purple
 
 @Composable
 fun PriorityDropdownMenu(selectedPriority: PriorityType, onPrioritySelected: (PriorityType) -> Unit) {
@@ -38,7 +38,7 @@ fun PriorityDropdownMenu(selectedPriority: PriorityType, onPrioritySelected: (Pr
             .fillMaxWidth()
             .border(1.dp, Color.White, shape = RoundedCornerShape(5.dp))
             .clickable { expanded = true }
-            .background(Purple, shape = RoundedCornerShape(5.dp))
+            .background(colorScheme.tertiary, shape = RoundedCornerShape(5.dp))
             .padding(8.dp)
     ) {
         Row(
@@ -63,7 +63,7 @@ fun PriorityDropdownMenu(selectedPriority: PriorityType, onPrioritySelected: (Pr
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.background(Purple)
+            modifier = Modifier.background(colorScheme.tertiary)
         ) {
             priorities.forEach { priority ->
                 DropdownMenuItem(

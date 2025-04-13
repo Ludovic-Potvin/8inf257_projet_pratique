@@ -15,7 +15,7 @@ constraintlayout = "2.1.4"
 navigationCompose = "2.8.5"
 roomVersion = "2.6.1"
 kspVersion = "2.0.0-1.0.24"
-
+dataStoreVersion = "1.1.4"
 daggerHiltVersion = "2.51.1"
 hiltNavigationComposeVersion = "1.2.0"
 
@@ -46,6 +46,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+datastore-preferences = { group = "androidx.datastore", name="datastore-preferences", version.ref = "dataStoreVersion" }
 
 [plugins]
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
