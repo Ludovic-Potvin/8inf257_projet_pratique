@@ -7,8 +7,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.rememberNavController
@@ -21,8 +23,10 @@ import java.util.Locale
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    // Database
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -31,42 +35,16 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
-    override fun attachBaseContext(newBase: Context) {
-        val langCode = runBlocking {
-            newBase.dataStore.data.first()[PreferencesKeys.LANGUAGE] ?: "en"
-        }
-        super.attachBaseContext(newBase.updateLocale(langCode))
-    }
-
-    private fun Context.updateLocale(languageCode: String): Context {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-
-        val config = Configuration(resources.configuration)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocale(locale)
-            createConfigurationContext(config)
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale = locale
-            resources.updateConfiguration(config, resources.displayMetrics)
-            this
-        }
-    }
-
+    // Interface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             MobileprojectTheme {
                 val navController = rememberNavController()
-                Scaffold { innerPadding ->
-                    NavGraph(
-                        navController = navController,
-                        db = db,
-                        innerPadding = innerPadding
-                    )
+
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    NavGraph(db, navController, innerPadding)
                 }
             }
         }
