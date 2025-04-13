@@ -4,6 +4,7 @@ import ReminderHeader
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,24 +15,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.addedit.AddEditStoryViewModel
 import com.project.mobile.ui.component.StoryCard
-import com.project.mobile.ui.theme.Purple
 
 @Composable
-fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel) {
-
+fun ListStoriesScreen(
+    navController: NavController, viewModel: ListStoriesViewModel = hiltViewModel()
+) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -65,27 +68,53 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
             Spacer(
                 modifier = Modifier
                     .height(1.dp)
-                    .background(Purple)
+                    .background(colorScheme.tertiary)
                     .fillMaxWidth()
             )
 
-            Button(
-                onClick = {
-                    navController.navigate(Screen.AddEditStoryScreen.route)
-                }, colors = ButtonColors(
-                    disabledContainerColor = Purple,
-                    disabledContentColor = Color.White,
-                    containerColor = Purple,
-                    contentColor = Color.White
-                ),
+            Row(
                 modifier = Modifier
-                    .padding(top = 10.dp)
-                    .width(80.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add a story"
-                )
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.PreferenceScreen.route)
+                    }, colors = ButtonColors(
+                        disabledContainerColor = colorScheme.tertiary,
+                        disabledContentColor = Color.White,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .width(80.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Edit parameters"
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.AddEditStoryScreen.route)
+                    }, colors = ButtonColors(
+                        disabledContainerColor = colorScheme.tertiary,
+                        disabledContentColor = Color.White,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .width(80.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add a story"
+                    )
+                }
             }
         }
     }
