@@ -51,6 +51,8 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation("androidx.test:core-ktx:1.6.1")
+
     kapt(libs.hilt.android.compiler) // Utilise kapt au lieu de ksp
 
 
@@ -97,5 +99,17 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.4.3") // Remplacer <compose_version> par la version réelle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1") // Remplacer <lifecycle_version> par la version réelle
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0") // Version compatible avec Kotlin 2.0
+    //MockK pour les tests
+    testImplementation ("io.mockk:mockk:1.10.6")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+// Pour les coroutines et les tests
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+// Pour MockK (ou Mockito si tu préfères)
+    testImplementation("io.mockk:mockk:1.13.5")
 
 }
