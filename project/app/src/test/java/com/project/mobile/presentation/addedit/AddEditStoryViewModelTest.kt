@@ -46,12 +46,12 @@ class AddEditStoryViewModelTest {
     }
 
     @Test
-    fun `saveStory emits SavedStory when valid data`() = runTest {
-        // Given
+    fun `saveStory emits SavedStory when valid data and then delete`() = runTest {
+
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
-        // Wait init block
+        // pour attendre la fin du init
         advanceUntilIdle()
 
         // When
@@ -69,7 +69,7 @@ class AddEditStoryViewModelTest {
 
 
         viewModel.onEvent(AddEditStoryEvent.DeleteStory)
-        // Then
+
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditStoryUiEvent.DeletedStory)
@@ -80,19 +80,19 @@ class AddEditStoryViewModelTest {
 
     @Test
     fun `saveStory emits ShowMessage when days are empty`() = runTest {
-        // Given
+
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
-        // Attendre la fin du init
+
         advanceUntilIdle()
 
-        //no days checked
+
         viewModel.onEvent(AddEditStoryEvent.EnteredTitle("My Story"))
-        // When
+
         viewModel.onEvent(AddEditStoryEvent.SaveStory)
 
-        // Then
+
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditStoryUiEvent.ShowMessage)
@@ -107,19 +107,19 @@ class AddEditStoryViewModelTest {
 
     @Test
     fun `saveStory emits ShowMessage when title is empty`() = runTest {
-        // Given
+
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
-        // Attendre la fin du init
+
         advanceUntilIdle()
 
-        //no title checked
+
         viewModel.onEvent(AddEditStoryEvent.EnteredDay(0))
-        // When
+
         viewModel.onEvent(AddEditStoryEvent.SaveStory)
 
-        // Then
+
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditStoryUiEvent.ShowMessage)
