@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,10 +35,19 @@ import com.project.mobile.util.showTimePicker
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.collectLatest
 import trocchi
+import com.project.mobile.viewmodel.WeatherViewModel
+import com.project.mobile.data.WeatherForecastResponse
+
 
 @Composable
-fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel()) {
+fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel(), weatherViewModel: WeatherViewModel = hiltViewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val weather = weatherViewModel.weatherResponse.observeAsState()
+
+    LaunchedEffect(true) {
+        // Récupère les prévisions météo pour Chicoutimi
+        weatherViewModel.fetchWeatherForecast(48.4284, -71.0856, "9cf7583f90421a4976dd9c5bea58ae3c")
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -63,19 +73,19 @@ fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryView
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             ReminderHeader()
             RoutineForm(
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                weather = weather.value // Passe la météo aux éléments de l'UI
             )
         }
-
     }
 }
 
 @Composable
-fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel()) {
+fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel(), weather: WeatherForecastResponse?) {
     val story = viewModel.story.value
     val context = LocalContext.current
     Box(
@@ -160,13 +170,17 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                story.days.forEachIndexed { index, day ->
+                // Vérifier que weather?.daily contient bien les prévisions pour chaque jour
+                weather?.daily?.take(7)?.forEachIndexed { index, day ->
+                    val weatherIcon = day.weather.firstOrNull()?.icon ?: "01d"
                     DayCard(
-                        label="SMTWTFS"[index].toString(),
-                        isActive=day,
-                        onClick= {
+                        label = "SMTWTFS"[index].toString(),
+                        isActive = true,  // Activer les jours
+                        weatherIcon = "http://openweathermap.org/img/wn/$weatherIcon@2x.png",  // Utiliser l'URL de l'icône
+                        onClick = {
                             viewModel.onEvent(AddEditStoryEvent.EnteredDay(index))
-                        })
+                        }
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }

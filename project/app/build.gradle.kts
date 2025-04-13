@@ -51,6 +51,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation("androidx.test.espresso:espresso-core:3.6.1")
     kapt(libs.hilt.android.compiler) // Utilise kapt au lieu de ksp
 
 
@@ -72,6 +73,7 @@ dependencies {
     // Room for database
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation("androidx.room:room-common:2.6.1")
     ksp(libs.androidx.room.compiler)
 
     // Test libraries
@@ -97,5 +99,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.4.3") // Remplacer <compose_version> par la version réelle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1") // Remplacer <lifecycle_version> par la version réelle
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0") // Version compatible avec Kotlin 2.0
+
+    // Retrofit pour effectuer les appels API
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+
+    // Pour charger les images des icônes météo
+    implementation ("io.coil-kt:coil-compose:2.1.0")
 
 }
