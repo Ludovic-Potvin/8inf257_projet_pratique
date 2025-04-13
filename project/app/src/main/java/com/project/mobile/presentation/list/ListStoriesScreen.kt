@@ -1,5 +1,6 @@
 package com.project.mobile.presentation.list
 
+import com.project.mobile.language.LanguageViewModel
 import ReminderHeader
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,16 +24,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.addedit.AddEditStoryViewModel
 import com.project.mobile.ui.component.StoryCard
 import com.project.mobile.ui.theme.Purple
 
 @Composable
-fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel) {
-
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
+    val currentLanguage = languageViewModel.currentLanguage
+    Scaffold(modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -41,7 +43,11 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            ReminderHeader()
+            ReminderHeader(onLanguageSelected = { code ->
+                languageViewModel.setLanguage(code)
+            },
+                currentLanguage = languageViewModel.currentLanguage)
+
             LazyColumn(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -56,7 +62,8 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                             navController.navigate(
                                 Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
                             );
-                        }
+                        },
+                        currentLanguage = currentLanguage
                     )
                     Spacer(modifier = Modifier.height(11.dp))
                 }

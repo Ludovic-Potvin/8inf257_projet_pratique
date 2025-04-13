@@ -1,5 +1,9 @@
 package com.project.mobile.common
 
+import android.content.Context
+import com.project.mobile.R
+import androidx.annotation.StringRes
+
 /**
  * Enum class representing different category types.
  *
@@ -12,25 +16,22 @@ package com.project.mobile.common
  * - [LOISIR]: Represents leisure activities.
  * - [AUTRE]: Represents other activities.
  */
-enum class CategoryType(val label: String) {
-    TRAVAIL("Travail"),
-    MEDICAL("Médical"),
-    MAISON("Maison"),
-    SPORT("Sport"),
-    ECOLE("Ecole"),
-    LOISIR("Loisir"),
-    AUTRE("Autre");
+enum class CategoryType(@StringRes val labelResId: Int) {
+    TRAVAIL(R.string.category_work),
+    MEDICAL(R.string.category_medical),
+    MAISON(R.string.category_home),
+    SPORT(R.string.category_sport),
+    ECOLE(R.string.category_school),
+    LOISIR(R.string.category_leisure),
+    AUTRE(R.string.category_other);
 
     companion object {
         /**
-         * Returns the corresponding [CategoryType] for the provided label.
+         * Returns the corresponding [CategoryType] for the provided localized label.
          * If no match is found, returns [CategoryType.AUTRE] as the default.
-         *
-         * @param label The label to match against the category types.
-         * @return The matching [CategoryType] or [CategoryType.AUTRE] if no match is found.
          */
         fun fromLabel(label: String): CategoryType {
-            return CategoryType.entries.find { it.label == label } ?: AUTRE
+            return entries.firstOrNull { it.name == label } ?: AUTRE
         }
     }
 }

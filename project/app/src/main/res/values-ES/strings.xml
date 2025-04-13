@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Proyecto Móvil</string>
+    <!-- AddEditStoryScreen -->
+    <string name="title_label">Título:</string>
+    <string name="days_label">Días:</string>
+    <string name="category_label">Categorías:</string>
+    <string name="time_label">Hora:</string>
+    <string name="description_label">Descripción</string>
+    <string name="priority_label">Prioridad:</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_save">Guardar</string>
+    <string name="back_button_desc">Volver</string>
+    <string name="close_button_desc">Cerrar</string>
+    <string name="time_picker_desc">Elegir hora: </string>
+    <string name="time_placeholder">HH:mm</string>
+
+    <!-- Jours de la semaine (initiales) -->
+    <string-array name="day_initials">
+        <item>D</item> <item>L</item> <item>M</item>
+        <item>X</item> <item>J</item> <item>V</item>
+        <item>S</item>
+    </string-array>
+
+    <!-- Categories -->
+    <string name="category_dropdown_desc">Menú de categorías</string>
+    <string name="category_work">Trabajo</string>
+    <string name="category_medical">Médico</string>
+    <string name="category_home">Hogar</string>
+    <string name="category_sport">Deporte</string>
+    <string name="category_school">Escuela</string>
+    <string name="category_leisure">Ocio</string>
+    <string name="category_other">Otro</string>
+
+    <!-- Priorité -->
+    <string name="priority_high">Alta</string>
+    <string name="priority_standard">Estándar</string>
+    <string name="priority_low">Baja</string>
+    <string name="priority_dropdown_desc">Prioridad: </string>
+</resources>

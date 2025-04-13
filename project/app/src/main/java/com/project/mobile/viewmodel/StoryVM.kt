@@ -6,8 +6,6 @@ import com.project.mobile.common.PriorityType
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
-
-
 data class StoryVM(
     val id: Int = Random.nextInt(),
     val title: String = "",
@@ -18,7 +16,7 @@ data class StoryVM(
     val priority: PriorityType = PriorityType.StandardPriority
 ) {
     companion object {
-        fun fromEntity(entity: Story) : StoryVM {
+        fun fromEntity(entity: Story): StoryVM {
             return StoryVM(
                 id = entity.id!!,
                 title = entity.title,
@@ -37,7 +35,7 @@ data class StoryVM(
             id = id,
             title = this.title,
             description = this.description,
-            category = this.category.label,
+            category = this.category.name, // Utilisez le nom de l'enum au lieu du label
             hour = this.hour,
             days = this.days.joinToString("") { if (it) "1" else "0" },
             priority = this.priority.toInt()
@@ -52,5 +50,3 @@ data class StoryVM(
         }
     }
 }
-
-
