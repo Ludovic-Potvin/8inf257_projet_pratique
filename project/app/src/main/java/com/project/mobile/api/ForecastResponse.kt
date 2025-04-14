@@ -5,6 +5,6 @@ data class ForecastResponse(
 )
 
 data class ForecastItem(
-    val dt_txt: String,  // ex: "2025-04-14 12:00:00"
+    val dt_txt: String,
     val main: Main
 )

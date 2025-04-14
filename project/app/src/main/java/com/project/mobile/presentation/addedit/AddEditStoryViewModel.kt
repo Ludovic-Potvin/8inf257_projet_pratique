@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.mobile.api.WeatherRepository
 import com.project.mobile.data.StoriesDao
 import com.project.mobile.notification.NotificationManager
 import com.project.mobile.viewmodel.StoryVM
@@ -109,5 +110,24 @@ class AddEditStoryViewModel @Inject constructor(
             }
         }
     }
+
+    var temperatures = mutableStateOf<List<Double>>(emptyList())
+
+    init {
+        loadTemperatures()
+    }
+
+    private fun loadTemperatures() {
+        viewModelScope.launch {
+            try {
+                val repo = WeatherRepository()
+                val result = repo.getWeeklyTemperatures("Chicoutimi")
+                temperatures.value = result
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 }
 

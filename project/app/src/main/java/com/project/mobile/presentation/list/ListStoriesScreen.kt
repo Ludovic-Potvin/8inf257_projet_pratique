@@ -3,6 +3,7 @@ package com.project.mobile.presentation.list
 import ReminderHeader
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
@@ -41,18 +43,20 @@ fun ListStoriesScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                ReminderHeader()
+            }
 
-            ReminderHeader()
             val temperatures = viewModel.temperatures.value
-
 
             LazyColumn(
                 modifier = Modifier
-                    .padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
@@ -60,18 +64,18 @@ fun ListStoriesScreen(
                 items(viewModel.stories.value) { story ->
                     StoryCard(
                         story = story,
-                        temperatures = temperatures, // important
+                        temperatures = temperatures,
                         onClick = {
                             navController.navigate(
                                 Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
                             )
                         }
-
                     )
                     Spacer(modifier = Modifier.height(11.dp))
                 }
-                }
             }
+
+            Spacer(modifier = Modifier.height(16.dp)) // espace entre stories et trait
 
             Spacer(
                 modifier = Modifier
@@ -89,15 +93,12 @@ fun ListStoriesScreen(
                 Button(
                     onClick = {
                         navController.navigate(Screen.PreferenceScreen.route)
-                    }, colors = ButtonColors(
-                        disabledContainerColor = colorScheme.tertiary,
-                        disabledContentColor = Color.White,
+                    },
+                    colors = ButtonDefaults.buttonColors(
                         containerColor = colorScheme.tertiary,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .width(80.dp)
+                    modifier = Modifier.width(80.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Settings,
@@ -108,15 +109,12 @@ fun ListStoriesScreen(
                 Button(
                     onClick = {
                         navController.navigate(Screen.AddEditStoryScreen.route)
-                    }, colors = ButtonColors(
-                        disabledContainerColor = colorScheme.tertiary,
-                        disabledContentColor = Color.White,
+                    },
+                    colors = ButtonDefaults.buttonColors(
                         containerColor = colorScheme.tertiary,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .width(80.dp)
+                    modifier = Modifier.width(80.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -126,6 +124,7 @@ fun ListStoriesScreen(
             }
         }
     }
+}
 
 
 

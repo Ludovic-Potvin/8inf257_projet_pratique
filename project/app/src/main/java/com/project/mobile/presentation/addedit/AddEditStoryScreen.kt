@@ -72,6 +72,8 @@ fun AddEditStoryScreen(navController: NavController, viewModel: AddEditStoryView
 @Composable
 fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel()) {
     val story = viewModel.story.value
+    val temperatures = viewModel.temperatures.value
+
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -165,8 +167,26 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }
-
             Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                story.days.forEachIndexed { index, _ ->
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "${temperatures.getOrNull(index)?.toInt() ?: "--"}°C",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontFamily = trocchi
+                        )
+                    }
+                }
+            }
+
 
             // Sélecteur d'heure
             Text(
