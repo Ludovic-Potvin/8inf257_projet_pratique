@@ -29,7 +29,11 @@ import suezOneRegular
 import trocchi
 
 @Composable
-fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
+fun StoryCard(
+    story: StoryVM,
+    temperatures: List<Double>,
+    onClick: (StoryVM) -> Unit
+){
 
     val background = when (story.priority) {
         PriorityType.LowPriority -> theme.primary
@@ -85,22 +89,38 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit){
 
             Row(horizontalArrangement = Arrangement.Center) {
                 story.days.forEachIndexed { index, day ->
-                    DayCard(
-                        label = "SMTWTFS"[index].toString(),
-                        isActive = day,
-                        onClick = { onClick(story) }
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        DayCard(
+                            label = "SMTWTFS"[index].toString(),
+                            isActive = day,
+                            onClick = { onClick(story) }
+                        )
+                        Spacer(modifier = Modifier.height(2.dp)) // un petit espace
+                        Text(
+                            text = "${temperatures.getOrNull(index)?.toInt() ?: "--"}°C",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                color = Color.White,
+                                fontFamily = trocchi
+                            )
+                        )
+                    }
                     Spacer(modifier = Modifier.width(5.dp))
                 }
                 Spacer(modifier = Modifier.width(8.dp))
+
                 val formattedHour = story.getHourAsLocalTime().toString()
 
-                Text(formattedHour, style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontFamily = suezOneRegular
-                ))
+                Text(
+                    formattedHour,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        fontFamily = suezOneRegular
+                    )
+                )
             }
+
         }
     }
 }
