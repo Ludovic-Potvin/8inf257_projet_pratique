@@ -2,6 +2,7 @@ package com.project.mobile.presentation.preference
 
 import LanguageSwitcher
 import ReminderHeader
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,27 +60,35 @@ import com.project.mobile.ui.theme.WhiteOrange
 import com.project.mobile.ui.theme.WhitePurple
 import androidx.compose.material3.MaterialTheme.colorScheme as theme
 import trocchi
+import java.util.Locale
 
 @Composable
 fun PreferenceScreen(navController: NavController, viewModel: ThemeViewModel) {
     val languageViewModel: LanguageViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ReminderHeader()
-            PreferenceForm(navController, viewModel, languageViewModel)
+    val context = LocalContext.current
+    val currentLanguage = languageViewModel.currentLanguage
+    val configuration = remember { Configuration(context.resources.configuration) }
+    configuration.setLocale(Locale(currentLanguage))
+    val localizedContext = remember(configuration) { context.createConfigurationContext(configuration) }
+
+    CompositionLocalProvider(LocalContext provides localizedContext) {
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ReminderHeader()
+                PreferenceForm(navController, viewModel, languageViewModel)
+            }
         }
     }
 }
-
 @Composable
 fun PreferenceForm(
     navController: NavController,
@@ -194,7 +205,8 @@ fun PreferenceForm(
                 LanguageSwitcher(
                     onLanguageSelected = { code ->
                         languageViewModel.setLanguage(code)
-                    }
+                    },
+                    currentLanguage = languageViewModel.currentLanguage
                 )
             }
         }

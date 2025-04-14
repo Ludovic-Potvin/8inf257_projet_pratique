@@ -30,7 +30,7 @@ class LanguageViewModel @Inject constructor(
         currentLanguage = languageCode
         sharedPrefs.edit { putString("app_language", languageCode) }
 
-        // Force la langue sur tout l'APP
+        // Force la langue sur toute l'Application
         updateAppLanguage()
     }
 
@@ -39,12 +39,8 @@ class LanguageViewModel @Inject constructor(
         val locale = Locale(currentLanguage)
         Locale.setDefault(locale)
 
-        val resources = application.resources
-        val config = resources.configuration
+        val config = application.resources.configuration
         config.setLocale(locale)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            application.createConfigurationContext(config)
-        }
     }
 }
