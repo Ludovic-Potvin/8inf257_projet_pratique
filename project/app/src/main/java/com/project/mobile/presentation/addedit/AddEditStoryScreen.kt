@@ -35,7 +35,6 @@
     import com.project.mobile.ui.component.PriorityDropdownMenu
     import com.project.mobile.language.LanguageViewModel
     import com.project.mobile.ui.theme.DarkPurple
-    import com.project.mobile.ui.theme.Purple
     import com.project.mobile.util.showTimePicker
     import java.time.format.DateTimeFormatter
     import kotlinx.coroutines.flow.collectLatest
@@ -82,12 +81,7 @@
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ReminderHeader(
-                        onLanguageSelected = { code ->
-                            languageViewModel.setLanguage(code)
-                        },
-                        currentLanguage = languageViewModel.currentLanguage
-                    )
+                    ReminderHeader()
                     RoutineForm(
                         navController = navController,
                         viewModel = viewModel,
@@ -114,7 +108,7 @@
             ) {
                 Column(
                     modifier = Modifier
-                        .background(Purple)
+                        .background(theme.secondary)
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
@@ -246,42 +240,6 @@
                             }
                         }
                     )
-            OutlinedTextField(
-                value = story.hour.format(DateTimeFormatter.ofPattern("HH:mm")),
-                onValueChange = {},
-                label = { Text("HH:MM") },
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                readOnly = true,
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = theme.tertiary,
-                    unfocusedContainerColor = theme.tertiary,
-                    disabledContainerColor = theme.tertiary,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    disabledTextColor = Color.White,
-                    focusedIndicatorColor = Color.White,
-                    unfocusedIndicatorColor = Color.White
-                ),
-                trailingIcon = {
-                    IconButton(onClick = {
-                        showTimePicker(
-                            context,
-                            story.getHourAsLocalTime()
-                        ) { newTime ->
-                            viewModel.onEvent(AddEditStoryEvent.EnteredHour(newTime))
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.AccessTime,
-                            contentDescription = "Sélectionner l'heure",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-
                     Spacer(modifier = Modifier.height(8.dp))
 
             // Description

@@ -5,7 +5,7 @@
     <string name="days_label">Days:</string>
     <string name="category_label">Category:</string>
     <string name="time_label">time:</string>
-    <string name="description_label">Description</string>
+    <string name="description_label">Description:</string>
     <string name="priority_label">Priority:</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>
@@ -35,4 +35,25 @@
     <string name="priority_standard">Standard</string>
     <string name="priority_low">Low</string>
     <string name="priority_dropdown_desc">Priority: </string>
+
+    <!-- Preference Screen -->
+    <string name="preference_title">Settings</string>
+    <string name="theme_label">Theme:</string>
+    <string name="language_label">Language:</string>
+    <string name="back_icon_desc">Back</string>
+
+    <!-- Language Options -->
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Français</item>
+        <item>Español</item>
+        <item>Português</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>fr</item>
+        <item>es</item>
+        <item>pt</item>
+    </string-array>
 </resources>

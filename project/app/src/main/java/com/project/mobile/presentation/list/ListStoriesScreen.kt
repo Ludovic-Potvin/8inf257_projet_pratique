@@ -32,98 +32,96 @@ import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
 import com.project.mobile.presentation.addedit.AddEditStoryViewModel
 import com.project.mobile.ui.component.StoryCard
-import com.project.mobile.ui.theme.Purple
 
 @Composable
 fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
     val currentLanguage = languageViewModel.currentLanguage
     Scaffold(modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            ReminderHeader()
-            LazyColumn(
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(vertical = 0.dp, horizontal = 30.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(viewModel.stories.value) { story ->
-                    StoryCard(
-                        story,
+                ReminderHeader()
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(vertical = 0.dp, horizontal = 30.dp)
+                ) {
+                    items(viewModel.stories.value) { story ->
+                        StoryCard(
+                            story,
+                            onClick = {
+                                navController.navigate(
+                                    Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                                );
+                            },
+                            currentLanguage = currentLanguage
+                        )
+                        Spacer(modifier = Modifier.height(11.dp))
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .background(colorScheme.tertiary)
+                        .fillMaxWidth()
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
                         onClick = {
-                            navController.navigate(
-                                Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
-                            );
-                        },
-                        currentLanguage = currentLanguage
-                    )
-                    Spacer(modifier = Modifier.height(11.dp))
-                }
-            }
+                            navController.navigate(Screen.PreferenceScreen.route)
+                        }, colors = ButtonColors(
+                            disabledContainerColor = colorScheme.tertiary,
+                            disabledContentColor = Color.White,
+                            containerColor = colorScheme.tertiary,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .width(80.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Edit parameters"
+                        )
+                    }
 
-            Spacer(
-                modifier = Modifier
-                    .height(1.dp)
-                    .background(colorScheme.tertiary)
-                    .fillMaxWidth()
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = {
-                        navController.navigate(Screen.PreferenceScreen.route)
-                    }, colors = ButtonColors(
-                        disabledContainerColor = colorScheme.tertiary,
-                        disabledContentColor = Color.White,
-                        containerColor = colorScheme.tertiary,
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .width(80.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Edit parameters"
-                    )
-                }
-
-                Button(
-                    onClick = {
-                        navController.navigate(Screen.AddEditStoryScreen.route)
-                    }, colors = ButtonColors(
-                        disabledContainerColor = colorScheme.tertiary,
-                        disabledContentColor = Color.White,
-                        containerColor = colorScheme.tertiary,
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .width(80.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add a story"
-                    )
+                    Button(
+                        onClick = {
+                            navController.navigate(Screen.AddEditStoryScreen.route)
+                        }, colors = ButtonColors(
+                            disabledContainerColor = colorScheme.tertiary,
+                            disabledContentColor = Color.White,
+                            containerColor = colorScheme.tertiary,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .width(80.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add a story"
+                        )
+                    }
                 }
             }
         }
     }
-}
 }
 
 

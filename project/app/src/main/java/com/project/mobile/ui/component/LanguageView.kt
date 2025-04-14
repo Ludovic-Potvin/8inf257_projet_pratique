@@ -1,5 +1,6 @@
 import androidx.compose.foundation.layout.Box
-    import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
     import androidx.compose.material3.DropdownMenu
     import androidx.compose.material3.DropdownMenuItem
     import androidx.compose.material3.Text
@@ -9,22 +10,31 @@ import androidx.compose.foundation.layout.Box
     import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import com.project.mobile.language.LanguageViewModel
-import com.project.mobile.ui.theme.Purple
+import androidx.compose.material3.MaterialTheme.colorScheme as theme
 
 @Composable
 fun LanguageSwitcher(
     onLanguageSelected: (String) -> Unit,
-    currentLanguage: String
+    languageViewModel: LanguageViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val languages = mapOf("en" to "EN", "fr" to "FR", "es" to "ES", "pt" to "PT")
+    val currentLanguage = languageViewModel.currentLanguage
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
-        TextButton(onClick = { expanded = true }) {
+    Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
+        TextButton(
+            onClick = { expanded = true },
+            modifier = Modifier.width(150.dp)
+        ) {
             Text(
-                text = languages[currentLanguage] ?: "EN",
-                color = Purple
+                text = when(currentLanguage) {
+                    "fr" -> "Français"
+                    "es" -> "Español"
+                    "pt" -> "Português"
+                    else -> "English"
+                },
+                color = theme.primary
             )
         }
 
@@ -32,15 +42,34 @@ fun LanguageSwitcher(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            languages.forEach { (code, label) ->
-                DropdownMenuItem(
-                    text = { Text(label, color = Purple) },
-                    onClick = {
-                        onLanguageSelected(code)
-                        expanded = false
-                    }
-                )
-            }
+            DropdownMenuItem(
+                text = { Text("English") },
+                onClick = {
+                    onLanguageSelected("en")
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Français") },
+                onClick = {
+                    onLanguageSelected("fr")
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Español") },
+                onClick = {
+                    onLanguageSelected("es")
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Português") },
+                onClick = {
+                    onLanguageSelected("pt")
+                    expanded = false
+                }
+            )
         }
     }
 }

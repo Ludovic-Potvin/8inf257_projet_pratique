@@ -3,15 +3,15 @@
     <!-- AddEditStoryScreen -->
     <string name="title_label">Titre:</string>
     <string name="days_label">Jours:</string>
-    <string name="category_label">Categories:</string>
+    <string name="category_label">Catégorie:</string>
     <string name="time_label">Heure:</string>
-    <string name="description_label">Description</string>
+    <string name="description_label">Description:</string>
     <string name="priority_label">Priorité:</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_save">Enregistrer</string>
     <string name="back_button_desc">Retour</string>
     <string name="close_button_desc">Fermer</string>
-    <string name="time_picker_desc">Choisir l\'heure: </string>
+    <string name="time_picker_desc">Sélectionner l\'heure: </string>
     <string name="time_placeholder">HH:mm</string>
 
     <!-- Jours de la semaine (initiales) -->
@@ -28,12 +28,32 @@
     <string name="category_home">Maison</string>
     <string name="category_sport">Sport</string>
     <string name="category_school">École</string>
-    <string name="category_leisure">Loisir</string>
+    <string name="category_leisure">Loisirs</string>
     <string name="category_other">Autre</string>
-
     <!-- Priorité  -->
-    <string name="priority_high">Élevée</string>
+    <string name="priority_high">Haute</string>
     <string name="priority_standard">Standard</string>
     <string name="priority_low">Basse</string>
     <string name="priority_dropdown_desc">Priorité: </string>
+
+    <!-- Preference Screen -->
+    <string name="preference_title">Paramètres</string>
+    <string name="theme_label">Thème:</string>
+    <string name="language_label">Langue:</string>
+    <string name="back_icon_desc">Retour</string>
+
+    <!-- Language Options -->
+    <string-array name="language_options">
+        <item>Anglais</item>
+        <item>Français</item>
+        <item>Espagnol</item>
+        <item>Portugais</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>fr</item>
+        <item>es</item>
+        <item>pt</item>
+    </string-array>
 </resources>
