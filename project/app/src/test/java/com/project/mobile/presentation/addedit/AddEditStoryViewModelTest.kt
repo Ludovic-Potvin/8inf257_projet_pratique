@@ -5,9 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 
 import app.cash.turbine.test
 
-import com.project.mobile.notification.NotificationManager
-
-
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
