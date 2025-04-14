@@ -46,7 +46,7 @@ class AddEditStoryViewModelTest {
     }
 
     @Test
-    fun `saveStory emits SavedStory when valid data and then delete`() = runTest {
+    fun `ajout et supression d'une stoty avec des donnees valides`() = runTest {
 
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
@@ -79,7 +79,7 @@ class AddEditStoryViewModelTest {
     }
 
     @Test
-    fun `saveStory emits ShowMessage when days are empty`() = runTest {
+    fun `tentative d'ajout de story sans jour selectionnes qui doit echouer`() = runTest {
 
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
@@ -106,7 +106,7 @@ class AddEditStoryViewModelTest {
     }
 
     @Test
-    fun `saveStory emits ShowMessage when title is empty`() = runTest {
+    fun `tentative d'ajout de story sans titre qui doit echouer`() = runTest {
 
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
