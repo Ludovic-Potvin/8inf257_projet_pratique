@@ -109,7 +109,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("app.cash.turbine:turbine:1.0.0")
 
-// Pour MockK (ou Mockito si tu préfères)
+// Pour MockK
     testImplementation("io.mockk:mockk:1.13.5")
 
 }
