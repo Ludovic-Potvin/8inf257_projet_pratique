@@ -25,7 +25,7 @@ import androidx.core.app.NotificationManagerCompat
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddEditStoryViewModelTest {
 
-    private val dao = FakeDatabase()
+
     private val context = mockk<Context>(relaxed = true)
     private val builder = mockk<NotificationCompat.Builder>(relaxed = true)
     private val notificationManagerCompact = mockk<NotificationManagerCompat>(relaxed = true)
@@ -41,11 +41,11 @@ class AddEditStoryViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
-
     @Test
-    fun `ajout et supression d'une stoty avec des donnees valides`() = runTest {
+    fun `ajout et suppression d'une routine avec donnees valides`() = runTest {
 
-        val handle = SavedStateHandle(mapOf("storyId" to -1))
+        val dao = FakeDatabase()
+        val handle = SavedStateHandle(mapOf("storyId" to 1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
         // pour attendre la fin du init
@@ -54,30 +54,32 @@ class AddEditStoryViewModelTest {
         // When
         viewModel.onEvent(AddEditStoryEvent.EnteredTitle("My Story"))
         viewModel.onEvent(AddEditStoryEvent.EnteredDay(0))
+
         viewModel.onEvent(AddEditStoryEvent.SaveStory)
 
-        // Then
         viewModel.eventFlow.test {
-            val event = awaitItem()
-            assert(event is AddEditStoryUiEvent.SavedStory)
+            val saveEvent = awaitItem()
+            assert(saveEvent is AddEditStoryUiEvent.SavedStory)
             assertTrue(dao.stories.size == 1)
             assertTrue(notificationManager.addedNotification.size == 1)
-        }
-
-
-        viewModel.onEvent(AddEditStoryEvent.DeleteStory)
-
-        viewModel.eventFlow.test {
-            val event = awaitItem()
-            assert(event is AddEditStoryUiEvent.DeletedStory)
+            viewModel.onEvent(AddEditStoryEvent.DeleteStory)
+            val deleteEvent = awaitItem()
+            assert(deleteEvent is AddEditStoryUiEvent.DeletedStory)
             assertTrue(dao.stories.size == 0)
             assertTrue(notificationManager.addedNotification.size == 0)
+
+            cancelAndIgnoreRemainingEvents()
         }
+
     }
 
     @Test
-    fun `tentative d'ajout de story sans jour selectionnes qui doit echouer`() = runTest {
-
+    fun `tentative d'ajout de routine sans jour selectionnes qui doit echouer`() = runTest {
+        val context = mockk<Context>(relaxed = true)
+        val builder = mockk<NotificationCompat.Builder>(relaxed = true)
+        val notificationManagerCompact = mockk<NotificationManagerCompat>(relaxed = true)
+        val notificationManager = FakeNotificationManager(context, builder, notificationManagerCompact)
+        val dao = FakeDatabase()
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
@@ -94,8 +96,8 @@ class AddEditStoryViewModelTest {
             val event = awaitItem()
             assert(event is AddEditStoryUiEvent.ShowMessage)
             assertEquals("Unable to save story", (event as AddEditStoryUiEvent.ShowMessage).message)
-            assertTrue(dao.stories.size == 0)
-            assertTrue(notificationManager.addedNotification.size == 0)
+            assertTrue(dao.stories.isEmpty())
+            assertTrue(notificationManager.addedNotification.isEmpty())
             cancelAndIgnoreRemainingEvents()
 
         }
@@ -103,8 +105,8 @@ class AddEditStoryViewModelTest {
     }
 
     @Test
-    fun `tentative d'ajout de story sans titre qui doit echouer`() = runTest {
-
+    fun `tentative d'ajout de routine sans titre qui doit echouer`() = runTest {
+        val dao = FakeDatabase()
         val handle = SavedStateHandle(mapOf("storyId" to -1))
         val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
 
