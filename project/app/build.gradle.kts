@@ -46,11 +46,14 @@ android {
 }
 
 dependencies {
+    // Dépendances CORE ESSENTIELLES pour SharedPreferences.edit {}
+    implementation("androidx.core:core-ktx:1.12.0") // Version mise à jour
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation("org.testng:testng:7.1.0")
     kapt(libs.hilt.android.compiler) // Utilise kapt au lieu de ksp
-
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
