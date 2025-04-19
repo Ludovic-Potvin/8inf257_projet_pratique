@@ -142,17 +142,16 @@ private fun DayAndTimeRow(story: StoryVM, temperatures: List<Double?>) {
                     onClick = { /* Optional */ }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                val temp = temperatures.getOrNull(index)
-                if (temp != null) {
+                val tempText = temperatures.getOrNull(index)?.toInt()?.toString()
                     Text(
-                        text = "${temp.toInt()}\u00B0C",
+                        text = tempText?.let { "$it°C" } ?: "--",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color.White,
                             fontFamily = trocchi
                         )
                     )
-                }
+
             }
             Spacer(modifier = Modifier.width(4.dp))
         }

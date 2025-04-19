@@ -186,27 +186,20 @@ fun RoutineForm(
             ) {
                 val dayInitials = stringArrayResource(R.array.day_initials)
                 story.days.forEachIndexed { index, day ->
-                    DayCard(
-                        label = dayInitials[index],
-                        isActive = day,
-                        onClick = {
-                            viewModel.onEvent(AddEditStoryEvent.EnteredDay(index))
-                        })
-                    Spacer(modifier = Modifier.width(4.dp))
-                }
-            }
-            // Affichage des températures
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                story.days.forEachIndexed { index, _ ->
                     val temp = temperatures.getOrNull(index)
                     val tempText = temp?.toInt()?.toString()
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        DayCard(
+                            label = dayInitials[index],
+                            isActive = day,
+                            onClick = {
+                                viewModel.onEvent(AddEditStoryEvent.EnteredDay(index))
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = if (tempText == null) "--" else "$tempText°C",
+                            text = tempText?.let { "$it°C" } ?: "--",
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 color = Color.White,
@@ -216,6 +209,7 @@ fun RoutineForm(
                     }
                 }
             }
+
 
 
             Spacer(modifier = Modifier.height(8.dp))
