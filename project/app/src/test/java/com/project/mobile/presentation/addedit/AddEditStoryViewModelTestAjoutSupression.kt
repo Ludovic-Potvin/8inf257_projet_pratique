@@ -23,7 +23,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddEditStoryViewModelTestAjout {
+class AddEditStoryViewModelTestAjoutSupression {
 
 
     private val context = mockk<Context>(relaxed = true)

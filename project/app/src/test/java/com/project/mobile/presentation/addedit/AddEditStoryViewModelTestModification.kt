@@ -62,15 +62,18 @@ class AddEditStoryViewModelTestModification {
 
         viewModel.onEvent(AddEditStoryEvent.EnteredTitle("Nouveau titre"))
         advanceUntilIdle()
-        println("Histoire modifiée avant SaveStory: ${viewModel.story.value.title}")
 
         viewModel.onEvent(AddEditStoryEvent.SaveStory)
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditStoryUiEvent.SavedStory)
+
             val modifiedStory = dao.stories.first()
             assertEquals("Nouveau titre", modifiedStory.title)
             assertEquals(1, dao.stories.size)
+
+            assertEquals("Nouveau titre", notificationManager.addedNotification.first().title)
+            assertEquals(1, notificationManager.addedNotification.size)
             cancelAndIgnoreRemainingEvents()
         }
     }
