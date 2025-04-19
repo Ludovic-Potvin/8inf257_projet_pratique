@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -18,27 +19,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.project.mobile.navigation.Screen
 import com.project.mobile.ui.component.StoryCard
-import java.time.LocalDate
 
 @Composable
 fun ListStoriesScreen(
-    navController: NavController, viewModel: ListStoriesViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: ListStoriesViewModel = hiltViewModel()
 ) {
+    val temperatures = viewModel.temperatures.value
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                ReminderHeader()
-            }
+            ReminderHeader()
             LazyColumn(
                 modifier = Modifier
+                    .padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(vertical = 0.dp, horizontal = 30.dp)
@@ -46,7 +46,7 @@ fun ListStoriesScreen(
                 items(viewModel.stories.value) { story ->
                     StoryCard(
                         story = story,
-                        temperatures = viewModel.temperatures.value,
+                        temperatures = temperatures,
                         onClick = {
                             navController.navigate(
                                 Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
@@ -56,8 +56,6 @@ fun ListStoriesScreen(
                     Spacer(modifier = Modifier.height(11.dp))
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(
                 modifier = Modifier
@@ -75,28 +73,33 @@ fun ListStoriesScreen(
                 Button(
                     onClick = {
                         navController.navigate(Screen.PreferenceScreen.route)
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
+                    }, colors = ButtonColors(
+                        disabledContainerColor = colorScheme.tertiary,
+                        disabledContentColor = Color.White,
+                        containerColor = colorScheme.tertiary,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier.width(80.dp)
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .width(80.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Edit parameters"
                     )
                 }
-
                 Button(
                     onClick = {
                         navController.navigate(Screen.AddEditStoryScreen.route)
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
+                    }, colors = ButtonColors(
+                        disabledContainerColor = colorScheme.tertiary,
+                        disabledContentColor = Color.White,
+                        containerColor = colorScheme.tertiary,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier.width(80.dp)
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .width(80.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
