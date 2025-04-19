@@ -15,8 +15,7 @@ class FakeDatabase : StoriesDao {
         return stories.find { it.id == id }
     }
     override suspend fun upsertStory(story: Story) {
-        if(stories.contains(story))
-            stories.remove(story)
+        stories.removeIf { it.id == story.id }
         stories.add(story)
     }
     override suspend fun deleteStory(story: Story) {

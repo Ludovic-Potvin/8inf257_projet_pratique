@@ -17,6 +17,7 @@ class FakeNotificationManager(
     val addedNotification = mutableListOf<Story>()
 
     override fun setNotification(story: Story) {
+        addedNotification.removeIf { it.id == story.id }
         addedNotification.add(story)
     }
 
