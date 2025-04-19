@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Mobile Project</string>
+    <!-- AddEditStoryScreen -->
+    <string name="title_label">Título:</string>
+    <string name="days_label">Dias:</string>
+    <string name="category_label">Categoria:</string>
+    <string name="time_label">Hora:</string>
+    <string name="description_label">Descrição:</string>
+    <string name="priority_label">Prioridade:</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_save">Salvar</string>
+    <string name="back_button_desc">Voltar</string>
+    <string name="close_button_desc">Fechar</string>
+    <string name="time_picker_desc">Selecionar hora: </string>
+    <string name="time_placeholder">HH:mm</string>
+
+    <!-- Jours de la semaine (initiales) -->
+    <string-array name="day_initials">
+        <item>D</item> <item>S</item> <item>T</item>
+        <item>Q</item> <item>Q</item> <item>S</item>
+        <item>S</item>
+    </string-array>
+
+    <!-- Categories -->
+    <string name="category_dropdown_desc">Menu suspenso de categorias</string>
+    <string name="category_work">Trabalho</string>
+    <string name="category_medical">Médico</string>
+    <string name="category_home">Casa</string>
+    <string name="category_sport">Esporte</string>
+    <string name="category_school">Escola</string>
+    <string name="category_leisure">Lazer</string>
+    <string name="category_other">Outro</string>
+    <!-- Priorité  -->
+    <string name="priority_high">Alta</string>
+    <string name="priority_standard">Padrão</string>
+    <string name="priority_low">Baixa</string>
+    <string name="priority_dropdown_desc">Prioridade: </string>
+
+    <!-- Preference Screen -->
+    <string name="preference_title">Configurações</string>
+    <string name="theme_label">Tema:</string>
+    <string name="language_label">Idioma:</string>
+    <string name="back_icon_desc">Voltar</string>
+
+    <!-- Language Options -->
+    <string-array name="language_options">
+        <item>Inglês</item>
+        <item>Francês</item>
+        <item>Espanhol</item>
+        <item>Português</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>fr</item>
+        <item>es</item>
+        <item>pt</item>
+    </string-array>
+</resources>

@@ -1,131 +1,171 @@
 package com.project.mobile.ui.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.mobile.R
+import com.project.mobile.common.CategoryType
 import com.project.mobile.common.PriorityType
 import com.project.mobile.viewmodel.StoryVM
-import androidx.compose.material3.MaterialTheme.colorScheme as theme
 import suezOneRegular
 import trocchi
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun StoryCard(
     story: StoryVM,
     temperatures: List<Double?>,
-    onClick: (StoryVM) -> Unit
-){
-
+    onClick: (StoryVM) -> Unit,
+    currentLanguage: String
+) {
+    val context = LocalContext.current
     val background = when (story.priority) {
-        PriorityType.LowPriority -> theme.primary
-        PriorityType.StandardPriority -> theme.secondary
-        PriorityType.HighPriority -> theme.tertiary
+        PriorityType.LowPriority -> MaterialTheme.colorScheme.primary
+        PriorityType.StandardPriority -> MaterialTheme.colorScheme.secondary
+        PriorityType.HighPriority -> MaterialTheme.colorScheme.tertiary
+    }
+
+    val localizedContext = remember(currentLanguage) {
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(Locale(currentLanguage))
+        context.createConfigurationContext(config)
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable {
-                onClick(story)
-            }
+            .clickable { onClick(story) }
             .background(background, shape = RoundedCornerShape(10.dp))
-            .padding(12.dp, 12.dp),
-    ){
+            .padding(12.dp)
+    ) {
+        CompositionLocalProvider(LocalContext provides localizedContext) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    CategoryBadge(story.category)
+                }
 
-        Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Box(modifier = Modifier
-                .align(Alignment.End)
-                .border(1.dp, theme.outline, shape = RoundedCornerShape(10.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = story.title,
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        color = Color.White,
+                        fontFamily = suezOneRegular,
+                        textAlign = TextAlign.Center
+                    )
                 )
-                .background(theme.secondary, shape = RoundedCornerShape(10.dp))
-                .padding(8.dp, 3.dp)
-            ){
-                Text(story.category.label,
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = story.description,
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
-                        fontFamily = trocchi
+                        fontFamily = suezOneRegular,
+                        textAlign = TextAlign.Center
                     )
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                DayAndTimeRow(story, temperatures)
             }
-            Text(story.title,
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    color = Color.White,
-                    fontFamily = suezOneRegular,
-                    textAlign = TextAlign.Center
-                )
-            )
-            Text(story.description,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    fontFamily = suezOneRegular,
-                    textAlign = TextAlign.Center
-                )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Row(horizontalArrangement = Arrangement.Center) {
-                story.days.forEachIndexed { index, day ->
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        DayCard(
-                            label = "SMTWTFS"[index].toString(),
-                            isActive = day,
-                            onClick = { onClick(story) }
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        val temp = temperatures.getOrNull(index)
-                        val tempText = temp?.toInt()?.toString() ?: "--"
-
-
-                        Text(
-                            text = if (temp == null) "--" else "$tempText°C",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                color = Color.White,
-                                fontFamily = trocchi
-                            )
-                        )
-
-                    }
-                    Spacer(modifier = Modifier.width(5.dp))
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-
-                val formattedHour = story.getHourAsLocalTime().toString()
-
-                Text(
-                    formattedHour,
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontFamily = suezOneRegular
-                    )
-                )
-            }
-
         }
+    }
+}
+
+@Composable
+private fun CategoryBadge(category: CategoryType) {
+    Box(
+        modifier = Modifier
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(10.dp))
+            .padding(horizontal = 8.dp, vertical = 3.dp)
+    ) {
+        Text(
+            text = stringResource(id = category.labelResId),
+            style = TextStyle(
+                fontSize = 18.sp,
+                color = Color.White,
+                fontFamily = trocchi
+            )
+        )
+    }
+}
+
+@Composable
+private fun DayAndTimeRow(story: StoryVM, temperatures: List<Double?>) {
+    val dayInitials = stringArrayResource(R.array.day_initials)
+    val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()) }
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        dayInitials.forEachIndexed { index, dayInitial ->
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                DayCard(
+                    label = dayInitial,
+                    isActive = story.days.getOrElse(index) { false },
+                    onClick = { /* Optional */ }
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                val temp = temperatures.getOrNull(index)
+                if (temp != null) {
+                    Text(
+                        text = "${temp.toInt()}\u00B0C",
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontFamily = trocchi
+                        )
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = story.getHourAsLocalTime().format(timeFormatter),
+            style = TextStyle(
+                fontSize = 20.sp,
+                color = Color.White,
+                fontFamily = suezOneRegular
+            )
+        )
     }
 }

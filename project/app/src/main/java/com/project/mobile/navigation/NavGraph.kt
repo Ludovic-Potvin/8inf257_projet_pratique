@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -13,6 +14,7 @@ import androidx.navigation.navArgument
 import com.project.mobile.data.StoriesDatabase
 import com.project.mobile.presentation.addedit.AddEditStoryScreen
 import com.project.mobile.presentation.list.ListStoriesScreen
+import com.project.mobile.presentation.list.ListStoriesViewModel
 import com.project.mobile.presentation.preference.PreferenceScreen
 import com.project.mobile.ui.theme.ThemeViewModel
 
@@ -27,7 +29,11 @@ fun NavGraph(db: StoriesDatabase,
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Screen.StoriesListScreen.route) {
-            ListStoriesScreen(navController)
+            ListStoriesScreen(
+                navController,
+                viewModel = hiltViewModel(),
+                languageViewModel = hiltViewModel()
+            )
         }
         composable(route = Screen.AddEditStoryScreen.route + "?storyId={storyId}",
             arguments = listOf(
