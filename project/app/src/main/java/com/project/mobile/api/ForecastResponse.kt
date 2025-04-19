@@ -8,3 +8,7 @@ data class ForecastItem(
     val dt_txt: String,
     val main: Main
 )
+
+data class Main(
+    val temp: Double
+)

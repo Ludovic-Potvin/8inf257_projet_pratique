@@ -111,13 +111,15 @@ class AddEditStoryViewModel @Inject constructor(
         }
     }
 
-    var temperatures = mutableStateOf<List<Double>>(emptyList())
+    var temperatures = mutableStateOf<List<Double?>>(emptyList())
+
+
 
     init {
-        loadTemperatures()
+        loadTemperature()
     }
 
-    private fun loadTemperatures() {
+    private fun loadTemperature() {
         viewModelScope.launch {
             try {
                 val repo = WeatherRepository()
@@ -128,6 +130,8 @@ class AddEditStoryViewModel @Inject constructor(
             }
         }
     }
+
+
 
 }
 

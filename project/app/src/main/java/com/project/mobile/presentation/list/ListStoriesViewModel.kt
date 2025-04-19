@@ -25,11 +25,9 @@ class ListStoriesViewModel @Inject constructor(
     private val _stories: MutableState<List<StoryVM>> = mutableStateOf(emptyList())
     val stories: State<List<StoryVM>> = _stories
     var job: Job? = null
+    var temperatures = mutableStateOf<List<Double?>>(emptyList())
 
-    private val weatherRepository = WeatherRepository()
 
-    // Liste des températures pour les 7 jours
-    var temperatures = mutableStateOf<List<Double>>(emptyList())
 
     init {
         loadStories()
@@ -49,15 +47,15 @@ class ListStoriesViewModel @Inject constructor(
     private fun loadTemperature() {
         viewModelScope.launch {
             try {
-                val result = weatherRepository.getWeeklyTemperatures("Chicoutimi")
-
-                println("Nombre de températures récupérées : ${result.size}")
-
-                temperatures.value = result
+                val repo = WeatherRepository()
+                temperatures.value = repo.getWeeklyTemperatures("Chicoutimi")
             } catch (e: Exception) {
+                temperatures.value = List(7) { null }
                 e.printStackTrace()
             }
         }
     }
+
+
 
 }

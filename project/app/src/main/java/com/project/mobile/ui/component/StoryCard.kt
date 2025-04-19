@@ -31,7 +31,7 @@ import trocchi
 @Composable
 fun StoryCard(
     story: StoryVM,
-    temperatures: List<Double>,
+    temperatures: List<Double?>,
     onClick: (StoryVM) -> Unit
 ){
 
@@ -95,15 +95,20 @@ fun StoryCard(
                             isActive = day,
                             onClick = { onClick(story) }
                         )
-                        Spacer(modifier = Modifier.height(2.dp)) // un petit espace
+                        Spacer(modifier = Modifier.height(2.dp))
+                        val temp = temperatures.getOrNull(index)
+                        val tempText = temp?.toInt()?.toString() ?: "--"
+
+
                         Text(
-                            text = "${temperatures.getOrNull(index)?.toInt() ?: "--"}°C",
+                            text = if (temp == null) "--" else "$tempText°C",
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 color = Color.White,
                                 fontFamily = trocchi
                             )
                         )
+
                     }
                     Spacer(modifier = Modifier.width(5.dp))
                 }

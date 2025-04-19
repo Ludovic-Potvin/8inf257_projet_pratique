@@ -10,11 +10,7 @@ class WeatherRepository {
         .build()
         .create(WeatherApiService::class.java)
 
-    suspend fun getTemperature(city: String): Double {
-        return api.getWeather(city, "9cf7583f90421a4976dd9c5bea58ae3c").main.temp
-    }
-
-    suspend fun getWeeklyTemperatures(city: String): List<Double> {
+    suspend fun getWeeklyTemperatures(city: String): List<Double?> {
         val response = api.getForecast(city, "9cf7583f90421a4976dd9c5bea58ae3c")
 
         val dailyTemps = response.list
@@ -22,10 +18,21 @@ class WeatherRepository {
             .take(7)
             .map { it.main.temp }
 
-        println("Températures récupérées pour $city : $dailyTemps")
+        // Réorganisation des températures selon le jour courant
+        val todayIndex = (java.time.LocalDate.now().dayOfWeek.value) % 7
+        val orderedTemperatures = MutableList<Double?>(7) { null }
 
-        return dailyTemps
+
+        dailyTemps.forEachIndexed { index, temp ->
+            val position = (todayIndex + index) % 7
+            orderedTemperatures[position] = temp
+        }
+
+        println("Températures ordonnées pour $city : $orderedTemperatures")
+
+        return orderedTemperatures
     }
+
 
 
 }

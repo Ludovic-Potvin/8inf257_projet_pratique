@@ -177,8 +177,11 @@ fun RoutineForm(navController: NavController, viewModel: AddEditStoryViewModel =
             ) {
                 story.days.forEachIndexed { index, _ ->
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        val temp = temperatures.getOrNull(index)
+                        val tempText = if (temp == null) "--" else "${temp.toInt()}°C"
+
                         Text(
-                            text = "${temperatures.getOrNull(index)?.toInt() ?: "--"}°C",
+                            text = tempText,
                             color = Color.White,
                             fontSize = 14.sp,
                             fontFamily = trocchi
