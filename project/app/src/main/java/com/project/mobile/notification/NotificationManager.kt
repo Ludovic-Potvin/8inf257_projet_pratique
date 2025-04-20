@@ -20,7 +20,7 @@ import java.time.temporal.TemporalAdjusters
 import java.util.Calendar
 import javax.inject.Inject
 
-class NotificationManager @Inject constructor(
+open class NotificationManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationBuilder: NotificationCompat.Builder,
     private val notificationManager: NotificationManagerCompat
@@ -52,7 +52,7 @@ class NotificationManager @Inject constructor(
         return nextTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    fun setNotification(story: Story) {
+    open fun setNotification(story: Story) {
         if (hasNotificationPermission()) {
             val time = story.hour.split(':')
 
@@ -103,7 +103,7 @@ class NotificationManager @Inject constructor(
         )
     }
 
-    fun cancelNotification(story: Story) {
+    open fun cancelNotification(story: Story) {
         val dayMap = mapOf(
             0 to DayOfWeek.SUNDAY,
             1 to DayOfWeek.MONDAY,
