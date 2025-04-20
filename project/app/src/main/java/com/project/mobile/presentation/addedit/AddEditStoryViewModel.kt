@@ -8,10 +8,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.mobile.api.WeatherRepository
 import com.project.mobile.data.StoriesDao
 import com.project.mobile.notification.NotificationManager
 import com.project.mobile.viewmodel.StoryVM
+import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +24,10 @@ import javax.inject.Inject
 class AddEditStoryViewModel @Inject constructor(
     val dao: StoriesDao,
     savedStateHandle: SavedStateHandle,
-    private val notificationManager: NotificationManager) : ViewModel()
+    private val notificationManager: NotificationManager,
+    private val getWeeklyTemperaturesUseCase: GetWeeklyTemperaturesUseCase
+) : ViewModel()
+
 {
     private val _story = mutableStateOf(StoryVM())
     val story : State<StoryVM> = _story
@@ -122,14 +125,14 @@ class AddEditStoryViewModel @Inject constructor(
     private fun loadTemperature() {
         viewModelScope.launch {
             try {
-                val repo = WeatherRepository()
-                val result = repo.getWeeklyTemperatures("Chicoutimi")
-                temperatures.value = result
+                temperatures.value = getWeeklyTemperaturesUseCase("Chicoutimi")
             } catch (e: Exception) {
                 e.printStackTrace()
+                temperatures.value = List(7) { null }
             }
         }
     }
+
 
 
 

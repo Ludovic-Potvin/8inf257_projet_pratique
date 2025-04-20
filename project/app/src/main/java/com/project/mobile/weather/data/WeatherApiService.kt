@@ -1,4 +1,4 @@
-package com.project.mobile.api
+package com.project.mobile.weather.data
 
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package com.project.mobile.api
+package com.project.mobile.weather.data
 
 data class ForecastResponse(
     val list: List<ForecastItem>
