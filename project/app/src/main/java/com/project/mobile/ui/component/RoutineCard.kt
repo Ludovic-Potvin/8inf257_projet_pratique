@@ -32,13 +32,13 @@ import java.util.Locale
 
 @Composable
 fun RoutineCard(
-    story: RoutineVM,
+    routine: RoutineVM,
     temperatures: List<Double?>,
     onClick: (RoutineVM) -> Unit,
     currentLanguage: String
 ) {
     val context = LocalContext.current
-    val background = when (story.priority) {
+    val background = when (routine.priority) {
         PriorityType.LowPriority -> MaterialTheme.colorScheme.primary
         PriorityType.StandardPriority -> MaterialTheme.colorScheme.secondary
         PriorityType.HighPriority -> MaterialTheme.colorScheme.tertiary
@@ -53,7 +53,7 @@ fun RoutineCard(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable { onClick(story) }
+            .clickable { onClick(routine) }
             .background(background, shape = RoundedCornerShape(10.dp))
             .padding(12.dp)
     ) {
@@ -67,13 +67,13 @@ fun RoutineCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    CategoryBadge(story.category)
+                    CategoryBadge(routine.category)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = story.title,
+                    text = routine.title,
                     style = TextStyle(
                         fontSize = 22.sp,
                         color = Color.White,
@@ -85,7 +85,7 @@ fun RoutineCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = story.description,
+                    text = routine.description,
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
@@ -96,7 +96,7 @@ fun RoutineCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                DayAndTimeRow(story, temperatures)
+                DayAndTimeRow(routine, temperatures)
             }
         }
     }
@@ -126,7 +126,7 @@ private fun CategoryBadge(category: CategoryType) {
 }
 
 @Composable
-private fun DayAndTimeRow(story: RoutineVM, temperatures: List<Double?>) {
+private fun DayAndTimeRow(routine: RoutineVM, temperatures: List<Double?>) {
     val dayInitials = stringArrayResource(R.array.day_initials)
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()) }
 
@@ -138,7 +138,7 @@ private fun DayAndTimeRow(story: RoutineVM, temperatures: List<Double?>) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 DayCard(
                     label = dayInitial,
-                    isActive = story.days.getOrElse(index) { false },
+                    isActive = routine.days.getOrElse(index) { false },
                     onClick = { /* Optional */ }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -159,7 +159,7 @@ private fun DayAndTimeRow(story: RoutineVM, temperatures: List<Double?>) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = story.getHourAsLocalTime().format(timeFormatter),
+            text = routine.getHourAsLocalTime().format(timeFormatter),
             style = TextStyle(
                 fontSize = 20.sp,
                 color = Color.White,

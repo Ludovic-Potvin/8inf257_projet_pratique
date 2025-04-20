@@ -53,7 +53,7 @@ class AddEditRoutineViewModelTestModification {
 
     @Test
     fun `modification routine`() = runTest {
-        val story = Routine(
+        val routine = Routine(
             id = 1,
             title = "Ancien titre",
             description = "",
@@ -62,9 +62,9 @@ class AddEditRoutineViewModelTestModification {
             days = "1000000",
             priority = 1
         )
-        dao.stories.add(story)
+        dao.routines.add(routine)
 
-        val handle = SavedStateHandle(mapOf("storyId" to 1))
+        val handle = SavedStateHandle(mapOf("routineId" to 1))
         val viewModel = AddEditRoutineViewModel(dao, handle, notificationManager, weeklytempusecase)
 
         advanceUntilIdle()
@@ -77,9 +77,9 @@ class AddEditRoutineViewModelTestModification {
             val event = awaitItem()
             assert(event is AddEditRoutineUiEvent.SavedRoutine)
 
-            val modifiedRoutine = dao.stories.first()
+            val modifiedRoutine = dao.routines.first()
             assertEquals("Nouveau titre", modifiedRoutine.title)
-            assertEquals(1, dao.stories.size)
+            assertEquals(1, dao.routines.size)
 
             assertEquals("Nouveau titre", notificationManager.addedNotification.first().title)
             assertEquals(1, notificationManager.addedNotification.size)

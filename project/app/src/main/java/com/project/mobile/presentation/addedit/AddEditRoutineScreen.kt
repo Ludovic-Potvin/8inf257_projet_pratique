@@ -61,13 +61,13 @@ fun AddEditRoutineScreen(navController: NavController,
                 viewModel.eventFlow.collectLatest { event ->
                     when (event) {
                         is AddEditRoutineUiEvent.SavedRoutine -> {
-                            navController.navigate(Screen.StoriesListScreen.route)
+                            navController.navigate(Screen.RoutinesListScreen.route)
                         }
                         is AddEditRoutineUiEvent.ShowMessage -> {
                             snackbarHostState.showSnackbar(event.message)
                         }
                         is AddEditRoutineUiEvent.DeletedRoutine -> {
-                            navController.navigate(Screen.StoriesListScreen.route)
+                            navController.navigate(Screen.RoutinesListScreen.route)
                         }
                     }
                 }
@@ -96,7 +96,7 @@ fun RoutineForm(
     navController: NavController, viewModel: AddEditRoutineViewModel = hiltViewModel(),
     currentLanguage: String
 ) {
-    val story = viewModel.story.value
+    val routine = viewModel.routine.value
     val context = LocalContext.current
     val temperatures = viewModel.temperatures.value
 
@@ -118,7 +118,7 @@ fun RoutineForm(
             ) {
                 Box(
                     modifier = Modifier
-                        .clickable { navController.navigate(Screen.StoriesListScreen.route) }
+                        .clickable { navController.navigate(Screen.RoutinesListScreen.route) }
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -150,7 +150,7 @@ fun RoutineForm(
                 fontFamily = trocchi
             )
             OutlinedTextField(
-                value = story.title,
+                value = routine.title,
                 onValueChange = {
                     viewModel.onEvent(AddEditRoutineEvent.EnteredTitle(it))
                 },
@@ -183,7 +183,7 @@ fun RoutineForm(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 val dayInitials = stringArrayResource(R.array.day_initials)
-                story.days.forEachIndexed { index, day ->
+                routine.days.forEachIndexed { index, day ->
                     val temp = temperatures.getOrNull(index)
                     val tempText = temp?.toInt()?.toString()
 
@@ -222,7 +222,7 @@ fun RoutineForm(
             )
 
             OutlinedTextField(
-                value = story.hour.format(DateTimeFormatter.ofPattern("HH:mm")),
+                value = routine.hour.format(DateTimeFormatter.ofPattern("HH:mm")),
                 onValueChange = {},
                 label = { Text(stringResource(R.string.time_placeholder)) },
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
@@ -243,7 +243,7 @@ fun RoutineForm(
                     IconButton(onClick = {
                         showTimePicker(
                             context,
-                            story.getHourAsLocalTime()
+                            routine.getHourAsLocalTime()
                         ) { newTime ->
                             viewModel.onEvent(AddEditRoutineEvent.EnteredHour(newTime))
                         }
@@ -267,7 +267,7 @@ fun RoutineForm(
                 fontFamily = trocchi
             )
             OutlinedTextField(
-                value = story.description,
+                value = routine.description,
                 onValueChange = {
                     viewModel.onEvent(AddEditRoutineEvent.EnteredDescription(it))
                 },
@@ -297,7 +297,7 @@ fun RoutineForm(
             )
 
             CategoryDropdownMenu(
-                selectedCategory = story.category,
+                selectedCategory = routine.category,
                 onCategorySelected = { newCategory ->
                     viewModel.onEvent(AddEditRoutineEvent.EnteredCategory(newCategory))
                 },
@@ -315,7 +315,7 @@ fun RoutineForm(
             )
 
             PriorityDropdownMenu(
-                selectedPriority = story.priority
+                selectedPriority = routine.priority
             ) { newPriority ->
                 viewModel.onEvent(AddEditRoutineEvent.EnteredPriority(newPriority))
             }
@@ -327,7 +327,7 @@ fun RoutineForm(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.StoriesListScreen.route) },
+                    onClick = { navController.navigate(Screen.RoutinesListScreen.route) },
                     colors = ButtonColors(
                         disabledContainerColor = Color.White,
                         disabledContentColor = Color.White,

@@ -50,7 +50,7 @@ class AddEditRoutineViewModelTestAjoutSupression {
     fun `ajout et suppression d'une routine avec donnees valides`() = runTest {
 
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to 1))
+        val handle = SavedStateHandle(mapOf("routineId" to 1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
@@ -71,12 +71,12 @@ class AddEditRoutineViewModelTestAjoutSupression {
         viewModel.eventFlow.test {
             val saveEvent = awaitItem()
             assert(saveEvent is AddEditRoutineUiEvent.SavedRoutine)
-            assertTrue(dao.stories.size == 1)
+            assertTrue(dao.routines.size == 1)
             assertTrue(notificationManager.addedNotification.size == 1)
             viewModel.onEvent(AddEditRoutineEvent.DeleteRoutine)
             val deleteEvent = awaitItem()
             assert(deleteEvent is AddEditRoutineUiEvent.DeletedRoutine)
-            assertTrue(dao.stories.size == 0)
+            assertTrue(dao.routines.size == 0)
             assertTrue(notificationManager.addedNotification.size == 0)
 
             cancelAndIgnoreRemainingEvents()
@@ -91,7 +91,7 @@ class AddEditRoutineViewModelTestAjoutSupression {
         val notificationManagerCompact = mockk<NotificationManagerCompat>(relaxed = true)
         val notificationManager = FakeNotificationManager(context, builder, notificationManagerCompact)
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to -1))
+        val handle = SavedStateHandle(mapOf("routineId" to -1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/data/2.5/")
@@ -112,8 +112,8 @@ class AddEditRoutineViewModelTestAjoutSupression {
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditRoutineUiEvent.ShowMessage)
-            assertEquals("Unable to save story", (event as AddEditRoutineUiEvent.ShowMessage).message)
-            assertTrue(dao.stories.isEmpty())
+            assertEquals("Unable to save routine", (event as AddEditRoutineUiEvent.ShowMessage).message)
+            assertTrue(dao.routines.isEmpty())
             assertTrue(notificationManager.addedNotification.isEmpty())
             cancelAndIgnoreRemainingEvents()
 
@@ -124,7 +124,7 @@ class AddEditRoutineViewModelTestAjoutSupression {
     @Test
     fun `tentative d'ajout de routine sans titre qui doit echouer`() = runTest {
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to -1))
+        val handle = SavedStateHandle(mapOf("routineId" to -1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/data/2.5/")
@@ -145,8 +145,8 @@ class AddEditRoutineViewModelTestAjoutSupression {
         viewModel.eventFlow.test {
             val event = awaitItem()
             assert(event is AddEditRoutineUiEvent.ShowMessage)
-            assertEquals("Unable to save story", (event as AddEditRoutineUiEvent.ShowMessage).message)
-            assertTrue(dao.stories.size == 0)
+            assertEquals("Unable to save routine", (event as AddEditRoutineUiEvent.ShowMessage).message)
+            assertTrue(dao.routines.size == 0)
             assertTrue(notificationManager.addedNotification.size == 0)
             cancelAndIgnoreRemainingEvents()
 

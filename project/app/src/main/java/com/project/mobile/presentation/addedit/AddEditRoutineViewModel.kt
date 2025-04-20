@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.mobile.data.StoriesDao
+import com.project.mobile.data.RoutinesDao
 import com.project.mobile.notification.NotificationManager
 import com.project.mobile.viewmodel.RoutineVM
 import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
@@ -19,55 +19,55 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditRoutineViewModel @Inject constructor(
-    val dao: StoriesDao,
+    val dao: RoutinesDao,
     savedStateHandle: SavedStateHandle,
     private val notificationManager: NotificationManager,
     private val getWeeklyTemperaturesUseCase: GetWeeklyTemperaturesUseCase
 ) : ViewModel()
 
 {
-    private val _story = mutableStateOf(RoutineVM())
-    val story : State<RoutineVM> = _story
+    private val _routine = mutableStateOf(RoutineVM())
+    val routine : State<RoutineVM> = _routine
 
     private val _eventFlow = MutableSharedFlow<AddEditRoutineUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        val storyId = savedStateHandle.get<Int>("storyId")?: -1
+        val routineId = savedStateHandle.get<Int>("routineId")?: -1
         viewModelScope.launch(Dispatchers.IO) {
-            val storyEntity = dao.getRoutine(storyId)
-            _story.value = storyEntity?.let { RoutineVM.fromEntity(it) } ?: RoutineVM()
+            val routineEntity = dao.getRoutine(routineId)
+            _routine.value = routineEntity?.let { RoutineVM.fromEntity(it) } ?: RoutineVM()
         }
     }
 
     fun onEvent(event: AddEditRoutineEvent) {
         when (event) {
             is AddEditRoutineEvent.EnteredTitle -> {
-                _story.value = _story.value.copy(title = event.title)
+                _routine.value = _routine.value.copy(title = event.title)
             }
 
             is AddEditRoutineEvent.EnteredDescription -> {
-                _story.value = _story.value.copy(description = event.description)
+                _routine.value = _routine.value.copy(description = event.description)
             }
 
             is AddEditRoutineEvent.EnteredCategory -> {
-                _story.value = _story.value.copy(category = event.category)
+                _routine.value = _routine.value.copy(category = event.category)
             }
 
             is AddEditRoutineEvent.EnteredHour -> {
                 val newTime = event.hour.format(DateTimeFormatter.ofPattern("HH:mm"))
-                _story.value = _story.value.copy(hour = newTime)
+                _routine.value = _routine.value.copy(hour = newTime)
             }
 
             is AddEditRoutineEvent.EnteredDay -> {
-                _story.value = _story.value.copy(
-                    days = _story.value.days.mapIndexed { i, value ->
+                _routine.value = _routine.value.copy(
+                    days = _routine.value.days.mapIndexed { i, value ->
                         if (i == event.index) !value else value
                     })
             }
 
             is AddEditRoutineEvent.EnteredPriority -> {
-                _story.value = _story.value.copy(priority = event.priority)
+                _routine.value = _routine.value.copy(priority = event.priority)
             }
 
             AddEditRoutineEvent.SaveRoutine -> {
@@ -83,11 +83,11 @@ class AddEditRoutineViewModel @Inject constructor(
     private fun saveRoutine() {
         viewModelScope.launch {
             try {
-                if(story.value.title.isEmpty() || !story.value.days.any { it }) {
-                    _eventFlow.emit(AddEditRoutineUiEvent.ShowMessage("Unable to save story"))
+                if(routine.value.title.isEmpty() || !routine.value.days.any { it }) {
+                    _eventFlow.emit(AddEditRoutineUiEvent.ShowMessage("Unable to save routine"))
                 }
                 else {
-                    val entity = story.value.toEntity()
+                    val entity = routine.value.toEntity()
                     notificationManager.setNotification(entity)
                     dao.upsertRoutine(entity)
                     _eventFlow.emit(AddEditRoutineUiEvent.SavedRoutine)
@@ -101,7 +101,7 @@ class AddEditRoutineViewModel @Inject constructor(
     private fun deleteRoutine() {
         viewModelScope.launch {
             try {
-                val entity = story.value.toEntity()
+                val entity = routine.value.toEntity()
                 notificationManager.cancelNotification(entity)
                 dao.deleteRoutine(entity)
                 _eventFlow.emit(AddEditRoutineUiEvent.DeletedRoutine)

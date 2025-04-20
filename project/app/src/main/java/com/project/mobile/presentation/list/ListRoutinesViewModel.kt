@@ -5,41 +5,39 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.mobile.data.StoriesDao
+import com.project.mobile.data.RoutinesDao
 import com.project.mobile.viewmodel.RoutineVM
 import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListStoriesViewModel @Inject constructor(
-    val dao: StoriesDao,
+class ListRoutinesViewModel @Inject constructor(
+    val dao: RoutinesDao,
     private val getWeeklyTemperaturesUseCase: GetWeeklyTemperaturesUseCase
 ) : ViewModel() {
 
-    private val _stories: MutableState<List<RoutineVM>> = mutableStateOf(emptyList())
-    val stories: State<List<RoutineVM>> = _stories
+    private val _routines: MutableState<List<RoutineVM>> = mutableStateOf(emptyList())
+    val routines: State<List<RoutineVM>> = _routines
     var job: Job? = null
     var temperatures = mutableStateOf<List<Double?>>(emptyList())
 
 
 
     init {
-        loadStories()
+        loadRoutines()
         loadTemperature()
     }
 
-    private fun loadStories() {
+    private fun loadRoutines() {
         job?.cancel()
 
-        job = dao.getStories().onEach { stories ->
-            _stories.value = stories.map {
+        job = dao.getRoutines().onEach { routines ->
+            _routines.value = routines.map {
                 RoutineVM.fromEntity(it)
             }
         }.launchIn(viewModelScope)

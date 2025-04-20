@@ -16,13 +16,13 @@ class FakeNotificationManager(
 
     val addedNotification = mutableListOf<Routine>()
 
-    override fun setNotification(story: Routine) {
-        addedNotification.removeIf { it.id == story.id }
-        addedNotification.add(story)
+    override fun setNotification(routine: Routine) {
+        addedNotification.removeIf { it.id == routine.id }
+        addedNotification.add(routine)
     }
 
-    override fun cancelNotification(story: Routine) {
-        addedNotification.remove(story)
+    override fun cancelNotification(routine: Routine) {
+        addedNotification.remove(routine)
     }
 
 }
