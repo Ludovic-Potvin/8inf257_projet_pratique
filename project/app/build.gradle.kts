@@ -119,9 +119,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-
-}
 // Pour MockK (ou Mockito si tu préfères)
     testImplementation("io.mockk:mockk:1.13.5")
-
 }
+

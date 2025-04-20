@@ -21,6 +21,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.project.mobile.weather.data.WeatherApiService
+import com.project.mobile.weather.data.WeatherRepository
+import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddEditStoryViewModelTestAjoutSupression {
@@ -46,7 +51,13 @@ class AddEditStoryViewModelTestAjoutSupression {
 
         val dao = FakeDatabase()
         val handle = SavedStateHandle(mapOf("storyId" to 1))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
+        val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
+            Retrofit.Builder()
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(WeatherApiService::class.java)))
+        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
 
         // pour attendre la fin du init
         advanceUntilIdle()
@@ -81,7 +92,13 @@ class AddEditStoryViewModelTestAjoutSupression {
         val notificationManager = FakeNotificationManager(context, builder, notificationManagerCompact)
         val dao = FakeDatabase()
         val handle = SavedStateHandle(mapOf("storyId" to -1))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
+        val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
+            Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(WeatherApiService::class.java)))
+        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
 
 
         advanceUntilIdle()
@@ -108,7 +125,13 @@ class AddEditStoryViewModelTestAjoutSupression {
     fun `tentative d'ajout de routine sans titre qui doit echouer`() = runTest {
         val dao = FakeDatabase()
         val handle = SavedStateHandle(mapOf("storyId" to -1))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
+        val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
+            Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(WeatherApiService::class.java)))
+        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
 
 
         advanceUntilIdle()

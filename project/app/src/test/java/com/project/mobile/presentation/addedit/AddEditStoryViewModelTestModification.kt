@@ -6,6 +6,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.project.mobile.data.Story
+import com.project.mobile.weather.data.WeatherApiService
+import com.project.mobile.weather.data.WeatherRepository
+import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +22,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,6 +36,11 @@ class AddEditStoryViewModelTestModification {
     private val notificationManager = FakeNotificationManager(context, builder, notificationManagerCompact)
     private val dao = FakeDatabase()
     private val dispatcher = StandardTestDispatcher()
+    private val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(Retrofit.Builder()
+        .baseUrl("https://api.openweathermap.org/data/2.5/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(WeatherApiService::class.java)))
 
     @Before
     fun setup() {
@@ -56,7 +66,7 @@ class AddEditStoryViewModelTestModification {
         dao.stories.add(story)
 
         val handle = SavedStateHandle(mapOf("storyId" to 1))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager)
+        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
 
         advanceUntilIdle()
 
