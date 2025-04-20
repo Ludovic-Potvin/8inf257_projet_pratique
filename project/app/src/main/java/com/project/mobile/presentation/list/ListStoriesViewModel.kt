@@ -7,19 +7,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
 import com.project.mobile.viewmodel.StoryVM
+import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListStoriesViewModel @Inject constructor(val dao: StoriesDao) : ViewModel() {
-    private val _stories : MutableState<List<StoryVM>> = mutableStateOf(emptyList())
+class ListStoriesViewModel @Inject constructor(
+    val dao: StoriesDao,
+    private val getWeeklyTemperaturesUseCase: GetWeeklyTemperaturesUseCase
+) : ViewModel() {
+
+    private val _stories: MutableState<List<StoryVM>> = mutableStateOf(emptyList())
     val stories: State<List<StoryVM>> = _stories
     var job: Job? = null
+    var temperatures = mutableStateOf<List<Double?>>(emptyList())
 
-    init { loadStories() }
+
+
+    init {
+        loadStories()
+        loadTemperature()
+    }
 
     private fun loadStories() {
         job?.cancel()
@@ -30,4 +44,19 @@ class ListStoriesViewModel @Inject constructor(val dao: StoriesDao) : ViewModel(
             }
         }.launchIn(viewModelScope)
     }
+
+    private fun loadTemperature() {
+        viewModelScope.launch {
+            try {
+                temperatures.value = getWeeklyTemperaturesUseCase("Chicoutimi")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                temperatures.value = List(7) { null }
+            }
+        }
+    }
+
+
+
+
 }

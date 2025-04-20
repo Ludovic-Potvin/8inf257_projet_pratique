@@ -36,6 +36,8 @@ import com.project.mobile.ui.component.StoryCard
 @Composable
 fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
     val currentLanguage = languageViewModel.currentLanguage
+    val temperatures = viewModel.temperatures.value
+
     Scaffold(modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -57,6 +59,7 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                     items(viewModel.stories.value) { story ->
                         StoryCard(
                             story,
+                            temperatures = temperatures,
                             onClick = {
                                 navController.navigate(
                                     Screen.AddEditStoryScreen.route + "?storyId=${story.id}"

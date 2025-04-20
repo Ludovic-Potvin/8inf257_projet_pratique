@@ -31,14 +31,19 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit,currentLanguage: String) {
+fun StoryCard(
+    story: StoryVM,
+    temperatures: List<Double?>,
+    onClick: (StoryVM) -> Unit,
+    currentLanguage: String
+) {
     val context = LocalContext.current
     val background = when (story.priority) {
         PriorityType.LowPriority -> MaterialTheme.colorScheme.primary
         PriorityType.StandardPriority -> MaterialTheme.colorScheme.secondary
         PriorityType.HighPriority -> MaterialTheme.colorScheme.tertiary
     }
-    // Création des ressources localisées
+
     val localizedContext = remember(currentLanguage) {
         val config = Configuration(context.resources.configuration)
         config.setLocale(Locale(currentLanguage))
@@ -67,7 +72,6 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit,currentLanguage: String
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Titre
                 Text(
                     text = story.title,
                     style = TextStyle(
@@ -80,7 +84,6 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit,currentLanguage: String
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Description
                 Text(
                     text = story.description,
                     style = TextStyle(
@@ -93,8 +96,7 @@ fun StoryCard(story: StoryVM, onClick: (StoryVM) -> Unit,currentLanguage: String
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Jours et heure
-                DayAndTimeRow(story)
+                DayAndTimeRow(story, temperatures)
             }
         }
     }
@@ -109,23 +111,22 @@ private fun CategoryBadge(category: CategoryType) {
                 color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(10.dp)
             )
-                    .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(10.dp))
-                    .padding(horizontal = 8.dp, vertical = 3.dp)
-            ) {
-                Text(
-                    text = stringResource(id = category.labelResId),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        fontFamily = trocchi
-                    )
-                )
-            }
+            .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(10.dp))
+            .padding(horizontal = 8.dp, vertical = 3.dp)
+    ) {
+        Text(
+            text = stringResource(id = category.labelResId),
+            style = TextStyle(
+                fontSize = 18.sp,
+                color = Color.White,
+                fontFamily = trocchi
+            )
+        )
+    }
 }
 
 @Composable
-private fun DayAndTimeRow(story: StoryVM) {
-    val context = LocalContext.current
+private fun DayAndTimeRow(story: StoryVM, temperatures: List<Double?>) {
     val dayInitials = stringArrayResource(R.array.day_initials)
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()) }
 
@@ -133,19 +134,30 @@ private fun DayAndTimeRow(story: StoryVM) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Jours de la semaine
         dayInitials.forEachIndexed { index, dayInitial ->
-            DayCard(
-                label = dayInitial,
-                isActive = story.days.getOrElse(index) { false },
-                onClick = { /* Gestion du clic si nécessaire */ }
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                DayCard(
+                    label = dayInitial,
+                    isActive = story.days.getOrElse(index) { false },
+                    onClick = { /* Optional */ }
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                val tempText = temperatures.getOrNull(index)?.toInt()?.toString()
+                    Text(
+                        text = tempText?.let { "$it°C" } ?: "--",
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontFamily = trocchi
+                        )
+                    )
+
+            }
             Spacer(modifier = Modifier.width(4.dp))
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Heure
         Text(
             text = story.getHourAsLocalTime().format(timeFormatter),
             style = TextStyle(
