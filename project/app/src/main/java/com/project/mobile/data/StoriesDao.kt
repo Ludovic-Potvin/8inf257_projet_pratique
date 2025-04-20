@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.Flow
 interface StoriesDao {
 
     @Query("SELECT * FROM stories")
-    fun getStories() : Flow<List<Story>>
+    fun getStories() : Flow<List<Routine>>
 
     @Query("SELECT * FROM stories WHERE id = :id")
-    fun getStory(id: Int) : Story?
+    fun getRoutine(id: Int) : Routine?
 
     @Upsert
-    suspend fun upsertStory(story: Story)
+    suspend fun upsertRoutine(story: Routine)
 
     @Delete
-    suspend fun deleteStory(story: Story)
+    suspend fun deleteRoutine(story: Routine)
 }

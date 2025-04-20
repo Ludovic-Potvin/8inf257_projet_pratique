@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.mobile.data.StoriesDatabase
-import com.project.mobile.presentation.addedit.AddEditStoryScreen
+import com.project.mobile.presentation.addedit.AddEditRoutineScreen
 import com.project.mobile.presentation.list.ListStoriesScreen
 import com.project.mobile.presentation.list.ListStoriesViewModel
 import com.project.mobile.presentation.preference.PreferenceScreen
@@ -35,7 +35,7 @@ fun NavGraph(db: StoriesDatabase,
                 languageViewModel = hiltViewModel()
             )
         }
-        composable(route = Screen.AddEditStoryScreen.route + "?storyId={storyId}",
+        composable(route = Screen.AddEditRoutineScreen.route + "?storyId={storyId}",
             arguments = listOf(
                 navArgument(name = "storyId") {
                     type = NavType.IntType
@@ -43,7 +43,7 @@ fun NavGraph(db: StoriesDatabase,
                 }
             )
         ) {
-            AddEditStoryScreen(navController)
+            AddEditRoutineScreen(navController)
         }
         composable(route = Screen.PreferenceScreen.route) {
             PreferenceScreen(navController, themeViewModel)

@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.addedit.AddEditStoryViewModel
-import com.project.mobile.ui.component.StoryCard
+import com.project.mobile.presentation.addedit.AddEditRoutineViewModel
+import com.project.mobile.ui.component.RoutineCard
 
 @Composable
 fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
@@ -57,12 +57,12 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                         .padding(vertical = 0.dp, horizontal = 30.dp)
                 ) {
                     items(viewModel.stories.value) { story ->
-                        StoryCard(
+                        RoutineCard(
                             story,
                             temperatures = temperatures,
                             onClick = {
                                 navController.navigate(
-                                    Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                                    Screen.AddEditRoutineScreen.route + "?storyId=${story.id}"
                                 );
                             },
                             currentLanguage = currentLanguage
@@ -105,7 +105,7 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
 
                     Button(
                         onClick = {
-                            navController.navigate(Screen.AddEditStoryScreen.route)
+                            navController.navigate(Screen.AddEditRoutineScreen.route)
                         }, colors = ButtonColors(
                             disabledContainerColor = colorScheme.tertiary,
                             disabledContentColor = Color.White,

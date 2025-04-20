@@ -24,17 +24,17 @@ import androidx.compose.ui.unit.sp
 import com.project.mobile.R
 import com.project.mobile.common.CategoryType
 import com.project.mobile.common.PriorityType
-import com.project.mobile.viewmodel.StoryVM
+import com.project.mobile.viewmodel.RoutineVM
 import suezOneRegular
 import trocchi
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun StoryCard(
-    story: StoryVM,
+fun RoutineCard(
+    story: RoutineVM,
     temperatures: List<Double?>,
-    onClick: (StoryVM) -> Unit,
+    onClick: (RoutineVM) -> Unit,
     currentLanguage: String
 ) {
     val context = LocalContext.current
@@ -126,7 +126,7 @@ private fun CategoryBadge(category: CategoryType) {
 }
 
 @Composable
-private fun DayAndTimeRow(story: StoryVM, temperatures: List<Double?>) {
+private fun DayAndTimeRow(story: RoutineVM, temperatures: List<Double?>) {
     val dayInitials = stringArrayResource(R.array.day_initials)
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()) }
 

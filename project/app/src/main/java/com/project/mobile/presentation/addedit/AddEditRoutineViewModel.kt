@@ -1,16 +1,13 @@
 package com.project.mobile.presentation.addedit
 
-import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
 import com.project.mobile.notification.NotificationManager
-import com.project.mobile.viewmodel.StoryVM
+import com.project.mobile.viewmodel.RoutineVM
 import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +18,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class AddEditStoryViewModel @Inject constructor(
+class AddEditRoutineViewModel @Inject constructor(
     val dao: StoriesDao,
     savedStateHandle: SavedStateHandle,
     private val notificationManager: NotificationManager,
@@ -29,87 +26,87 @@ class AddEditStoryViewModel @Inject constructor(
 ) : ViewModel()
 
 {
-    private val _story = mutableStateOf(StoryVM())
-    val story : State<StoryVM> = _story
+    private val _story = mutableStateOf(RoutineVM())
+    val story : State<RoutineVM> = _story
 
-    private val _eventFlow = MutableSharedFlow<AddEditStoryUiEvent>()
+    private val _eventFlow = MutableSharedFlow<AddEditRoutineUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         val storyId = savedStateHandle.get<Int>("storyId")?: -1
         viewModelScope.launch(Dispatchers.IO) {
-            val storyEntity = dao.getStory(storyId)
-            _story.value = storyEntity?.let { StoryVM.fromEntity(it) } ?: StoryVM()
+            val storyEntity = dao.getRoutine(storyId)
+            _story.value = storyEntity?.let { RoutineVM.fromEntity(it) } ?: RoutineVM()
         }
     }
 
-    fun onEvent(event: AddEditStoryEvent) {
+    fun onEvent(event: AddEditRoutineEvent) {
         when (event) {
-            is AddEditStoryEvent.EnteredTitle -> {
+            is AddEditRoutineEvent.EnteredTitle -> {
                 _story.value = _story.value.copy(title = event.title)
             }
 
-            is AddEditStoryEvent.EnteredDescription -> {
+            is AddEditRoutineEvent.EnteredDescription -> {
                 _story.value = _story.value.copy(description = event.description)
             }
 
-            is AddEditStoryEvent.EnteredCategory -> {
+            is AddEditRoutineEvent.EnteredCategory -> {
                 _story.value = _story.value.copy(category = event.category)
             }
 
-            is AddEditStoryEvent.EnteredHour -> {
+            is AddEditRoutineEvent.EnteredHour -> {
                 val newTime = event.hour.format(DateTimeFormatter.ofPattern("HH:mm"))
                 _story.value = _story.value.copy(hour = newTime)
             }
 
-            is AddEditStoryEvent.EnteredDay -> {
+            is AddEditRoutineEvent.EnteredDay -> {
                 _story.value = _story.value.copy(
                     days = _story.value.days.mapIndexed { i, value ->
                         if (i == event.index) !value else value
                     })
             }
 
-            is AddEditStoryEvent.EnteredPriority -> {
+            is AddEditRoutineEvent.EnteredPriority -> {
                 _story.value = _story.value.copy(priority = event.priority)
             }
 
-            AddEditStoryEvent.SaveStory -> {
-                saveStory()
+            AddEditRoutineEvent.SaveRoutine -> {
+                saveRoutine()
             }
 
-            AddEditStoryEvent.DeleteStory -> {
-                deleteStory()
+            AddEditRoutineEvent.DeleteRoutine -> {
+                deleteRoutine()
             }
         }
     }
 
-    private fun saveStory() {
+    private fun saveRoutine() {
         viewModelScope.launch {
             try {
                 if(story.value.title.isEmpty() || !story.value.days.any { it }) {
-                    _eventFlow.emit(AddEditStoryUiEvent.ShowMessage("Unable to save story"))
+                    _eventFlow.emit(AddEditRoutineUiEvent.ShowMessage("Unable to save story"))
                 }
                 else {
                     val entity = story.value.toEntity()
                     notificationManager.setNotification(entity)
-                    dao.upsertStory(entity)
-                    _eventFlow.emit(AddEditStoryUiEvent.SavedStory)
+                    dao.upsertRoutine(entity)
+                    _eventFlow.emit(AddEditRoutineUiEvent.SavedRoutine)
                 }
             } catch(e: Exception) {
-                _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
+                _eventFlow.emit(AddEditRoutineUiEvent.ShowMessage(e.message!!))
             }
         }
     }
 
-    private fun deleteStory() {
+    private fun deleteRoutine() {
         viewModelScope.launch {
             try {
                 val entity = story.value.toEntity()
                 notificationManager.cancelNotification(entity)
-                dao.deleteStory(entity)
-                _eventFlow.emit(AddEditStoryUiEvent.DeletedStory)
+                dao.deleteRoutine(entity)
+                _eventFlow.emit(AddEditRoutineUiEvent.DeletedRoutine)
             } catch(e: Exception) {
-                _eventFlow.emit(AddEditStoryUiEvent.ShowMessage(e.message!!))
+                _eventFlow.emit(AddEditRoutineUiEvent.ShowMessage(e.message!!))
             }
         }
     }

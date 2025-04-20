@@ -5,7 +5,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.project.mobile.data.Story
+import com.project.mobile.data.Routine
 import com.project.mobile.weather.data.WeatherApiService
 import com.project.mobile.weather.data.WeatherRepository
 import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
@@ -21,13 +21,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddEditStoryViewModelTestModification {
+class AddEditRoutineViewModelTestModification {
 
 
     private val context = mockk<Context>(relaxed = true)
@@ -54,7 +53,7 @@ class AddEditStoryViewModelTestModification {
 
     @Test
     fun `modification routine`() = runTest {
-        val story = Story(
+        val story = Routine(
             id = 1,
             title = "Ancien titre",
             description = "",
@@ -66,20 +65,20 @@ class AddEditStoryViewModelTestModification {
         dao.stories.add(story)
 
         val handle = SavedStateHandle(mapOf("storyId" to 1))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
+        val viewModel = AddEditRoutineViewModel(dao, handle, notificationManager, weeklytempusecase)
 
         advanceUntilIdle()
 
-        viewModel.onEvent(AddEditStoryEvent.EnteredTitle("Nouveau titre"))
+        viewModel.onEvent(AddEditRoutineEvent.EnteredTitle("Nouveau titre"))
         advanceUntilIdle()
 
-        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
         viewModel.eventFlow.test {
             val event = awaitItem()
-            assert(event is AddEditStoryUiEvent.SavedStory)
+            assert(event is AddEditRoutineUiEvent.SavedRoutine)
 
-            val modifiedStory = dao.stories.first()
-            assertEquals("Nouveau titre", modifiedStory.title)
+            val modifiedRoutine = dao.stories.first()
+            assertEquals("Nouveau titre", modifiedRoutine.title)
             assertEquals(1, dao.stories.size)
 
             assertEquals("Nouveau titre", notificationManager.addedNotification.first().title)

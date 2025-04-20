@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import com.project.mobile.data.Story
+import com.project.mobile.data.Routine
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -52,7 +52,7 @@ open class NotificationManager @Inject constructor(
         return nextTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    open fun setNotification(story: Story) {
+    open fun setNotification(story: Routine) {
         if (hasNotificationPermission()) {
             val time = story.hour.split(':')
 
@@ -75,7 +75,7 @@ open class NotificationManager @Inject constructor(
         }
     }
 
-    private fun planNotification(story: Story, dayOfWeek: DayOfWeek, hour: Int, minute: Int)
+    private fun planNotification(story: Routine, dayOfWeek: DayOfWeek, hour: Int, minute: Int)
     {
         val triggerTime = nextTriggerTime(dayOfWeek, hour, minute)
 
@@ -103,7 +103,7 @@ open class NotificationManager @Inject constructor(
         )
     }
 
-    open fun cancelNotification(story: Story) {
+    open fun cancelNotification(story: Routine) {
         val dayMap = mapOf(
             0 to DayOfWeek.SUNDAY,
             1 to DayOfWeek.MONDAY,

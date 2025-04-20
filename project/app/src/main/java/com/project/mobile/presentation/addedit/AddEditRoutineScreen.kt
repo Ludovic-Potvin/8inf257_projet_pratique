@@ -11,7 +11,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,6 @@ import com.project.mobile.ui.component.CategoryDropdownMenu
 import com.project.mobile.ui.component.DayCard
 import com.project.mobile.ui.component.PriorityDropdownMenu
 import com.project.mobile.language.LanguageViewModel
-import com.project.mobile.ui.theme.DarkPurple
 import com.project.mobile.util.showTimePicker
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.collectLatest
@@ -43,8 +41,8 @@ import java.util.Locale
 import androidx.compose.material3.MaterialTheme.colorScheme as theme
 
 @Composable
-fun AddEditStoryScreen(navController: NavController,
-                       viewModel: AddEditStoryViewModel = hiltViewModel(),
+fun AddEditRoutineScreen(navController: NavController,
+                       viewModel: AddEditRoutineViewModel = hiltViewModel(),
                        languageViewModel: LanguageViewModel = hiltViewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -62,13 +60,13 @@ fun AddEditStoryScreen(navController: NavController,
             LaunchedEffect(true) {
                 viewModel.eventFlow.collectLatest { event ->
                     when (event) {
-                        is AddEditStoryUiEvent.SavedStory -> {
+                        is AddEditRoutineUiEvent.SavedRoutine -> {
                             navController.navigate(Screen.StoriesListScreen.route)
                         }
-                        is AddEditStoryUiEvent.ShowMessage -> {
+                        is AddEditRoutineUiEvent.ShowMessage -> {
                             snackbarHostState.showSnackbar(event.message)
                         }
-                        is AddEditStoryUiEvent.DeletedStory -> {
+                        is AddEditRoutineUiEvent.DeletedRoutine -> {
                             navController.navigate(Screen.StoriesListScreen.route)
                         }
                     }
@@ -95,7 +93,7 @@ fun AddEditStoryScreen(navController: NavController,
 
 @Composable
 fun RoutineForm(
-    navController: NavController, viewModel: AddEditStoryViewModel = hiltViewModel(),
+    navController: NavController, viewModel: AddEditRoutineViewModel = hiltViewModel(),
     currentLanguage: String
 ) {
     val story = viewModel.story.value
@@ -132,7 +130,7 @@ fun RoutineForm(
 
                 Box(
                     modifier = Modifier
-                        .clickable { viewModel.onEvent(AddEditStoryEvent.DeleteStory) }
+                        .clickable { viewModel.onEvent(AddEditRoutineEvent.DeleteRoutine) }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -154,7 +152,7 @@ fun RoutineForm(
             OutlinedTextField(
                 value = story.title,
                 onValueChange = {
-                    viewModel.onEvent(AddEditStoryEvent.EnteredTitle(it))
+                    viewModel.onEvent(AddEditRoutineEvent.EnteredTitle(it))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
@@ -194,7 +192,7 @@ fun RoutineForm(
                             label = dayInitials[index],
                             isActive = day,
                             onClick = {
-                                viewModel.onEvent(AddEditStoryEvent.EnteredDay(index))
+                                viewModel.onEvent(AddEditRoutineEvent.EnteredDay(index))
                             }
                         )
                         Spacer(modifier = Modifier.height(2.dp))
@@ -247,7 +245,7 @@ fun RoutineForm(
                             context,
                             story.getHourAsLocalTime()
                         ) { newTime ->
-                            viewModel.onEvent(AddEditStoryEvent.EnteredHour(newTime))
+                            viewModel.onEvent(AddEditRoutineEvent.EnteredHour(newTime))
                         }
                     }) {
                         Icon(
@@ -271,7 +269,7 @@ fun RoutineForm(
             OutlinedTextField(
                 value = story.description,
                 onValueChange = {
-                    viewModel.onEvent(AddEditStoryEvent.EnteredDescription(it))
+                    viewModel.onEvent(AddEditRoutineEvent.EnteredDescription(it))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -301,7 +299,7 @@ fun RoutineForm(
             CategoryDropdownMenu(
                 selectedCategory = story.category,
                 onCategorySelected = { newCategory ->
-                    viewModel.onEvent(AddEditStoryEvent.EnteredCategory(newCategory))
+                    viewModel.onEvent(AddEditRoutineEvent.EnteredCategory(newCategory))
                 },
                 currentLanguage = currentLanguage
             )
@@ -319,7 +317,7 @@ fun RoutineForm(
             PriorityDropdownMenu(
                 selectedPriority = story.priority
             ) { newPriority ->
-                viewModel.onEvent(AddEditStoryEvent.EnteredPriority(newPriority))
+                viewModel.onEvent(AddEditRoutineEvent.EnteredPriority(newPriority))
             }
 
             // Boutons Enregistrer et Annuler
@@ -348,7 +346,7 @@ fun RoutineForm(
 
                 Button(
                     onClick = {
-                        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+                        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
                     },
                     colors = ButtonColors(
                         disabledContainerColor = theme.secondary,

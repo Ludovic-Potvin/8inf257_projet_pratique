@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.data.StoriesDao
-import com.project.mobile.viewmodel.StoryVM
+import com.project.mobile.viewmodel.RoutineVM
 import com.project.mobile.weather.domain.GetWeeklyTemperaturesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -23,8 +23,8 @@ class ListStoriesViewModel @Inject constructor(
     private val getWeeklyTemperaturesUseCase: GetWeeklyTemperaturesUseCase
 ) : ViewModel() {
 
-    private val _stories: MutableState<List<StoryVM>> = mutableStateOf(emptyList())
-    val stories: State<List<StoryVM>> = _stories
+    private val _stories: MutableState<List<RoutineVM>> = mutableStateOf(emptyList())
+    val stories: State<List<RoutineVM>> = _stories
     var job: Job? = null
     var temperatures = mutableStateOf<List<Double?>>(emptyList())
 
@@ -40,7 +40,7 @@ class ListStoriesViewModel @Inject constructor(
 
         job = dao.getStories().onEach { stories ->
             _stories.value = stories.map {
-                StoryVM.fromEntity(it)
+                RoutineVM.fromEntity(it)
             }
         }.launchIn(viewModelScope)
     }
