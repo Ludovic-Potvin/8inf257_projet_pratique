@@ -17,7 +17,7 @@ class WeatherRepository @Inject constructor(
             .map { it.main.temp }
 
         // Réorganiser selon le jour courant (dimanche = 0)
-        val todayIndex = java.time.LocalDate.now().dayOfWeek.ordinal
+        val todayIndex = (java.time.LocalDate.now().dayOfWeek.value % 7)
         val orderedTemps = MutableList<Double?>(7) { null }
 
         dailyTemps.forEachIndexed { index, temp ->
