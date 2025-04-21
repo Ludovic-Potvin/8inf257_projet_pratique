@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.room.Room
-import com.project.mobile.data.StoriesDao
-import com.project.mobile.data.StoriesDatabase
+import com.project.mobile.data.RoutinesDao
+import com.project.mobile.data.RoutinesDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,17 +20,17 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideStoriesDatabase(context: Application): StoriesDatabase {
+    fun provideRoutinesDatabase(context: Application): RoutinesDatabase {
         return Room.databaseBuilder(
             context,
-            StoriesDatabase::class.java,
-            StoriesDatabase.DATABASE_NAME
+            RoutinesDatabase::class.java,
+            RoutinesDatabase.DATABASE_NAME
         ).build()
     }
 
     @Provides
     @Singleton
-    fun provideStoriesDAO(db: StoriesDatabase): StoriesDao {
+    fun provideRoutinesDAO(db: RoutinesDatabase): RoutinesDao {
         return db.dao
     }
 

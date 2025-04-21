@@ -1,12 +1,12 @@
 package com.project.mobile.viewmodel
 
-import com.project.mobile.data.Story
+import com.project.mobile.data.Routine
 import com.project.mobile.common.CategoryType
 import com.project.mobile.common.PriorityType
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
-data class StoryVM(
+data class RoutineVM(
     val id: Int = Random.nextInt(),
     val title: String = "",
     val description: String = "",
@@ -16,8 +16,8 @@ data class StoryVM(
     val priority: PriorityType = PriorityType.StandardPriority
 ) {
     companion object {
-        fun fromEntity(entity: Story): StoryVM {
-            return StoryVM(
+        fun fromEntity(entity: Routine): RoutineVM {
+            return RoutineVM(
                 id = entity.id!!,
                 title = entity.title,
                 description = entity.description,
@@ -29,9 +29,9 @@ data class StoryVM(
         }
     }
 
-    fun toEntity(): Story {
+    fun toEntity(): Routine {
         val id = if (this.id == -1) null else this.id
-        return Story(
+        return Routine(
             id = id,
             title = this.title,
             description = this.description,
