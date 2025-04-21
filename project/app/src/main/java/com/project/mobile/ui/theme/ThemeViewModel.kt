@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile.preferences.PreferenceManager;
-import com.project.mobile.presentation.addedit.AddEditStoryEvent
+import com.project.mobile.presentation.addedit.AddEditRoutineEvent
 import com.project.mobile.presentation.preference.PreferenceEvent
 
 import dagger.hilt.android.lifecycle.HiltViewModel;

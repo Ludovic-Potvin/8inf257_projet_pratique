@@ -42,7 +42,7 @@ object NotificationModule
     ) : NotificationCompat.Builder {
         return NotificationCompat.Builder(context, "Main channel ID")
             .setContentTitle("Welcome")
-            .setContentText("Stories App")
+            .setContentText("Routines App")
             .setSmallIcon(android.R.drawable.ic_notification_overlay)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

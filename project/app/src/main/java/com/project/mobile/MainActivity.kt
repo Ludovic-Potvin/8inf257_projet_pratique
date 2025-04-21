@@ -10,7 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.room.Room
-import com.project.mobile.data.StoriesDatabase
+import com.project.mobile.data.RoutinesDatabase
 import com.project.mobile.navigation.NavGraph
 import com.project.mobile.ui.theme.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,8 +21,8 @@ class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
-            StoriesDatabase::class.java,
-            StoriesDatabase.DATABASE_NAME
+            RoutinesDatabase::class.java,
+            RoutinesDatabase.DATABASE_NAME
         ).build()
     }
 

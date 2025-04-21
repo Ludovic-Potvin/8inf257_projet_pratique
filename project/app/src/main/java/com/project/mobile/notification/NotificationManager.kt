@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import com.project.mobile.data.Story
+import com.project.mobile.data.Routine
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -52,9 +52,9 @@ open class NotificationManager @Inject constructor(
         return nextTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    open fun setNotification(story: Story) {
+    open fun setNotification(routine: Routine) {
         if (hasNotificationPermission()) {
-            val time = story.hour.split(':')
+            val time = routine.hour.split(':')
 
             val dayMap = mapOf(
                 0 to DayOfWeek.SUNDAY,
@@ -67,26 +67,26 @@ open class NotificationManager @Inject constructor(
             )
 
             for (i in 0 until 7) {
-                if (story.days[i] == '1') {
-                    planNotification(story, dayMap[i]!!, time[0].toInt(), time[1].toInt())
+                if (routine.days[i] == '1') {
+                    planNotification(routine, dayMap[i]!!, time[0].toInt(), time[1].toInt())
                 }
             }
             instantNotification(title = "Notification crée", text = "Notification crée")
         }
     }
 
-    private fun planNotification(story: Story, dayOfWeek: DayOfWeek, hour: Int, minute: Int)
+    private fun planNotification(routine: Routine, dayOfWeek: DayOfWeek, hour: Int, minute: Int)
     {
         val triggerTime = nextTriggerTime(dayOfWeek, hour, minute)
 
         val intent = Intent(context, NotificationReceiver::class.java).apply {
-            putExtra("title", story.title)
-            putExtra("description", story.description)
-            putExtra("priority", story.priority)
-            putExtra("category", story.category)
+            putExtra("title", routine.title)
+            putExtra("description", routine.description)
+            putExtra("priority", routine.priority)
+            putExtra("category", routine.category)
         }
 
-        val requestCode = story.id!! * 10 + dayOfWeek.value
+        val requestCode = routine.id!! * 10 + dayOfWeek.value
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             requestCode,
@@ -103,7 +103,7 @@ open class NotificationManager @Inject constructor(
         )
     }
 
-    open fun cancelNotification(story: Story) {
+    open fun cancelNotification(routine: Routine) {
         val dayMap = mapOf(
             0 to DayOfWeek.SUNDAY,
             1 to DayOfWeek.MONDAY,
@@ -117,13 +117,13 @@ open class NotificationManager @Inject constructor(
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         for (i in 0 until 7) {
-            if (story.days[i] == '0') {
+            if (routine.days[i] == '0') {
                 val day = dayMap[i]!!
-                val requestCode = story.id!! * 10 + day.value
+                val requestCode = routine.id!! * 10 + day.value
 
                 val intent = Intent(context, NotificationReceiver::class.java).apply {
-                    putExtra("title", story.title)
-                    putExtra("description", story.description)
+                    putExtra("title", routine.title)
+                    putExtra("description", routine.description)
                 }
 
                 val pendingIntent = PendingIntent.getBroadcast(

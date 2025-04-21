@@ -28,7 +28,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddEditStoryViewModelTestAjoutSupression {
+class AddEditRoutineViewModelTestAjoutSupression {
 
 
     private val context = mockk<Context>(relaxed = true)
@@ -50,33 +50,33 @@ class AddEditStoryViewModelTestAjoutSupression {
     fun `ajout et suppression d'une routine avec donnees valides`() = runTest {
 
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to 1))
+        val handle = SavedStateHandle(mapOf("routineId" to 1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WeatherApiService::class.java)))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
+        val viewModel = AddEditRoutineViewModel(dao, handle, notificationManager, weeklytempusecase)
 
         // pour attendre la fin du init
         advanceUntilIdle()
 
         // When
-        viewModel.onEvent(AddEditStoryEvent.EnteredTitle("My Story"))
-        viewModel.onEvent(AddEditStoryEvent.EnteredDay(0))
+        viewModel.onEvent(AddEditRoutineEvent.EnteredTitle("My Routine"))
+        viewModel.onEvent(AddEditRoutineEvent.EnteredDay(0))
 
-        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
 
         viewModel.eventFlow.test {
             val saveEvent = awaitItem()
-            assert(saveEvent is AddEditStoryUiEvent.SavedStory)
-            assertTrue(dao.stories.size == 1)
+            assert(saveEvent is AddEditRoutineUiEvent.SavedRoutine)
+            assertTrue(dao.routines.size == 1)
             assertTrue(notificationManager.addedNotification.size == 1)
-            viewModel.onEvent(AddEditStoryEvent.DeleteStory)
+            viewModel.onEvent(AddEditRoutineEvent.DeleteRoutine)
             val deleteEvent = awaitItem()
-            assert(deleteEvent is AddEditStoryUiEvent.DeletedStory)
-            assertTrue(dao.stories.size == 0)
+            assert(deleteEvent is AddEditRoutineUiEvent.DeletedRoutine)
+            assertTrue(dao.routines.size == 0)
             assertTrue(notificationManager.addedNotification.size == 0)
 
             cancelAndIgnoreRemainingEvents()
@@ -91,29 +91,29 @@ class AddEditStoryViewModelTestAjoutSupression {
         val notificationManagerCompact = mockk<NotificationManagerCompat>(relaxed = true)
         val notificationManager = FakeNotificationManager(context, builder, notificationManagerCompact)
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to -1))
+        val handle = SavedStateHandle(mapOf("routineId" to -1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/data/2.5/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherApiService::class.java)))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
+        val viewModel = AddEditRoutineViewModel(dao, handle, notificationManager, weeklytempusecase)
 
 
         advanceUntilIdle()
 
 
-        viewModel.onEvent(AddEditStoryEvent.EnteredTitle("My Story"))
+        viewModel.onEvent(AddEditRoutineEvent.EnteredTitle("My Routine"))
 
-        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
 
 
         viewModel.eventFlow.test {
             val event = awaitItem()
-            assert(event is AddEditStoryUiEvent.ShowMessage)
-            assertEquals("Unable to save story", (event as AddEditStoryUiEvent.ShowMessage).message)
-            assertTrue(dao.stories.isEmpty())
+            assert(event is AddEditRoutineUiEvent.ShowMessage)
+            assertEquals("Unable to save routine", (event as AddEditRoutineUiEvent.ShowMessage).message)
+            assertTrue(dao.routines.isEmpty())
             assertTrue(notificationManager.addedNotification.isEmpty())
             cancelAndIgnoreRemainingEvents()
 
@@ -124,29 +124,29 @@ class AddEditStoryViewModelTestAjoutSupression {
     @Test
     fun `tentative d'ajout de routine sans titre qui doit echouer`() = runTest {
         val dao = FakeDatabase()
-        val handle = SavedStateHandle(mapOf("storyId" to -1))
+        val handle = SavedStateHandle(mapOf("routineId" to -1))
         val weeklytempusecase = GetWeeklyTemperaturesUseCase(WeatherRepository(
             Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/data/2.5/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherApiService::class.java)))
-        val viewModel = AddEditStoryViewModel(dao, handle, notificationManager, weeklytempusecase)
+        val viewModel = AddEditRoutineViewModel(dao, handle, notificationManager, weeklytempusecase)
 
 
         advanceUntilIdle()
 
 
-        viewModel.onEvent(AddEditStoryEvent.EnteredDay(0))
+        viewModel.onEvent(AddEditRoutineEvent.EnteredDay(0))
 
-        viewModel.onEvent(AddEditStoryEvent.SaveStory)
+        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
 
 
         viewModel.eventFlow.test {
             val event = awaitItem()
-            assert(event is AddEditStoryUiEvent.ShowMessage)
-            assertEquals("Unable to save story", (event as AddEditStoryUiEvent.ShowMessage).message)
-            assertTrue(dao.stories.size == 0)
+            assert(event is AddEditRoutineUiEvent.ShowMessage)
+            assertEquals("Unable to save routine", (event as AddEditRoutineUiEvent.ShowMessage).message)
+            assertTrue(dao.routines.size == 0)
             assertTrue(notificationManager.addedNotification.size == 0)
             cancelAndIgnoreRemainingEvents()
 

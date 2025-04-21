@@ -113,7 +113,7 @@ fun PreferenceForm(
             ) {
                 Box(
                     modifier = Modifier
-                        .clickable { navController.navigate(Screen.StoriesListScreen.route) }
+                        .clickable { navController.navigate(Screen.RoutinesListScreen.route) }
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

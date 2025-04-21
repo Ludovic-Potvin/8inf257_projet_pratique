@@ -30,11 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.mobile.navigation.Screen
-import com.project.mobile.presentation.addedit.AddEditStoryViewModel
-import com.project.mobile.ui.component.StoryCard
+import com.project.mobile.ui.component.RoutineCard
 
 @Composable
-fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
+fun ListRoutinesScreen(navController: NavController, viewModel: ListRoutinesViewModel, languageViewModel: LanguageViewModel = hiltViewModel()) {
     val currentLanguage = languageViewModel.currentLanguage
     val temperatures = viewModel.temperatures.value
 
@@ -56,13 +55,13 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                         .weight(1f)
                         .padding(vertical = 0.dp, horizontal = 30.dp)
                 ) {
-                    items(viewModel.stories.value) { story ->
-                        StoryCard(
-                            story,
+                    items(viewModel.routines.value) { routine ->
+                        RoutineCard(
+                            routine,
                             temperatures = temperatures,
                             onClick = {
                                 navController.navigate(
-                                    Screen.AddEditStoryScreen.route + "?storyId=${story.id}"
+                                    Screen.AddEditRoutineScreen.route + "?routineId=${routine.id}"
                                 );
                             },
                             currentLanguage = currentLanguage
@@ -105,7 +104,7 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
 
                     Button(
                         onClick = {
-                            navController.navigate(Screen.AddEditStoryScreen.route)
+                            navController.navigate(Screen.AddEditRoutineScreen.route)
                         }, colors = ButtonColors(
                             disabledContainerColor = colorScheme.tertiary,
                             disabledContentColor = Color.White,
@@ -118,7 +117,7 @@ fun ListStoriesScreen(navController: NavController, viewModel: ListStoriesViewMo
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Add a story"
+                            contentDescription = "Add a routine"
                         )
                     }
                 }

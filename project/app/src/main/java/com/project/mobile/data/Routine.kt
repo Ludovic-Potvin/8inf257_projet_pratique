@@ -3,8 +3,8 @@ package com.project.mobile.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "stories")
-data class Story (
+@Entity(tableName = "routines")
+data class Routine (
     @PrimaryKey() val id : Int? = null,
     val title: String,
     val description: String,
