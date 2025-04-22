@@ -39,6 +39,8 @@ import kotlinx.coroutines.flow.collectLatest
 import trocchi
 import java.util.Locale
 import androidx.compose.material3.MaterialTheme.colorScheme as theme
+import androidx.compose.ui.platform.LocalView
+
 
 @Composable
 fun AddEditRoutineScreen(navController: NavController,
@@ -97,7 +99,7 @@ fun RoutineForm(
     currentLanguage: String
 ) {
     val routine = viewModel.routine.value
-    val context = LocalContext.current
+    val context = LocalView.current.context
     val temperatures = viewModel.temperatures.value
 
     Box(
